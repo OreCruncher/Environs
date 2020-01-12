@@ -1,0 +1,4 @@
+{
+  "biome": "transformers/biome.js",
+  "blockstate": "transformers/blockstate.js"
+}

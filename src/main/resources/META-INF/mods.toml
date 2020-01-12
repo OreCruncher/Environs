@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/OreCruncher/Environs/issues"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/dynamic-surroundings-environs"
+logoFile="logo.png"
+
+[[mods]]
+	modId="environs"
+	version="${version}"
+	displayName="§3Dynamic Surroundings\n§eEnvirons"
+	updateJSONURL="https://raw.githubusercontent.com/OreCruncher/Environs/master/version.json"
+	credits="\n\n§6All the Players§r that installed and enjoyed §2Dynamic Surroundings§r\n"
+	authors="§6OreCruncher§r\n"
+	description="\nGiving §6biomes§r special §6effects§r."
+	
+[[dependencies.mobeffects]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28.1.96,)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.environs]]
+    modId="sndctrl"
+    mandatory=true
+    versionRange="[1.14.4-0.0.5,)"
+    ordering="AFTER"
+    side="CLIENT"
