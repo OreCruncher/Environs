@@ -220,7 +220,7 @@
       "_comment": "Coyote",
       "acoustics": [
         {
-          "acoustic": "environs:coyote",
+          "acoustic": "coyote",
           "conditions": "weather.isNotRaining() && diurnal.isNight()",
           "type": "spot"
         }

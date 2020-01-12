@@ -18,16 +18,14 @@
 
 package org.orecruncher.environs.handlers;
 
-import java.util.Random;
-
 import javax.annotation.Nonnull;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Environs;
-import org.orecruncher.lib.random.XorShiftRandom;
 import org.orecruncher.sndctrl.audio.AudioEngine;
 import org.orecruncher.sndctrl.audio.BackgroundSoundInstance;
+import org.orecruncher.sndctrl.audio.ISoundInstance;
 import org.orecruncher.sndctrl.audio.SoundState;
 import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
 
@@ -40,10 +38,6 @@ import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
 @OnlyIn(Dist.CLIENT)
 public final class Emitter {
 
-	protected static final int ERROR_DELAY = 10;
-	protected static final int ERROR_DELAY_RANDOM = 6;
-	protected static final Random RANDOM = XorShiftRandom.current();
-
 	protected final IAcoustic effect;
 	protected BackgroundSoundInstance activeSound;
 	protected boolean done = false;
@@ -53,7 +47,8 @@ public final class Emitter {
 	}
 
 	protected BackgroundSoundInstance createSound() {
-		return new BackgroundSoundInstance(this.effect.getSound());
+		final ISoundInstance sound = this.effect.getSound();
+		return new BackgroundSoundInstance(sound);
 	}
 
 	public void update() {

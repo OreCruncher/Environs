@@ -4,7 +4,9 @@
     "volume": 20,
     "pitch": 150
   },
-  "wind/mountains": "environs:wind",
+  "wind/mountains": {
+    "name": "environs:wind"
+  },
   "wind/desert": {
     "name": "environs:desert.wind",
     "volume": 15
