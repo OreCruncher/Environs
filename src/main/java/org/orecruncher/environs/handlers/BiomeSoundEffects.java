@@ -30,6 +30,7 @@ import org.orecruncher.environs.library.BiomeLibrary;
 import org.orecruncher.environs.library.DimensionLibrary;
 import org.orecruncher.environs.scanner.BiomeScanner;
 import org.orecruncher.lib.GameUtils;
+import org.orecruncher.lib.TickCounter;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.events.DiagnosticEvent;
 import org.orecruncher.sndctrl.audio.AudioEngine;
@@ -49,7 +50,7 @@ public class BiomeSoundEffects extends HandlerBase {
 
     @Override
     public boolean doTick(final long tick) {
-        return (tick % SCAN_INTERVAL) == 0 && DimensionLibrary.getData(GameUtils.getWorld()).playBiomeSounds();
+        return DimensionLibrary.getData(GameUtils.getWorld()).playBiomeSounds();
     }
 
     private boolean doBiomeSounds() {
@@ -70,7 +71,24 @@ public class BiomeSoundEffects extends HandlerBase {
 
     @Override
     public void process(@Nonnull final PlayerEntity player) {
+        this.emitters.values().forEach(Emitter::update);
+        if ((TickCounter.getTickCount() % SCAN_INTERVAL) == 0) {
+            this.biomes.tick();
+            handleBiomeSounds(player);
+        }
+    }
 
+    @Override
+    public void onConnect() {
+        clearSounds();
+    }
+
+    @Override
+    public void onDisconnect() {
+        clearSounds();
+    }
+
+    private void handleBiomeSounds(@Nonnull final PlayerEntity player) {
         this.biomes.tick();
 
         final Object2FloatOpenHashMap<IAcoustic> sounds = new Object2FloatOpenHashMap<>();
@@ -105,19 +123,7 @@ public class BiomeSoundEffects extends HandlerBase {
         queueAmbientSounds(sounds);
     }
 
-    @Override
-    public void onConnect() {
-        clearSounds();
-    }
-
-    @Override
-    public void onDisconnect() {
-        clearSounds();
-    }
-
     private void queueAmbientSounds(@Nonnull final Object2FloatOpenHashMap<IAcoustic> sounds) {
-
-        this.emitters.values().forEach(Emitter::update);
 
         // Iterate through the existing emitters:
         // * If done, remove
