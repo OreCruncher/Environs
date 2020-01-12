@@ -325,7 +325,7 @@
       "acoustics": [
         {
           "acoustic": "underground",
-          "conditions": "player.isInside() && player.getY() < 33"
+          "conditions": "state.isInside() && player.getY() < 33"
         },
         {
           "acoustic": "rockfall",
@@ -400,21 +400,21 @@
       "acoustics": [
         {
           "acoustic": "village.rooster",
-          "conditions": "dim.getId() == 0 && !player.isInside() && diurnal.isSunrise() && weather.isNotRaining()",
+          "conditions": "dim.getId() == 0 && !state.isInside() && diurnal.isSunrise() && weather.isNotRaining()",
           "type": "periodic",
           "repeatDelay": 100,
           "repeatDelayRandom": 100
         },
         {
           "acoustic": "village.anvil",
-          "conditions": "dim.getId() == 0 && !player.isInside() && diurnal.isDay() && weather.isNotRaining()",
+          "conditions": "dim.getId() == 0 && !state.isInside() && diurnal.isDay() && weather.isNotRaining()",
           "type": "periodic",
           "repeatDelay": 1200,
           "repeatDelayRandom": 2400
         },
         {
           "acoustic": "village.dogbark",
-          "conditions": "dim.getId() == 0 && !player.isInside() && weather.isNotRaining()",
+          "conditions": "dim.getId() == 0 && !state.isInside() && weather.isNotRaining()",
           "type": "periodic",
           "repeatDelay": 200,
           "repeatDelayRandom": 200
@@ -494,13 +494,13 @@
     },
     {
       "blocks": [
-        "minecraft:waterlily"
+        "minecraft:lily_pad"
       ],
       "chance": 25,
       "acoustics": [
         {
           "acoustic": "waterlily/frog",
-          "conditions": "!player.isInside() && !weather.canWaterFreeze()"
+          "conditions": "!state.isInside() && !weather.canWaterFreeze()"
         }
       ]
     },

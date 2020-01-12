@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.orecruncher.environs.handlers.CommonState;
 import org.orecruncher.environs.library.DimensionInfo;
 import org.orecruncher.environs.library.DimensionLibrary;
 import org.orecruncher.lib.GameUtils;
@@ -81,7 +82,7 @@ public final class CeilingCoverage implements ITickable {
 			if (dimInfo.getId() == -1 || dimInfo.alwaysOutside()) {
 				this.reallyInside = false;
 			} else {
-				final BlockPos pos = GameUtils.getPlayer().getPosition();
+				final BlockPos pos = CommonState.getPlayerPosition();
 				float score = 0.0F;
 				for (Cell cell : cells) score += cell.score(pos);
 				ceilingCoverageRatio = 1.0F - (score / TOTAL_POINTS);
@@ -131,7 +132,7 @@ public final class CeilingCoverage implements ITickable {
 
 				final BlockState state = world.getBlockState(this.working);
 
-				if (state.getMaterial().blocksMovement() || !state.isIn(BlockTags.LEAVES)) {
+				if (state.getMaterial().blocksMovement() && !state.isIn(BlockTags.LEAVES)) {
 					// Cover block - no points for you!
 					return 0;
 				}

@@ -27,7 +27,7 @@ import org.orecruncher.environs.scanner.*;
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
-public class AreaBlockEffects extends HandlerBase {
+class AreaBlockEffects extends HandlerBase {
 
     protected final ClientPlayerLocus locus = new ClientPlayerLocus();
     protected final RandomBlockEffectScanner nearEffects =
@@ -43,17 +43,12 @@ public class AreaBlockEffects extends HandlerBase {
                 this.locus,
                 org.orecruncher.sndctrl.Config.CLIENT.effects.get_effectRange());
 
-    protected final BiomeScanner biomeScanner = new BiomeScanner();
-    protected final CeilingCoverage ceilingCoverage = new CeilingCoverage();
-
     public AreaBlockEffects() {
         super("Area Block Effects");
     }
 
     @Override
     public void process(@Nonnull final PlayerEntity player) {
-        this.ceilingCoverage.tick();
-        this.biomeScanner.tick();
         this.nearEffects.tick();
         this.farEffects.tick();
         this.alwaysOn.tick();

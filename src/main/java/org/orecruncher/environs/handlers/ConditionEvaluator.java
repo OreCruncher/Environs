@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package org.orecruncher.environs.library;
+package org.orecruncher.environs.handlers;
 
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraftforge.api.distmarker.Dist;
@@ -40,6 +40,7 @@ public final class ConditionEvaluator implements ITickable {
         this.context.add(new DiurnalCycleVariables());
         this.context.add(new PlayerVariables());
         this.context.add(new WeatherVariables());
+        this.context.add(new StateVariables());
     }
 
     @Override
@@ -47,11 +48,15 @@ public final class ConditionEvaluator implements ITickable {
         this.context.update();
     }
 
-    public boolean eval(@Nonnull final String conditions) {
+    public boolean check(@Nonnull final String conditions) {
+        final Object result = eval(conditions);
+        return result instanceof Boolean && (boolean) result;
+    }
+
+    public Object eval(@Nonnull final String conditions) {
         if (conditions.length() == 0)
             return true;
-
-        Optional<Object> result = this.context.eval(conditions);
-        return result.isPresent() && (boolean) result.get();
+        final Optional<Object> result = this.context.eval(conditions);
+        return result.orElse(false);
     }
 }

@@ -238,23 +238,15 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	@Nullable
 	public IAcoustic getSpotSound(@Nonnull final Random random) {
-		return this.spotSounds.size() != 0 && random.nextInt(this.spotSoundChance) == 0
-				? new WeightTable<>(this.spotSounds).next()
-				: null;
+		if (this.spotSounds.size() == 0 || random.nextInt(this.spotSoundChance) != 0)
+			return null;
+		return new WeightTable<>(this.spotSounds.stream().filter(AcousticEntry::matches).collect(Collectors.toList())).next();
 	}
 
 	void resetSounds() {
 		this.sounds.clear();
 		this.spotSounds.clear();
 		this.spotSoundChance = DEFAULT_SPOT_CHANCE;
-	}
-
-	public boolean isBiomeType(@Nonnull final Type type) {
-		return getBiomeTypes().contains(type);
-	}
-
-	public boolean areBiomesSameClass(@Nonnull final Biome biome) {
-		return BiomeUtil.areBiomesSimilar(this.biome.getBiome(), biome);
 	}
 
 	public void update(@Nonnull final BiomeConfig entry) {

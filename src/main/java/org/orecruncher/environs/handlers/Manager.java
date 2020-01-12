@@ -59,7 +59,10 @@ public class Manager {
     }
 
     private void init() {
+        // This has to be first!
+        register(new CommonStateHandler());
         register(new AreaBlockEffects());
+        register(new BiomeSoundEffects());
     }
 
     private void onConnect() {

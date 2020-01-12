@@ -16,35 +16,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package org.orecruncher.environs.library;
+package org.orecruncher.environs.handlers;
 
-import net.minecraft.block.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.orecruncher.lib.reflection.ObjectField;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public final class BlockStateUtil {
-    private BlockStateUtil() {
+public interface IStateVariables {
 
-    }
+    boolean isInside();
 
-    private static final ObjectField<BlockState, BlockStateData> environs_blockData =
-            new ObjectField<>(
-                    BlockState.class,
-                    () -> BlockStateData.DEFAULT,
-                    "environs_blockData"
-            );
+    float getCurrentTemperature();
 
-    public static BlockStateData getData(@Nonnull final BlockState state) {
-        return environs_blockData.get(state);
-    }
+    boolean isInVillage();
 
-    public static void setData(@Nonnull final BlockState state, @Nullable final BlockStateData data) {
-        environs_blockData.set(state, data);
-    }
+    boolean isUnderground();
+
+    boolean isInClouds();
+
+    boolean isInSpace();
+
+    int getLightLevel();
 
 }

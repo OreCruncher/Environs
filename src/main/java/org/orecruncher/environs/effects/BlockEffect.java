@@ -24,7 +24,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
-import org.orecruncher.environs.library.ConditionEvaluator;
+import org.orecruncher.environs.handlers.ConditionEvaluator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -78,7 +78,7 @@ public abstract class BlockEffect {
         if (!alwaysExecute() && random.nextInt(getChance()) != 0)
             return false;
 
-        return ConditionEvaluator.INSTANCE.eval(getConditions());
+        return ConditionEvaluator.INSTANCE.check(getConditions());
     }
 
     /**
