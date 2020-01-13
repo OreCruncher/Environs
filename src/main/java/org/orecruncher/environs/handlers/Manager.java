@@ -23,6 +23,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -63,6 +64,7 @@ public class Manager {
         register(new CommonStateHandler());
         register(new AreaBlockEffects());
         register(new BiomeSoundEffects());
+        register(new ParticleSystems());
     }
 
     private void onConnect() {
@@ -102,7 +104,7 @@ public class Manager {
     }
 
     protected boolean checkReady(@Nonnull final TickEvent.ClientTickEvent event) {
-        if (event.side == LogicalSide.SERVER || event.phase == TickEvent.Phase.END || Minecraft.getInstance().isGamePaused())
+        if (event.phase == TickEvent.Phase.END || Minecraft.getInstance().isGamePaused())
             return false;
         return GameUtils.isInGame();
     }
@@ -127,7 +129,7 @@ public class Manager {
         instance().effectHandlers.forEach(h -> event.addTimer(h.getTimer()));
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void clientTick(@Nonnull final TickEvent.ClientTickEvent event) {
         if (isConnected)
             instance_.onTick(event);

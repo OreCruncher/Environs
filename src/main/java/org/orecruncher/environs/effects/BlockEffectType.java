@@ -24,9 +24,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Config;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.lang.reflect.Constructor;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -35,30 +35,14 @@ import java.util.function.Supplier;
 @OnlyIn(Dist.CLIENT)
 public enum BlockEffectType {
 
-    /**
-     * Generic UNKNOWN effect
-     */
-    UNKNOWN("UNKNOWN", null, () -> false),
-
-    /**
-     * Firefly mote effect
-     */
-    FIREFLY("firefly", FireFlyEffect.class, Config.CLIENT.effects::get_enableFireFlies),
-
-    /**
-     * Various jet like particle effects
-     */
-    STEAM_JET("steam", SteamJetEffect.class, Config.CLIENT.effects::get_enableSteamJets),
-
-    FIRE_JET("fire", FireJetEffect.class, Config.CLIENT.effects::get_enableFireJets),
-
-    BUBBLE_JET("bubble", BubbleJetEffect.class, Config.CLIENT.effects::get_enableBubbleJets),
-
-    DUST_JET("dust", DustJetEffect.class, Config.CLIENT.effects::get_enableDustJets),
-
-    FOUNTAIN_JET("fountain", FountainJetEffect.class, Config.CLIENT.effects::get_enableFountainJets),
-
-    SPLASH_JET("splash", WaterSplashJetEffect.class, Config.CLIENT.effects::get_enableWaterSplashJets);
+    UNKNOWN("UNKNOWN", ignored -> null, () -> false),
+    FIREFLY("firefly", FireFlyEffect::new, Config.CLIENT.effects::get_enableFireFlies),
+    STEAM_JET("steam", SteamJetEffect::new, Config.CLIENT.effects::get_enableSteamJets),
+    FIRE_JET("fire", FireJetEffect::new, Config.CLIENT.effects::get_enableFireJets),
+    BUBBLE_JET("bubble", BubbleJetEffect::new, Config.CLIENT.effects::get_enableBubbleJets),
+    DUST_JET("dust", DustJetEffect::new, Config.CLIENT.effects::get_enableDustJets),
+    FOUNTAIN_JET("fountain", FountainJetEffect::new, Config.CLIENT.effects::get_enableFountainJets),
+    SPLASH_JET("splash", WaterSplashJetEffect::new, Config.CLIENT.effects::get_enableWaterSplashJets);
 
     private static final Map<String, BlockEffectType> typeMap = new Object2ObjectOpenHashMap<>();
     static {
@@ -73,18 +57,13 @@ public enum BlockEffectType {
     }
 
     protected final String name;
-    protected Constructor<?> factory;
+    protected final Function<Integer, BlockEffect> factory;
     protected final Supplier<Boolean> enabled;
 
-    BlockEffectType(@Nonnull final String name, @Nullable final Class<?> clazz, @Nullable final Supplier<Boolean> enabled) {
+    BlockEffectType(@Nonnull final String name, @Nonnull final Function<Integer, BlockEffect> factory, @Nonnull final Supplier<Boolean> enabled) {
         this.name = name;
         this.enabled = enabled;
-        try {
-            if (clazz != null)
-                this.factory = clazz.getConstructor(int.class);
-        } catch (@Nonnull final Throwable ignored) {
-            this.factory = null;
-        }
+        this.factory = factory;
     }
 
     @Nonnull
@@ -96,15 +75,8 @@ public enum BlockEffectType {
         return this.enabled.get();
     }
 
-    @Nullable
-    public BlockEffect getInstance(final int chance) {
-        if (isEnabled() && this.factory != null) {
-            try {
-                return (BlockEffect) this.factory.newInstance(chance);
-            } catch (@Nonnull final Throwable ignored) {
-            }
-        }
-
-        return null;
+    @Nonnull
+    public Optional<BlockEffect> getInstance(final int chance) {
+        return Optional.ofNullable(this.factory.apply(chance));
     }
 }

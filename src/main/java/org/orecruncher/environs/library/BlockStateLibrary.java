@@ -40,17 +40,17 @@ import org.orecruncher.sndctrl.library.AcousticLibrary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public final class BlockStateLibrary {
 
     private static final IModLog LOGGER = Environs.LOGGER.createChild(BlockStateLibrary.class);
+    private static final BlockStateMatcherMap<BlockStateData> registry = new BlockStateMatcherMap<>();
 
     private BlockStateLibrary() {
 
     }
-
-    private static final BlockStateMatcherMap<BlockStateData> registry = new BlockStateMatcherMap<>();
 
     static void initialize() {
         ForgeUtils.getBlockStates().forEach(state -> BlockStateUtil.setData(state, null));
@@ -134,12 +134,12 @@ public final class BlockStateLibrary {
                     LOGGER.warn("Unknown block effect type in configuration: [%s]", e.effect);
                 } else if (type.isEnabled()) {
                     final int chance = e.chance != null ? e.chance : 100;
-                    final BlockEffect blockEffect = type.getInstance(chance);
-                    if (blockEffect != null) {
-                        if (e.conditions != null)
-                            blockEffect.setConditions(e.conditions);
-                        blockData.addEffect(blockEffect);
-                    }
+                    type.getInstance(chance).ifPresent(
+                            be -> {
+                                if (e.conditions != null)
+                                    be.setConditions(e.conditions);
+                                blockData.addEffect(be);
+                            });
                 }
             }
         }

@@ -242,7 +242,13 @@ public final class Config {
             }
 
             public void update() {
+                this._enableBubbleJets = true;
+                this._enableFireJets = true;
+            }
 
+            // Reach over and grab from SoundControl
+            public int get_effectRange() {
+                return org.orecruncher.sndctrl.Config.CLIENT.effects.get_effectRange();
             }
 
             public boolean get_enableFireFlies() {

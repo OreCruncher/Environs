@@ -21,11 +21,18 @@ package org.orecruncher.environs.effects;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
 
+@OnlyIn(Dist.CLIENT)
 public class SteamJetEffect extends BlockEffect {
+
+    public SteamJetEffect(final int chance) {
+        super(chance);
+    }
 
     @Nonnull
     @Override

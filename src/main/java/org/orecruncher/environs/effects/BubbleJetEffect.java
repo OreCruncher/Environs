@@ -19,13 +19,23 @@
 package org.orecruncher.environs.effects;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.orecruncher.environs.effects.particles.BubbleJet;
+import org.orecruncher.environs.effects.particles.Jet;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-public class BubbleJetEffect extends BlockEffect {
+@OnlyIn(Dist.CLIENT)
+public class BubbleJetEffect extends JetEffect {
+
+    public BubbleJetEffect(final int chance) {
+        super(chance);
+    }
 
     @Nonnull
     @Override
@@ -34,7 +44,23 @@ public class BubbleJetEffect extends BlockEffect {
     }
 
     @Override
-    public void doEffect(@Nonnull IWorldReader provider, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull Random random) {
+    public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+                              @Nonnull final BlockPos pos, @Nonnull final Random random) {
+        if (WATER_PREDICATE.test(state)) {
+            final boolean isSolidBlock = provider.getBlockState(pos.down()).getMaterial().isSolid();
+            return isSolidBlock && super.canTrigger(provider, state, pos, random);
+        }
+        return false;
+    }
 
+    @Override
+    public void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+                         @Nonnull final BlockPos pos, @Nonnull final Random random) {
+        final int liquidBlocks = countBlocks(provider, pos, WATER_PREDICATE, 1);
+        if (liquidBlocks > 0) {
+            final Jet effect = new BubbleJet(liquidBlocks, provider, pos.getX() + 0.5D,
+                    pos.getY() + 0.1D, pos.getZ() + 0.5D);
+            addEffect(effect);
+        }
     }
 }
