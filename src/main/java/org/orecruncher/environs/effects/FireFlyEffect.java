@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.orecruncher.environs.effects.particles.Collections;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -41,7 +42,9 @@ public class FireFlyEffect extends BlockEffect {
     }
 
     @Override
-    public void doEffect(@Nonnull IWorldReader provider, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull Random random) {
-
+    public void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+                         @Nonnull final BlockPos pos, @Nonnull final Random random) {
+        Collections.addFireFly(provider, pos.getX() + 0.5F, pos.getY() + 0.5F,
+                pos.getZ() + 0.5F);
     }
 }

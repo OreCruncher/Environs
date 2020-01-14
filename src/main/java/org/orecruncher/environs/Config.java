@@ -242,6 +242,7 @@ public final class Config {
             }
 
             public void update() {
+                this._enableFireFlies = true;
                 this._enableBubbleJets = true;
                 this._enableFireJets = true;
                 this._enableSteamJets = true;

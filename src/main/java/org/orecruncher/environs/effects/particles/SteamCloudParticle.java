@@ -1,5 +1,5 @@
 /*
- *  Dynamic Surroundings: Mob Effects
+ *  Dynamic Surroundings: Environs
  *  Copyright (C) 2019  OreCruncher
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,9 @@
 
 package org.orecruncher.environs.effects.particles;
 
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.IAnimatedSprite;
+import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.particle.SpriteTexturedParticle;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;

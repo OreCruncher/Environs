@@ -531,13 +531,13 @@
     },
     {
       "blocks": [
-        "minecraft:red_flower",
+        "minecraft:rose_bush",
         "minecraft:yellow_flower",
         "minecraft:double_plant"
       ],
-      "acoustics": [
+      "effects": [
         {
-          "acoustic": "firefly",
+          "effect": "firefly",
           "conditions": "weather.isNotRaining() && (diurnal.isNight() || diurnal.isSunset()) && !(biome.is('hot') || weather.canWaterFreeze())",
           "chance": 30
         }
