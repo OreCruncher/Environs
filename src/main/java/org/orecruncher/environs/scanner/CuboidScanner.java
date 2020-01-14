@@ -229,9 +229,11 @@ public abstract class CuboidScanner extends Scanner {
 
 	public void onBlockUpdate(@Nonnull final BlockPos pos) {
 		try {
-			final BlockState state = this.locus.getWorld().getBlockState(pos);
-			if (isInteresting(pos, state)) {
-				blockScan(state, pos, this.random);
+			if (this.activeCuboid != null && this.activeCuboid.contains(pos)) {
+				final BlockState state = this.locus.getWorld().getBlockState(pos);
+				if (isInteresting(pos, state)) {
+					blockScan(state, pos, this.random);
+				}
 			}
 		} catch (final Throwable t) {
 			this.locus.getLogger().error(t, "onBlockUpdate() error");

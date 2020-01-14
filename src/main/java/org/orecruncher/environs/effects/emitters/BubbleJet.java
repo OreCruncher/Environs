@@ -22,61 +22,24 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.environs.effects.particles;
+package org.orecruncher.environs.effects.emitters;
 
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.orecruncher.lib.GameUtils;
 
-/*
- * Base for particle entities that are long lived and generate
- * other particles as a jet.  This entity does not render - just
- * serves as a particle factory.
- */
 @OnlyIn(Dist.CLIENT)
-public abstract class Jet extends ParticleEmitter {
+public class BubbleJet extends Jet {
 
-	protected final int jetStrength;
-	protected final int updateFrequency;
-
-	protected final int particleMaxAge;
-	protected int particleAge;
-
-	public Jet(final int strength, final IWorldReader world, final double x, final double y, final double z) {
-		this(0, strength, world, x, y, z, 3);
+	public BubbleJet(final int strength, final IWorldReader world, final double x, final double y, final double z) {
+		super(strength, world, x, y, z);
 	}
-
-	public Jet(final int layer, final int strength, final IWorldReader world, final double x, final double y,
-			   final double z, final int freq) {
-		super(world, x, y, z);
-
-		this.jetStrength = strength;
-		this.updateFrequency = freq;
-		this.particleMaxAge = (RANDOM.nextInt(strength) + 2) * 20;
-	}
-
-	/*
-	 * Override in derived class to provide particle for the jet.
-	 */
-	protected abstract void spawnJetParticle();
 
 	@Override
-	public boolean shouldDie() {
-		return this.particleAge >= this.particleMaxAge;
+	protected void spawnJetParticle() {
+		GameUtils.getMC().particles.addParticle(ParticleTypes.BUBBLE, this.posX, this.posY, this.posZ, 0, 0.5D + this.jetStrength / 10D, 0D);
 	}
 
-	/*
-	 * During update see if a particle needs to be spawned so that it can rise up.
-	 */
-	@Override
-	public void think() {
-
-		// Check to see if a particle needs to be generated
-		if (this.particleAge % this.updateFrequency == 0) {
-			spawnJetParticle();
-		}
-
-		// Grow older
-		this.particleAge++;
-	}
 }

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package org.orecruncher.environs.effects.particles;
+package org.orecruncher.environs.effects.emitters;
 
 import java.util.Random;
 

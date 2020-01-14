@@ -24,7 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Config;
-import org.orecruncher.environs.effects.particles.ParticleEmitter;
+import org.orecruncher.environs.effects.emitters.ParticleEmitter;
 import org.orecruncher.lib.BlockPosUtil;
 
 import javax.annotation.Nonnull;
@@ -82,6 +82,5 @@ public class ParticleSystems extends HandlerBase {
     public static void add(@Nonnull final ParticleEmitter system) {
         _instance.systems.put(system.getPos().toImmutable(), system);
     }
-
 
 }

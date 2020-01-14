@@ -21,27 +21,20 @@ package org.orecruncher.environs.handlers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.orecruncher.environs.Config;
 import org.orecruncher.environs.scanner.*;
+import org.orecruncher.lib.events.BlockUpdateEvent;
 
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 class AreaBlockEffects extends HandlerBase {
 
-    protected final ClientPlayerLocus locus = new ClientPlayerLocus();
-    protected final RandomBlockEffectScanner nearEffects =
-            new RandomBlockEffectScanner(
-                this.locus,
-                RandomBlockEffectScanner.NEAR_RANGE);
-    protected final RandomBlockEffectScanner farEffects =
-            new RandomBlockEffectScanner(
-                this.locus,
-                RandomBlockEffectScanner.FAR_RANGE);
-    protected final AlwaysOnBlockEffectScanner alwaysOn =
-            new AlwaysOnBlockEffectScanner(
-                this.locus,
-                org.orecruncher.sndctrl.Config.CLIENT.effects.get_effectRange());
+    protected ClientPlayerLocus locus;
+    protected RandomBlockEffectScanner nearEffects;
+    protected RandomBlockEffectScanner farEffects;
+    protected AlwaysOnBlockEffectScanner alwaysOn;
 
     public AreaBlockEffects() {
         super("Area Block Effects");
@@ -56,11 +49,22 @@ class AreaBlockEffects extends HandlerBase {
 
     @Override
     public void onConnect() {
-        MinecraftForge.EVENT_BUS.register(this.alwaysOn);
+        this.locus = new ClientPlayerLocus();
+        this.nearEffects = new RandomBlockEffectScanner(this.locus, RandomBlockEffectScanner.NEAR_RANGE);
+        this.farEffects = new RandomBlockEffectScanner(this.locus, RandomBlockEffectScanner.FAR_RANGE);
+        this.alwaysOn = new AlwaysOnBlockEffectScanner(this.locus, Config.CLIENT.effects.get_effectRange());
     }
 
     @Override
     public void onDisconnect() {
-        MinecraftForge.EVENT_BUS.unregister(this.alwaysOn);
+        this.locus = null;
+        this.nearEffects = null;
+        this.farEffects = null;
+        this.alwaysOn = null;
+    }
+
+    @SubscribeEvent
+    public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
+        event.getExpandedPositions().forEach(this.alwaysOn::onBlockUpdate);
     }
 }

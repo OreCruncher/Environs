@@ -19,13 +19,12 @@
 package org.orecruncher.environs.effects;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.orecruncher.environs.effects.particles.BubbleJet;
-import org.orecruncher.environs.effects.particles.Jet;
+import org.orecruncher.environs.effects.emitters.BubbleJet;
+import org.orecruncher.environs.effects.emitters.Jet;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -56,7 +55,7 @@ public class BubbleJetEffect extends JetEffect {
     @Override
     public void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
                          @Nonnull final BlockPos pos, @Nonnull final Random random) {
-        final int liquidBlocks = countBlocks(provider, pos, WATER_PREDICATE, 1);
+        final int liquidBlocks = countVerticalBlocks(provider, pos, WATER_PREDICATE, 1);
         if (liquidBlocks > 0) {
             final Jet effect = new BubbleJet(liquidBlocks, provider, pos.getX() + 0.5D,
                     pos.getY() + 0.1D, pos.getZ() + 0.5D);

@@ -24,8 +24,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.orecruncher.environs.effects.particles.FireJet;
-import org.orecruncher.environs.effects.particles.Jet;
+import org.orecruncher.environs.effects.emitters.FireJet;
+import org.orecruncher.environs.effects.emitters.Jet;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -63,7 +63,7 @@ public class FireJetEffect extends JetEffect {
             blockCount = 2;
             spawnHeight = pos.getY() + 1.1F;
         } else if (blockMaterial.isLiquid()) {
-            blockCount = countBlocks(provider, pos, LAVA_PREDICATE, -1);
+            blockCount = countVerticalBlocks(provider, pos, LAVA_PREDICATE, -1);
             spawnHeight = pos.getY() + state.getFluidState().getHeight() + 0.1F;
         } else {
             // Fail safe - shouldn't get here

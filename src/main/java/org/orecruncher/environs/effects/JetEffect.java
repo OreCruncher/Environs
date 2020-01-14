@@ -29,17 +29,15 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.fluid.FluidState;
+import net.minecraft.block.Blocks;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.util.math.BlockPos;
-import org.orecruncher.environs.effects.particles.Jet;
+import org.orecruncher.environs.effects.emitters.Jet;
 import org.orecruncher.environs.handlers.ConditionEvaluator;
 import org.orecruncher.environs.handlers.ParticleSystems;
 
@@ -50,27 +48,43 @@ public abstract class JetEffect extends BlockEffect {
 
 	protected static final Predicate<BlockState> FLUID_PREDICATE = (state) -> !state.getFluidState().isEmpty();
 
-	protected static final Predicate<BlockState> LAVA_PREDICATE = (state) -> {
+	public static final Predicate<BlockState> LAVA_PREDICATE = (state) -> {
 		final IFluidState fs = state.getFluidState();
 		return !fs.isEmpty() && fs.isTagged(FluidTags.LAVA);
-	} ;
-
-	protected static final Predicate<BlockState> WATER_PREDICATE = (state) -> {
-		final IFluidState fs = state.getFluidState();
-		return !fs.isEmpty() && fs.isTagged(FluidTags.WATER);
-	} ;
-
-	protected static final Predicate<BlockState> SOLID_PREDICATE = (state) -> {
-		return state.getMaterial().isSolid();
 	};
 
-	protected static int countBlocks(final IWorldReader provider, final BlockPos pos,
-									 final Predicate<BlockState> predicate, final int step) {
+	public static final Predicate<BlockState> WATER_PREDICATE = (state) -> {
+		final IFluidState fs = state.getFluidState();
+		return !fs.isEmpty() && fs.isTagged(FluidTags.WATER);
+	};
+
+	public static final Predicate<BlockState> SOLID_PREDICATE = (state) -> state.getMaterial().isSolid();
+
+	public static final Predicate<BlockState> HOTBLOCK_PREDICATE = (state) -> LAVA_PREDICATE.test(state) || state.getBlock() == Blocks.MAGMA_BLOCK;
+
+	public static int countVerticalBlocks(final IWorldReader provider, final BlockPos pos,
+										  final Predicate<BlockState> predicate, final int step) {
 		int count = 0;
 		final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos(pos);
 		for (; count < MAX_STRENGTH && predicate.test(provider.getBlockState(mutable)); count++)
 			mutable.setY(mutable.getY() + step);
 		return count;
+	}
+
+	public static int countHorizontalBlocks(final IWorldReader provider, final BlockPos pos,
+											final Predicate<BlockState> predicate, final boolean fastFirst) {
+		int blockCount = 0;
+		for (int i = -1; i <= 1; i++)
+			for (int j = -1; j <= 1; j++)
+				for (int k = -1; k <= 1; k++) {
+					final BlockState state = provider.getBlockState(pos.add(i, j, k));
+					if (predicate.test(state)) {
+						if (fastFirst)
+							return 1;
+						blockCount++;
+					}
+				}
+		return blockCount;
 	}
 
 	public JetEffect(final int chance) {
@@ -79,7 +93,7 @@ public abstract class JetEffect extends BlockEffect {
 
 	@Override
 	public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
-			@Nonnull final BlockPos pos, @Nonnull final Random random) {
+							  @Nonnull final BlockPos pos, @Nonnull final Random random) {
 		if (alwaysExecute() || random.nextInt(getChance()) == 0) {
 			return ParticleSystems.okToSpawn(pos) && ConditionEvaluator.INSTANCE.check(getConditions());
 		}
