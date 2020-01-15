@@ -246,6 +246,7 @@ public final class Config {
                 this._enableBubbleJets = true;
                 this._enableFireJets = true;
                 this._enableSteamJets = true;
+                this._enableDustJets = true;
             }
 
             // Reach over and grab from SoundControl

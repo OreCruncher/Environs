@@ -33,9 +33,6 @@ import javax.annotation.Nonnull;
 @OnlyIn(Dist.CLIENT)
 public class MoteFireFly extends AnimatedMote {
 
-    private static final int startColorRGB = ColorPalette.MC_YELLOW.rgb();
-    private static final int fadeColorRGB = ColorPalette.MC_GREEN.rgb();
-
     private static final float XZ_MOTION_DELTA = 0.2F;
     private static final float Y_MOTION_DELTA = XZ_MOTION_DELTA / 2.0F;
     private static final float ACCELERATION = 0.004F;
@@ -58,8 +55,8 @@ public class MoteFireFly extends AnimatedMote {
         this.particleScale *= 0.75F * 0.25F * 0.1F;
         this.maxAge = 120 + RANDOM.nextInt(12);
 
-        setColor(startColorRGB);
-        setColorFade(fadeColorRGB);
+        setColor(ColorPalette.MC_YELLOW);
+        setColorFade(ColorPalette.MC_GREEN);
     }
 
     @Override

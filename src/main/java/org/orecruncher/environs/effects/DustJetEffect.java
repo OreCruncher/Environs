@@ -23,12 +23,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.orecruncher.environs.effects.emitters.DustJet;
+import org.orecruncher.environs.effects.emitters.Jet;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
-public class DustJetEffect extends BlockEffect {
+public class DustJetEffect extends JetEffect {
 
     public DustJetEffect(final int chance) {
         super(chance);
@@ -41,7 +43,16 @@ public class DustJetEffect extends BlockEffect {
     }
 
     @Override
-    public void doEffect(@Nonnull IWorldReader provider, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull Random random) {
+    public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+                              @Nonnull final BlockPos pos, @Nonnull final Random random) {
+        return provider.isAirBlock(pos.down()) && super.canTrigger(provider, state, pos, random);
+    }
 
+    @Override
+    public void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+                         @Nonnull final BlockPos pos, @Nonnull final Random random) {
+        final Jet effect = new DustJet(2, provider, pos.getX() + 0.5D, pos.getY() - 0.2D,
+                pos.getZ() + 0.5D, state);
+        addEffect(effect);
     }
 }
