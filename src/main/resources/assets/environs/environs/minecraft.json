@@ -477,6 +477,10 @@
         {
           "effect": "splash",
           "chance": 0
+        },
+        {
+          "effect": "fountain",
+          "chance": 800
         }
       ]
     },

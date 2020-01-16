@@ -33,11 +33,16 @@ public class DustParticle extends DiggingParticle {
 	private final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 	public DustParticle(final World world, final double x, final double y, final double z, final BlockState state) {
+		this(world, x, y, z, 0, 0, 0, state);
+	}
+
+	public DustParticle(final World world, final double x, final double y, final double z, final double dX, final double dY, final double dZ, final BlockState state) {
 		super(world, x, y, z, 0, 0, 0, state);
 
 		this.canCollide = false;
-
-		this.motionX = this.motionY = this.motionZ = 0;
+		this.motionX = dX;
+		this.motionY = dY;
+		this.motionZ = dZ;
 
 		multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 30.0F));
 		setPosition(this.posX, this.posY, this.posZ);

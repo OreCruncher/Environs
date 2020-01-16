@@ -16,33 +16,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-
 package org.orecruncher.environs.effects.emitters;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
 import org.orecruncher.environs.effects.particles.DustParticle;
 
 @OnlyIn(Dist.CLIENT)
-public class DustJet extends Jet {
+public class FountainJet extends Jet {
 
-	protected final BlockState blockState;
+	protected final BlockState state;
 
-	public DustJet(final int strength, final IWorldReader world, final double x, final double y, final double z,
-				   final BlockState state) {
-		super(1, strength, world, x, y, z, 2);
-		this.blockState = state;
+	public FountainJet(final int strength, final IWorldReader world, final double x, final double y, final double z,
+					   final BlockState state) {
+		super(1, strength, world, x, y, z, 1);
+		this.state = state;
 	}
 
 	@Override
 	protected void spawnJetParticle() {
+		final double motionX = RANDOM.nextGaussian() * 0.03D;
+		final double motionZ = RANDOM.nextGaussian() * 0.03D;
 		final double x = this.posX + RANDOM.nextGaussian() * 0.2D;
 		final double z = this.posZ + RANDOM.nextGaussian() * 0.2D;
-		final Particle particle = new DustParticle((World) this.world, x, this.posY, z, this.blockState).init();
+		final Particle particle = new DustParticle((World) this.world, x, this.posY, z, motionX, 0.5D, motionZ, this.state)
+				.init();
 		addParticle(particle);
 	}
 
