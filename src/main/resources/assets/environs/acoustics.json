@@ -39,5 +39,11 @@
     "name": "environs:soulsand",
     "pitch_min": 60,
     "pitch_max": 120
+  },
+  "steam.hiss": {
+    "name": "minecraft:block.fire.extinguish",
+    "category": "ambient",
+    "vol_min": 8,
+    "vol_max": 12
   }
 }

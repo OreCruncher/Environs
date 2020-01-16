@@ -50,9 +50,10 @@ public final class Collections {
                 public void beginRender(@Nonnull BufferBuilder buffer, @Nonnull TextureManager textureManager) {
                     RenderHelper.disableStandardItemLighting();
                     textureManager.bindTexture(RippleStyle.get().getTexture());
+                    GlStateManager.depthMask(false);
                     GlStateManager.enableDepthTest();
                     OpenGlUtil.setStandardBlend();
-                    GlStateManager.depthMask(false);
+                    GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
                     buffer.begin(GL11.GL_QUADS, this.getVertexFormat());
                 }
             };

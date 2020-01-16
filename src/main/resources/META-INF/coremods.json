@@ -1,4 +1,5 @@
 {
   "biome": "transformers/biome.js",
-  "blockstate": "transformers/blockstate.js"
+  "blockstate": "transformers/blockstate.js",
+  "dripparticle": "transformers/dripparticle.js"
 }
