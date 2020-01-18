@@ -65,6 +65,7 @@ public class Manager {
         register(new AreaBlockEffects());
         register(new BiomeSoundEffects());
         register(new ParticleSystems());
+        register(new AuroraHandler());
     }
 
     private void onConnect() {

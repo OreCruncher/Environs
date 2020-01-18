@@ -81,12 +81,14 @@ public final class Config {
         public final Rain rain;
         public final Biome biome;
         public final Effects effects;
+        public final Aurora aurora;
 
         Client(@Nonnull final ForgeConfigSpec.Builder builder) {
             this.logging = new Logging(builder);
             this.rain = new Rain(builder);
             this.biome = new Biome(builder);
             this.effects = new Effects(builder);
+            this.aurora = new Aurora(builder);
         }
 
         void update() {
@@ -94,6 +96,7 @@ public final class Config {
             this.rain.update();
             this.biome.update();
             this.effects.update();
+            this.aurora.update();
         }
 
         public static class Logging {
@@ -335,6 +338,47 @@ public final class Config {
                 return this._enableWaterSplashJets;
             }
 
+        }
+
+        public static class Aurora {
+
+            private final BooleanValue auroraEnabled;
+            private final IntValue maxBands;
+
+            private boolean _auroraEnabled;
+            private int _maxBands;
+
+            Aurora(@Nonnull final ForgeConfigSpec.Builder builder) {
+                builder.comment("Options for controlling various effects")
+                        .push("Effect Options");
+
+                this.auroraEnabled = builder
+                        .worldRestart()
+                        .comment("Enable/disable Aurora processing")
+                        .translation("environs.cfg.aurora.Enable")
+                        .define("Auroras", true);
+
+                this.maxBands = builder
+                        .worldRestart()
+                        .comment("Cap the maximum bands that will be rendered")
+                        .translation("environs.cfg.aurora.MaxBands")
+                        .defineInRange("Maximum Bands", 3, 0, 3);
+
+                builder.pop();
+            }
+
+            public void update() {
+                this._auroraEnabled = this.auroraEnabled.get();
+                this._maxBands = this.maxBands.get();
+            }
+
+            public boolean get_auroraEnabled() {
+                return this._auroraEnabled;
+            }
+
+            public int get_maxBands() {
+                return this._maxBands;
+            }
         }
     }
 }

@@ -24,6 +24,11 @@
 	"environs.cfg.effects.Fireflies": "Светлячки",
 	"environs.cfg.effects.Fireflies.tooltip": "Вкл/выкл светлячков, летающих вокруг растений",
 	"environs.cfg.effects.Splash": "Брызги воды",
-	"environs.cfg.effects.Splash.tooltip": "Вкл/выкл брызги от стекающей воды"
-
+	"environs.cfg.effects.Splash.tooltip": "Вкл/выкл брызги от стекающей воды",
+	"environs.cfg.aurora": "Северное сияние",
+	"environs.cfg.aurora.tooltip": "Настройки поведения и отрисовки северного сияния",
+	"environs.cfg.aurora.Enable": "Северное сияние",
+	"environs.cfg.aurora.Enable.tooltip": "Вкл/выкл северное сияние на стороне клиента и сервера",
+	"environs.cfg.aurora.MaxBands": "Maximum Bands",
+	"environs.cfg.aurora.MaxBands.tooltip": "Cap the maximum bands that will be rendered"
 }

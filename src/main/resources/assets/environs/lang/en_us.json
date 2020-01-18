@@ -30,5 +30,11 @@
 	"environs.cfg.effects.Fireflies": "Fireflies",
 	"environs.cfg.effects.Fireflies.tooltip": "Enable/disable Firefly effect around plants",
 	"environs.cfg.effects.Splash": "Water Splash",
-	"environs.cfg.effects.Splash.tooltip": "Enable/disable Water Splash effects when water spills down"
+	"environs.cfg.effects.Splash.tooltip": "Enable/disable Water Splash effects when water spills down",
+	"environs.cfg.aurora": "Aurora Options",
+	"environs.cfg.aurora.tooltip": "Options that control Aurora behavior and rendering",
+	"environs.cfg.aurora.Enable": "Auroras",
+	"environs.cfg.aurora.Enable.tooltip": "Enable/disable Aurora processing",
+	"environs.cfg.aurora.MaxBands": "Maximum Bands",
+	"environs.cfg.aurora.MaxBands.tooltip": "Cap the maximum bands that will be rendered"
 }
