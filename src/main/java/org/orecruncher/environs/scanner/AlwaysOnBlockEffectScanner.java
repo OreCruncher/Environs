@@ -59,7 +59,7 @@ public class AlwaysOnBlockEffectScanner extends CuboidScanner {
 		for (final BlockEffect be : effects) {
 			if (be.canTrigger(provider, state, pos, rand))
 				be.doEffect(provider, state, pos, rand);
-		}
+ 		}
 	}
 
 }

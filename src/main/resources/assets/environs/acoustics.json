@@ -45,5 +45,35 @@
     "category": "ambient",
     "vol_min": 8,
     "vol_max": 12
+  },
+  "waterfall/0": {
+    "name": "environs:waterfall.0",
+    "pitch_min": 80,
+    "pitch_max": 120
+  },
+  "waterfall/1": {
+    "name": "environs:waterfall.1",
+    "pitch_min": 80,
+    "pitch_max": 120
+  },
+  "waterfall/2": {
+    "name": "environs:waterfall.2",
+    "pitch_min": 80,
+    "pitch_max": 120
+  },
+  "waterfall/3": {
+    "name": "environs:waterfall.3",
+    "pitch_min": 80,
+    "pitch_max": 120
+  },
+  "waterfall/4": {
+    "name": "environs:waterfall.4",
+    "pitch_min": 80,
+    "pitch_max": 120
+  },
+  "waterfall/5": {
+    "name": "environs:waterfall.5",
+    "pitch_min": 80,
+    "pitch_max": 120
   }
 }

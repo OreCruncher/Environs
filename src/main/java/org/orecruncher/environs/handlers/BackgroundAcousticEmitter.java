@@ -20,6 +20,7 @@ package org.orecruncher.environs.handlers;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Environs;
@@ -36,22 +37,23 @@ import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
  * cancels the sound.
  */
 @OnlyIn(Dist.CLIENT)
-public final class Emitter {
+public final class BackgroundAcousticEmitter implements ITickable {
 
 	protected final IAcoustic effect;
 	protected BackgroundSoundInstance activeSound;
 	protected boolean done = false;
 
-	public Emitter(@Nonnull final IAcoustic sound) {
+	public BackgroundAcousticEmitter(@Nonnull final IAcoustic sound) {
 		this.effect = sound;
 	}
 
 	protected BackgroundSoundInstance createSound() {
-		final ISoundInstance sound = this.effect.getSound();
+		final ISoundInstance sound = this.effect.getFactory().createSound();
 		return new BackgroundSoundInstance(sound);
 	}
 
-	public void update() {
+	@Override
+	public void tick() {
 
 		// Allocate a new sound to send down if needed
 		if (this.activeSound == null) {

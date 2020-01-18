@@ -792,69 +792,87 @@
 		]
 	},
 	"waterfall.0": {
-		"category": "spot",
+		"category": "biomes",
 		"credits": [
 			"§aWaterfall Winspit Dorset.wav",
 			"genghis attenborough",
 			"Attribution Noncommercial"
 		],
 		"sounds": [
-			"environs:ambient/stream/waterfall0"
+			{
+				"name": "environs:ambient/stream/waterfall0",
+				"attenuation_distance": 12
+			}
 		]
 	},
 	"waterfall.1": {
-		"category": "spot",
+		"category": "biomes",
 		"credits": [
 			"§aRunning-water-mountain-stream.mp3",
 			"Alexander",
 			"Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)"
 		],
 		"sounds": [
-			"environs:ambient/stream/waterfall1"
+			{
+				"name": "environs:ambient/stream/waterfall1",
+				"attenuation_distance": 16
+			}
 		]
 	},
 	"waterfall.2": {
-		"category": "spot",
+		"category": "biomes",
 		"credits": [
 			"§aWaterfall",
 			"Orpheuz",
 			"Creative Commons 0"
 		],
 		"sounds": [
-			"environs:ambient/stream/waterfall2"
+			{
+				"name": "environs:ambient/stream/waterfall2",
+				"attenuation_distance": 18
+			}
 		]
 	},
 	"waterfall.3": {
-		"category": "spot",
+		"category": "biomes",
 		"credits": [
 			"§aSmall Waterfall at the Mill",
 			"willstepp",
 			"Creative Commons 0"
 		],
 		"sounds": [
-			"environs:ambient/stream/waterfall3"
+			{
+				"name": "environs:ambient/stream/waterfall3",
+				"attenuation_distance": 20
+			}
 		]
 	},
 	"waterfall.4": {
-		"category": "spot",
+		"category": "biomes",
 		"credits": [
 			"§a Waterfall, Large, A.wav",
 			"InspectorJ",
 			"Attribution"
 		],
 		"sounds": [
-			"environs:ambient/stream/waterfall4"
+			{
+				"name": "environs:ambient/stream/waterfall4",
+				"attenuation_distance": 22
+			}
 		]
 	},
 	"waterfall.5": {
-		"category": "spot",
+		"category": "biomes",
 		"credits": [
 			"§aWaterfall, Small, B.wav",
 			"InspectorJ",
 			"Attribution"
 		],
 		"sounds": [
-			"environs:ambient/stream/waterfall5"
+			{
+				"name": "environs:ambient/stream/waterfall5",
+				"attenuation_distance": 24
+			}
 		]
 	},
 	"village.rooster": {

@@ -60,6 +60,7 @@ class CommonStateHandler extends HandlerBase {
         data.dimensionName = world.getProviderName();
         data.dimInfo = DimensionLibrary.getData(world);
         data.playerPosition = GameUtils.getPlayer().getPosition();
+        data.playerEyePosition = GameUtils.getPlayer().getEyePosition(1F);
         data.dayCycle = DayCycle.getCycle(world);
         data.inside = ceilingCoverage.isReallyInside();
         data.biomeTemperature = WorldUtils.getTemperatureAt(world, data.playerPosition);

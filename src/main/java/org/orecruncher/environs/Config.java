@@ -248,6 +248,7 @@ public final class Config {
                 this._enableSteamJets = true;
                 this._enableDustJets = true;
                 this._enableFountainJets = true;
+                this._enableWaterSplashJets = true;
             }
 
             // Reach over and grab from SoundControl

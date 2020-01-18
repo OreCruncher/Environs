@@ -69,43 +69,47 @@ public final class Collections {
 
     }
 
-    public static void addWaterRipple(@Nonnull final IWorldReader world, final double x, final double y,
+    public static boolean addWaterRipple(@Nonnull final IWorldReader world, final double x, final double y,
                                                final double z) {
         IParticleMote mote = null;
         if (theRipples.get().canFit()) {
             mote = new MoteWaterRipple(world, x, y, z);
             theRipples.get().addParticle(mote);
         }
+        return mote != null;
     }
 
-    public static void addWaterSpray(@Nonnull final IWorldReader world, final double x, final double y,
+    public static boolean addWaterSpray(@Nonnull final IWorldReader world, final double x, final double y,
                                               final double z, final double dX, final double dY, final double dZ) {
         IParticleMote mote = null;
         if (theSprays.get().canFit()) {
             mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
             theSprays.get().addParticle(mote);
         }
+        return mote != null;
     }
 
     public static boolean canFitWaterSpray() {
         return theSprays.get().canFit();
     }
 
-    public static void addRainSplash(@Nonnull final IWorldReader world, final double x, final double y,
+    public static boolean addRainSplash(@Nonnull final IWorldReader world, final double x, final double y,
                                               final double z) {
         IParticleMote mote = null;
         if (theSprays.get().canFit()) {
             mote = new MoteRainSplash(world, x, y, z);
             theSprays.get().addParticle(mote);
         }
+        return mote != null;
     }
 
-    public static void addFireFly(@Nonnull final IWorldReader world, final double x, final double y, final double z) {
+    public static boolean addFireFly(@Nonnull final IWorldReader world, final double x, final double y, final double z) {
         IParticleMote mote = null;
         if (theFireFlies.get().canFit()) {
             mote = new MoteFireFly(world, x, y, z);
             theFireFlies.get().addParticle(mote);
         }
+        return mote != null;
     }
 
     @SubscribeEvent

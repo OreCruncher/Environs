@@ -18,30 +18,94 @@
 
 package org.orecruncher.environs.effects;
 
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.orecruncher.environs.effects.emitters.Jet;
+import org.orecruncher.environs.effects.emitters.WaterSplashJet;
+import org.orecruncher.lib.WorldUtils;
 
-import javax.annotation.Nonnull;
-import java.util.Random;
+import net.minecraft.block.material.Material;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
 @OnlyIn(Dist.CLIENT)
-public class WaterSplashJetEffect extends BlockEffect {
+public class WaterSplashJetEffect extends JetEffect {
 
-    public WaterSplashJetEffect(final int chance) {
-        super(chance);
-    }
+	private final static Vec3i[] cardinal_offsets = {
+		new Vec3i(-1, 0, 0),
+		new Vec3i(1, 0, 0),
+		new Vec3i(0, 0, -1),
+		new Vec3i(0, 0, 1)
+	};
 
-    @Nonnull
-    @Override
-    public BlockEffectType getEffectType() {
-        return BlockEffectType.SPLASH_JET;
-    }
+	public WaterSplashJetEffect(final int chance) {
+		super(chance);
+	}
 
-    @Override
-    public void doEffect(@Nonnull IWorldReader provider, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull Random random) {
+	@Override
+	@Nonnull
+	public BlockEffectType getEffectType() {
+		return BlockEffectType.SPLASH_JET;
+	}
 
-    }
+	private static boolean isUnboundedLiquid(final IWorldReader provider, final BlockPos pos) {
+		for (final Vec3i cardinal_offset : cardinal_offsets) {
+			final BlockPos tp = pos.add(cardinal_offset);
+			final BlockState state = provider.getBlockState(tp);
+			if (state.getMaterial() == Material.AIR)
+				return true;
+			final IFluidState fluidState = provider.getFluidState(tp);
+			final int height = fluidState.getLevel();
+			if (height > 0 && height < 8)
+				return true;
+		}
+
+		return false;
+	}
+
+	private int liquidBlockCount(final IWorldReader provider, final BlockPos pos) {
+		return countVerticalBlocks(provider, pos, FLUID_PREDICATE, 1);
+	}
+
+	public static boolean isValidSpawnBlock(final IWorldReader provider, final BlockPos pos) {
+		return isValidSpawnBlock(provider, provider.getBlockState(pos), pos);
+	}
+
+	private static boolean isValidSpawnBlock(final IWorldReader provider, final BlockState state,
+			final BlockPos pos) {
+		if (state.getFluidState().isEmpty())
+			return false;
+		if (isUnboundedLiquid(provider, pos)) {
+			final BlockPos down = pos.down();
+			if (WorldUtils.isBlockSolid(provider, down))
+				return true;
+			return !isUnboundedLiquid(provider, down);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
+		return super.canTrigger(provider, state, pos, random) && isValidSpawnBlock(provider, state, pos);
+	}
+
+	@Override
+	public void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+			@Nonnull final BlockPos pos, @Nonnull final Random random) {
+
+		final int strength = liquidBlockCount(provider, pos);
+		if (strength > 1) {
+			final float height = state.getFluidState().getActualHeight(provider, pos) + 0.1F;
+			final Jet effect = new WaterSplashJet(strength, provider, pos, height);
+			addEffect(effect);
+		}
+	}
 }

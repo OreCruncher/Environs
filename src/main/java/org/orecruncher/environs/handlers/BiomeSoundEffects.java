@@ -43,7 +43,7 @@ public class BiomeSoundEffects extends HandlerBase {
 
     public static final int SCAN_INTERVAL = 4;
     protected final BiomeScanner biomes = new BiomeScanner();
-    private final Object2ObjectOpenHashMap<IAcoustic, Emitter> emitters = new Object2ObjectOpenHashMap<>();
+    private final Object2ObjectOpenHashMap<IAcoustic, BackgroundAcousticEmitter> emitters = new Object2ObjectOpenHashMap<>();
     BiomeSoundEffects() {
         super("Biome Sounds");
     }
@@ -71,7 +71,7 @@ public class BiomeSoundEffects extends HandlerBase {
 
     @Override
     public void process(@Nonnull final PlayerEntity player) {
-        this.emitters.values().forEach(Emitter::update);
+        this.emitters.values().forEach(BackgroundAcousticEmitter::tick);
         if ((TickCounter.getTickCount() % SCAN_INTERVAL) == 0) {
             this.biomes.tick();
             handleBiomeSounds(player);
@@ -130,38 +130,38 @@ public class BiomeSoundEffects extends HandlerBase {
         // * If not in the incoming list, fade
         // * If it does exist, update volume throttle and unfade if needed
         this.emitters.object2ObjectEntrySet().removeIf(entry -> {
-            final Emitter emitter = entry.getValue();
-            if (emitter.isDonePlaying()) {
+            final BackgroundAcousticEmitter backgroundAcousticEmitter = entry.getValue();
+            if (backgroundAcousticEmitter.isDonePlaying()) {
                 return true;
             }
             final float volume = sounds.getFloat(entry.getKey());
             if (volume > 0) {
-                emitter.setVolumeThrottle(volume);
-                if (emitter.isFading())
-                    emitter.unfade();
+                backgroundAcousticEmitter.setVolumeThrottle(volume);
+                if (backgroundAcousticEmitter.isFading())
+                    backgroundAcousticEmitter.unfade();
                 sounds.removeFloat(entry.getKey());
-            } else if (!emitter.isFading()) {
-                emitter.fade();
+            } else if (!backgroundAcousticEmitter.isFading()) {
+                backgroundAcousticEmitter.fade();
             }
             return false;
         });
 
         // Any sounds left in the list are new and need an emitter created.
         sounds.forEach((fx, volume) -> {
-            final Emitter e = new Emitter(fx);
+            final BackgroundAcousticEmitter e = new BackgroundAcousticEmitter(fx);
             e.setVolumeThrottle(volume);
             this.emitters.put(fx, e);
         });
     }
 
     public void clearSounds() {
-        this.emitters.values().forEach(Emitter::stop);
+        this.emitters.values().forEach(BackgroundAcousticEmitter::stop);
         this.emitters.clear();
         AudioEngine.stopAll();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void diagnostics(@Nonnull final DiagnosticEvent event) {
-        this.emitters.values().forEach(emitter -> event.getLeft().add("EMITTER: " + emitter.toString()));
+        this.emitters.values().forEach(backgroundAcousticEmitter -> event.getLeft().add("EMITTER: " + backgroundAcousticEmitter.toString()));
     }
 }

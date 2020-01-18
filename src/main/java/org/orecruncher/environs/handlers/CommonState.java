@@ -19,6 +19,7 @@
 package org.orecruncher.environs.handlers;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +47,7 @@ public final class CommonState {
     String dimensionName = StringUtils.EMPTY;
     DimensionInfo dimInfo = DimensionInfo.NONE;
     BlockPos playerPosition = BlockPos.ZERO;
+    Vec3d playerEyePosition = Vec3d.ZERO;
     float biomeTemperature = 0F;
 
     boolean inside;
@@ -85,6 +87,8 @@ public final class CommonState {
     public static BlockPos getPlayerPosition() {
         return instance.playerPosition;
     }
+
+    public static Vec3d getPlayerEyePosition() { return instance.playerEyePosition; }
 
     public static float getCurrentTemperature() {
         return instance.biomeTemperature;

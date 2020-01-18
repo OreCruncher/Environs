@@ -34,11 +34,12 @@ import net.minecraft.util.math.BlockPos;
 import org.orecruncher.environs.effects.emitters.Jet;
 import org.orecruncher.environs.handlers.ConditionEvaluator;
 import org.orecruncher.environs.handlers.ParticleSystems;
+import org.orecruncher.lib.math.MathStuff;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class JetEffect extends BlockEffect {
 
-	protected static final int MAX_STRENGTH = 10;
+	public static final int MAX_STRENGTH = 10;
 
 	protected static final Predicate<BlockState> FLUID_PREDICATE = (state) -> !state.getFluidState().isEmpty();
 
@@ -62,7 +63,7 @@ public abstract class JetEffect extends BlockEffect {
 		final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos(pos);
 		for (; count < MAX_STRENGTH && predicate.test(provider.getBlockState(mutable)); count++)
 			mutable.setY(mutable.getY() + step);
-		return count;
+		return MathStuff.clamp(count, 0, MAX_STRENGTH);
 	}
 
 	public static int countHorizontalBlocks(final IWorldReader provider, final BlockPos pos,
