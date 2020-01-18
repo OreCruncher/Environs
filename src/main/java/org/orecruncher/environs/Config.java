@@ -18,6 +18,7 @@
 
 package org.orecruncher.environs;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -194,18 +195,18 @@ public final class Config {
             private IntOpenHashSet _biomeSoundBlacklist = new IntOpenHashSet();
 
             Biome(@Nonnull final ForgeConfigSpec.Builder builder) {
-                builder.comment("Define parameters for biome effects")
+                builder.comment("Options for controlling biome sound/effects")
                         .push("Biome Options");
 
                 this.worldSealevelOverride = builder
-                        .comment("Override the sea level value for Overworld")
-                        .translation("environs.cfg.biome.SeaLevelOverride")
-                        .defineInRange("Overworld Sea Level Override", 0, 0, 256);
+                        .comment("Sealevel to set for Overworld (0 use default for World)")
+                        .translation("environs.cfg.biome.Sealevel")
+                        .defineInRange("Overworld Sealevel Override", 0, 0, 256);
 
                 this.biomeSoundBlacklist = builder
-                        .comment("Prevent biome sounds from playing in specified dimensions")
-                        .translation("environs.cfg.biome.BlackList")
-                        .defineList("Biome Sound Blacklist", ArrayList::new, s -> true);
+                        .comment("Dimension IDs where biome sounds will not be played")
+                        .translation("environs.cfg.biome.DimBlackList")
+                        .defineList("Dimension Blacklist", ArrayList::new, s -> true);
 
                 builder.pop();
             }
@@ -226,6 +227,14 @@ public final class Config {
 
         public static class Effects {
 
+            private final BooleanValue enableFireFlies;
+            private final BooleanValue enableSteamJets;
+            private final BooleanValue enableFireJets;
+            private final BooleanValue enableBubbleJets;
+            private final BooleanValue enableDustJets;
+            private final BooleanValue enableFountainJets;
+            private final BooleanValue enableWaterSplashJets;
+
             private boolean _enableFireFlies;
             private boolean _enableSteamJets;
             private boolean _enableFireJets;
@@ -235,20 +244,62 @@ public final class Config {
             private boolean _enableWaterSplashJets;
 
             Effects(@Nonnull final ForgeConfigSpec.Builder builder) {
-                builder.comment("Define parameters for special effects")
+                builder.comment("Options for controlling various effects")
                         .push("Effect Options");
+
+                this.enableFireFlies = builder
+                        .worldRestart()
+                        .comment("Enable/disable Firefly effect around plants")
+                        .translation("environs.cfg.effects.Fireflies")
+                        .define("Fireflies", true);
+
+                this.enableSteamJets = builder
+                        .worldRestart()
+                        .comment("Enable/disable Steam Jets where lava meets water")
+                        .translation("environs.cfg.effects.Steam")
+                        .define("Steam Jets", true);
+
+                this.enableFireJets = builder
+                        .worldRestart()
+                        .comment("Enable/disable Fire Jets in lava")
+                        .translation("environs.cfg.effects.Fire")
+                        .define("Fire Jets", true);
+
+                this.enableBubbleJets = builder
+                        .worldRestart()
+                        .comment("Enable/disable Bubble Jets under water")
+                        .translation("environs.cfg.effects.Bubble")
+                        .define("Bubble Jets", true);
+
+                this.enableDustJets = builder
+                        .worldRestart()
+                        .comment("Enable/disable Dust Motes dropping from under blocks")
+                        .translation("environs.cfg.effects.Dust")
+                        .define("Dust Jets", true);
+
+                this.enableFountainJets = builder
+                        .worldRestart()
+                        .comment("Enable/disable Fountain Jets spraying")
+                        .translation("environs.cfg.effects.Fountain")
+                        .define("Fountain Jets", true);
+
+                this.enableWaterSplashJets = builder
+                        .worldRestart()
+                        .comment("Enable/disable Water Splash effects when water spills down")
+                        .translation("environs.cfg.effects.Splash")
+                        .define("Water Splash", true);
 
                 builder.pop();
             }
 
             public void update() {
-                this._enableFireFlies = true;
-                this._enableBubbleJets = true;
-                this._enableFireJets = true;
-                this._enableSteamJets = true;
-                this._enableDustJets = true;
-                this._enableFountainJets = true;
-                this._enableWaterSplashJets = true;
+                this._enableFireFlies = this.enableFireFlies.get();
+                this._enableBubbleJets = this.enableBubbleJets.get();
+                this._enableFireJets = this.enableFireJets.get();
+                this._enableSteamJets = this.enableSteamJets.get();
+                this._enableDustJets = this.enableDustJets.get();
+                this._enableFountainJets = this.enableFountainJets.get();
+                this._enableWaterSplashJets = this.enableWaterSplashJets.get();
             }
 
             // Reach over and grab from SoundControl
