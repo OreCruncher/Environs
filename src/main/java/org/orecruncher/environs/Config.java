@@ -18,7 +18,6 @@
 
 package org.orecruncher.environs;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeConfigSpec;
