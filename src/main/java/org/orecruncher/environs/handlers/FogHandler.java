@@ -30,11 +30,15 @@ import org.orecruncher.environs.Config;
 import org.orecruncher.environs.fog.*;
 import org.orecruncher.lib.events.DiagnosticEvent;
 import org.orecruncher.lib.gui.Color;
+import org.orecruncher.lib.math.LoggingTimerEMA;
 
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class FogHandler extends HandlerBase {
+
+    protected final LoggingTimerEMA renderColor = new LoggingTimerEMA("Render Fog Color");
+    protected final LoggingTimerEMA render = new LoggingTimerEMA("Render Fog");
 
     protected HolisticFogColorCalculator fogColor = new HolisticFogColorCalculator();
     protected HolisticFogRangeCalculator fogRange = new HolisticFogRangeCalculator();
@@ -60,6 +64,7 @@ public class FogHandler extends HandlerBase {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void fogColorEvent(final EntityViewRenderEvent.FogColors event) {
         if (doFog()) {
+            this.renderColor.begin();
             final IFluidState fluidState = event.getInfo().getFluidState();
             if (fluidState.isEmpty()) {
                 final Color color = this.fogColor.calculate(event);
@@ -67,18 +72,21 @@ public class FogHandler extends HandlerBase {
                 event.setGreen(color.green());
                 event.setBlue(color.blue());
             }
+            this.renderColor.end();
         }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void fogRenderEvent(final EntityViewRenderEvent.RenderFogEvent event) {
         if (doFog()) {
+            this.render.begin();
             final IFluidState fluidState = event.getInfo().getFluidState();
             if (fluidState.isEmpty()) {
                 final FogResult result = this.fogRange.calculate(event);
                 GlStateManager.fogStart(result.getStart());
                 GlStateManager.fogEnd(result.getEnd());
             }
+            this.render.end();
         }
     }
 
@@ -87,6 +95,8 @@ public class FogHandler extends HandlerBase {
         if (doFog()) {
             event.getLeft().add("Fog Range: " + this.fogRange.toString());
             event.getLeft().add("Fog Color: " + this.fogColor.toString());
+            event.addRenderTimer(this.renderColor);
+            event.addRenderTimer(this.render);
         } else
             event.getLeft().add("FOG: IGNORED");
     }

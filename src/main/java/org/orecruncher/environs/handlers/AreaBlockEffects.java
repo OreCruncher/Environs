@@ -25,12 +25,15 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.orecruncher.environs.Config;
 import org.orecruncher.environs.scanner.*;
 import org.orecruncher.lib.events.BlockUpdateEvent;
+import org.orecruncher.lib.events.DiagnosticEvent;
+import org.orecruncher.lib.math.LoggingTimerEMA;
 
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 class AreaBlockEffects extends HandlerBase {
 
+    protected final LoggingTimerEMA blockChange = new LoggingTimerEMA("Area Block Update");
     protected ClientPlayerLocus locus;
     protected RandomBlockEffectScanner nearEffects;
     protected RandomBlockEffectScanner farEffects;
@@ -64,7 +67,14 @@ class AreaBlockEffects extends HandlerBase {
     }
 
     @SubscribeEvent
+    public void onDiagnostics(@Nonnull final DiagnosticEvent event) {
+        event.addRenderTimer(this.blockChange);
+    }
+
+    @SubscribeEvent
     public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
+        this.blockChange.begin();
         event.getExpandedPositions().forEach(this.alwaysOn::onBlockUpdate);
+        this.blockChange.end();
     }
 }

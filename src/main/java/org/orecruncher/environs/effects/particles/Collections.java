@@ -23,21 +23,14 @@ import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
 import org.orecruncher.environs.Environs;
-import org.orecruncher.lib.events.DiagnosticEvent;
 import org.orecruncher.lib.opengl.OpenGlUtil;
-import org.orecruncher.lib.particles.IParticleMote;
-import org.orecruncher.lib.particles.ParticleCollectionHelper;
-import org.orecruncher.lib.particles.ParticleRenderType;
+import org.orecruncher.lib.particles.*;
 
 import javax.annotation.Nonnull;
 
@@ -61,68 +54,49 @@ public final class Collections {
     private static final IParticleRenderType SPRAY_RENDER = new ParticleRenderType(new ResourceLocation(Environs.MOD_ID,"textures/particles/rainsplash.png"));
     private static final IParticleRenderType FIREFLY_RENDER = IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 
-    private final static ParticleCollectionHelper theRipples = new ParticleCollectionHelper("Rain Ripples", RIPPLE_RENDER);
-    private final static ParticleCollectionHelper theSprays = new ParticleCollectionHelper("Water Spray", SPRAY_RENDER);
-    private final static ParticleCollectionHelper theFireFlies = new ParticleCollectionHelper("Fireflies", FIREFLY_RENDER);
+    private final static IParticleCollection theRipples = CollectionManager.create("Rain Ripples", RIPPLE_RENDER);
+    private final static IParticleCollection theSprays = CollectionManager.create("Water Spray", SPRAY_RENDER);
+    private final static IParticleCollection theFireFlies = CollectionManager.create("Fireflies", FIREFLY_RENDER);
 
     private Collections() {
 
     }
 
-    public static boolean addWaterRipple(@Nonnull final IWorldReader world, final double x, final double y,
-                                               final double z) {
-        IParticleMote mote = null;
-        if (theRipples.get().canFit()) {
-            mote = new MoteWaterRipple(world, x, y, z);
-            theRipples.get().addParticle(mote);
+    public static void addWaterRipple(@Nonnull final IWorldReader world, final double x, final double y,
+                                      final double z) {
+        if (theRipples.canFit()) {
+            final IParticleMote mote = new MoteWaterRipple(world, x, y, z);
+            theRipples.add(mote);
         }
-        return mote != null;
     }
 
     public static boolean addWaterSpray(@Nonnull final IWorldReader world, final double x, final double y,
                                               final double z, final double dX, final double dY, final double dZ) {
-        IParticleMote mote = null;
-        if (theSprays.get().canFit()) {
-            mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
-            theSprays.get().addParticle(mote);
+        if (theSprays.canFit()) {
+            final IParticleMote mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
+            theSprays.add(mote);
+            return true;
         }
-        return mote != null;
+        return false;
     }
 
     public static boolean canFitWaterSpray() {
-        return theSprays.get().canFit();
+        return theSprays.canFit();
     }
 
-    public static boolean addRainSplash(@Nonnull final IWorldReader world, final double x, final double y,
+    public static void addRainSplash(@Nonnull final IWorldReader world, final double x, final double y,
                                               final double z) {
-        IParticleMote mote = null;
-        if (theSprays.get().canFit()) {
-            mote = new MoteRainSplash(world, x, y, z);
-            theSprays.get().addParticle(mote);
-        }
-        return mote != null;
-    }
-
-    public static boolean addFireFly(@Nonnull final IWorldReader world, final double x, final double y, final double z) {
-        IParticleMote mote = null;
-        if (theFireFlies.get().canFit()) {
-            mote = new MoteFireFly(world, x, y, z);
-            theFireFlies.get().addParticle(mote);
-        }
-        return mote != null;
-    }
-
-    @SubscribeEvent
-    public static void onWorldUnload(@Nonnull final WorldEvent.Unload event) {
-        if (event.getWorld() instanceof ClientWorld) {
-            theFireFlies.clear();
+        if (theSprays.canFit()) {
+            final IParticleMote mote = new MoteRainSplash(world, x, y, z);
+            theSprays.add(mote);
         }
     }
 
-    @SubscribeEvent
-    public static void diagnostics(@Nonnull final DiagnosticEvent event) {
-        event.getLeft().add(TextFormatting.AQUA + theRipples.toString());
-        event.getLeft().add(TextFormatting.AQUA + theSprays.toString());
-        event.getLeft().add(TextFormatting.AQUA + theFireFlies.toString());
+    public static void addFireFly(@Nonnull final IWorldReader world, final double x, final double y, final double z) {
+        if (theFireFlies.canFit()) {
+            final IParticleMote mote = new MoteFireFly(world, x, y, z);
+            theFireFlies.add(mote);
+        }
     }
+
 }

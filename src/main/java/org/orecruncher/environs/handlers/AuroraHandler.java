@@ -34,12 +34,14 @@ import org.orecruncher.lib.events.DiagnosticEvent;
 import org.orecruncher.lib.logging.IModLog;
 
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import org.orecruncher.lib.math.LoggingTimerEMA;
 
 @OnlyIn(Dist.CLIENT)
 public final class AuroraHandler extends HandlerBase {
 
 	private static final IModLog LOGGER = Environs.LOGGER.createChild(AuroraHandler.class);
 
+	private final LoggingTimerEMA render = new LoggingTimerEMA("Render Aurora");
 	private IAurora current;
 	private int dimensionId;
 
@@ -111,14 +113,17 @@ public final class AuroraHandler extends HandlerBase {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void doRender(@Nonnull final RenderWorldLastEvent event) {
+		this.render.begin();
 		if (this.current != null) {
 			this.current.render(event.getPartialTicks());
 		}
+		this.render.end();
 	}
 
 	@SubscribeEvent
 	public void diagnostic(@Nonnull final DiagnosticEvent event) {
 		event.getLeft().add("Aurora: " + (this.current == null ? "NONE" : this.current.toString()));
+		event.getRenderTimers().add(this.render);
 	}
 
 }
