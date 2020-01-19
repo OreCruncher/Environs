@@ -128,7 +128,7 @@
       ]
     },
     {
-      "conditions": "(biome.isOcean || biome.isBeach) && !(biome.isCold || biome.isSnowy)",
+      "conditions": "!biome.isSnowy && (biome.isOcean || biome.isBeach)",
       "_comment": "Beach",
       "acoustics": [
         {
@@ -140,6 +140,13 @@
           "type": "spot"
         }
       ]
+    },
+    {
+      "conditions": "lib.oneof(biome.name, 'Frozen Ocean', 'Deep Frozen Ocean')",
+      "_comment": "Frozen Ocean explicit set",
+      "fog": true,
+      "fogColor": "220,219,223",
+      "fogDensity": 0.4
     },
     {
       "conditions": "biome.isRiver && !(biome.isSnowy || biome.isDry || biome.isOcean)",
@@ -517,7 +524,7 @@
     },
     {
       "blocks": [
-        "minecraft:nether_brick",
+        "minecraft:nether_bricks",
         "minecraft:nether_brick_fence",
         "minecraft:nether_brick_stairs"
       ],
