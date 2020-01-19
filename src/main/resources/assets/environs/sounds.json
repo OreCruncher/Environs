@@ -1,73 +1,4 @@
 {
-	"rain": {
-		"category": "weather",
-		"sounds": [
-			"environs:ambient/weather/rain_calm1",
-			"environs:ambient/weather/rain_calm2",
-			"environs:ambient/weather/rain_calm3",
-			"environs:ambient/weather/rain_calm4"
-		]
-	},
-	"thunder": {
-		"category": "weather",
-		"credits": [
-			"§aThunder 1",
-			"Yoyodaman234",
-			"Creative Commons 0",
-			"",
-			"§aDonner1.wav",
-			"swuing",
-			"Attribution",
-			"",
-			"§aThunder - 1",
-			"bone666138",
-			"Attribution",
-			"",
-			"§aThunder - 2",
-			"bone666138",
-			"Attribution",
-			"",
-			"§aDistant Thunder.wav",
-			"sarson",
-			"Creative Commons 0",
-			"",
-			"§aNM-Mejor-Lado-Thunder-01.wav",
-			"aaronstar",
-			"Creative Commons 0"
-		],
-		"sounds": [
-			{
-				"name": "environs:ambient/weather/thunder1",
-				"stream": true
-			},
-			{
-				"name": "environs:ambient/weather/thunder2",
-				"stream": true
-			},
-			{
-				"name": "environs:ambient/weather/thunder3",
-				"stream": true
-			},
-			{
-				"name": "environs:ambient/weather/thunder4",
-				"stream": true
-			},
-			{
-				"name": "environs:ambient/weather/thunder5",
-				"stream": true
-			},
-			{
-				"name": "environs:ambient/weather/thunder6",
-				"stream": true
-			}
-		]
-	},
-	"dust": {
-		"category": "weather",
-		"sounds": [
-			"environs:ambient/weather/dust"
-		]
-	},
 	"ice": {
 		"category": "spot",
 		"sounds": [
@@ -685,27 +616,6 @@
 			"environs:ambient/insects/crawl3"
 		]
 	},
-	"crocodile": {
-		"category": "spot",
-		"sounds": [
-			{
-				"name": "environs:ambient/crock/crocodile1",
-				"volume": 0.7
-			},
-			{
-				"name": "environs:ambient/crock/crocodile2",
-				"volume": 0.7
-			},
-			{
-				"name": "environs:ambient/crock/crocodile3",
-				"volume": 0.7
-			},
-			{
-				"name": "environs:ambient/crock/crocodile4",
-				"volume": 0.7
-			}
-		]
-	},
 	"newsprint": {
 		"category": "spot",
 		"sounds": [
@@ -763,31 +673,6 @@
 			{
 				"name": "environs:ambient/book/pageflipheavy3",
 				"volume": 0.175
-			}
-		]
-	},
-	"primates": {
-		"category": "spot",
-		"sounds": [
-			{
-				"name": "environs:ambient/primate/primate1",
-				"volume": 0.3
-			},
-			{
-				"name": "environs:ambient/primate/primate2",
-				"volume": 0.3
-			},
-			{
-				"name": "environs:ambient/primate/primate3",
-				"volume": 0.3
-			},
-			{
-				"name": "environs:ambient/primate/primate4",
-				"volume": 0.3
-			},
-			{
-				"name": "environs:ambient/primate/primate5",
-				"volume": 0.3
 			}
 		]
 	},

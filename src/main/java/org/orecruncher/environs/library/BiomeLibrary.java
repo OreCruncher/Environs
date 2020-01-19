@@ -58,7 +58,6 @@ public final class BiomeLibrary {
 	public static final FakeBiome UNDERRIVER = new FakeBiome("UnderRVR");
 	public static final FakeBiome OUTERSPACE = new FakeBiome("OuterSpace");
 	public static final FakeBiome CLOUDS = new FakeBiome("Clouds");
-	public static final FakeBiome VILLAGE = new FakeBiome("Village");
 
 	public static BiomeInfo UNDERGROUND_INFO;
 	public static BiomeInfo PLAYER_INFO;
@@ -67,7 +66,6 @@ public final class BiomeLibrary {
 	public static BiomeInfo UNDERDEEPOCEAN_INFO;
 	public static BiomeInfo UNDERWATER_INFO;
 
-	public static BiomeInfo VILLAGE_INFO;
 	public static BiomeInfo CLOUDS_INFO;
 	public static BiomeInfo OUTERSPACE_INFO;
 	public static BiomeInfo WTF_INFO;
@@ -92,7 +90,6 @@ public final class BiomeLibrary {
 		register(UNDERDEEPOCEAN);
 		register(UNDERRIVER);
 		register(PLAYER);
-		register(VILLAGE);
 		register(UNDERGROUND);
 		register(CLOUDS);
 		register(OUTERSPACE);
@@ -104,7 +101,6 @@ public final class BiomeLibrary {
 		UNDERDEEPOCEAN_INFO = resolve(UNDERDEEPOCEAN);
 
 		UNDERWATER_INFO = resolve(UNDERWATER);
-		VILLAGE_INFO = resolve(VILLAGE);
 		CLOUDS_INFO = resolve(CLOUDS);
 		OUTERSPACE_INFO = resolve(OUTERSPACE);
 

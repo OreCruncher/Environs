@@ -51,7 +51,6 @@ public final class CommonState {
     float biomeTemperature = 0F;
 
     boolean inside;
-    boolean inVillage;
     boolean isUnderground;
     boolean isInSpace;
     boolean isInClouds;
@@ -96,10 +95,6 @@ public final class CommonState {
 
     public static boolean isInside() {
         return instance.inside;
-    }
-
-    public static boolean isInVillage() {
-        return instance.inVillage;
     }
 
     public static boolean isUnderground() {

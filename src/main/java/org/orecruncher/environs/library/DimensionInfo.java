@@ -26,33 +26,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Config;
 import org.orecruncher.environs.Environs;
 import org.orecruncher.environs.library.config.DimensionConfig;
-import org.orecruncher.lib.math.MathStuff;
-import org.orecruncher.lib.random.XorShiftRandom;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.text.DecimalFormat;
-import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
 public class DimensionInfo {
 
-    public final static DimensionInfo NONE = new DimensionInfo();
-
-    public final static float MIN_INTENSITY = 0.0F;
-    public final static float MAX_INTENSITY = 1.0F;
-
     private static final int SPACE_HEIGHT_OFFSET = 32;
-    private static final DecimalFormat FORMATTER = new DecimalFormat("0");
 
-    protected final Random RANDOM = XorShiftRandom.current();
-
-    // Rain/weather tracking data. Some of the data is synchronized from the server.
-    private float intensity = 0.0F;
-    private float currentIntensity = 0.0F;
-    private float minIntensity = Config.CLIENT.rain.get_defaultMinRainStrength();
-    private float maxIntensity = Config.CLIENT.rain.get_defaultMaxRainStrength();
-    private int thunderTimer = 0;
+    public static final  DimensionInfo NONE = new DimensionInfo();
 
     // Attributes about the dimension. This is information is loaded from local configs.
     protected int dimensionId;
@@ -71,10 +54,6 @@ public class DimensionInfo {
     DimensionInfo() {
         this.dimensionId = Integer.MIN_VALUE;
         this.name = new ResourceLocation(Environs.MOD_ID, "no_dimension");
-    }
-
-    public DimensionInfo(@Nonnull final World world) {
-        this(world, null);
     }
 
     public DimensionInfo(@Nonnull final World world, @Nullable final DimensionConfig dimConfig) {
@@ -161,10 +140,6 @@ public class DimensionInfo {
         return this.hasAuroras;
     }
 
-    public boolean hasWeather() {
-        return this.hasWeather;
-    }
-
     public boolean hasFog() {
         return this.hasFog;
     }
@@ -175,78 +150,6 @@ public class DimensionInfo {
 
     public boolean alwaysOutside() {
         return this.alwaysOutside;
-    }
-
-    public float getRainIntensity() {
-        return this.intensity;
-    }
-
-    public float getCurrentRainIntensity() {
-        return this.currentIntensity;
-    }
-
-    public void setRainIntensity(final float intensity) {
-        this.intensity = MathStuff.clamp(intensity, MIN_INTENSITY, MAX_INTENSITY);
-    }
-
-    public void setCurrentRainIntensity(final float intensity) {
-        this.currentIntensity = MathStuff.clamp(intensity, 0, this.intensity);
-    }
-
-    public float getMinRainIntensity() {
-        return this.minIntensity;
-    }
-
-    public void setMinRainIntensity(final float intensity) {
-        this.minIntensity = MathStuff.clamp(intensity, MIN_INTENSITY, this.maxIntensity);
-    }
-
-    public float getMaxRainIntensity() {
-        return this.maxIntensity;
-    }
-
-    public void setMaxRainIntensity(final float intensity) {
-        this.maxIntensity = MathStuff.clamp(intensity, this.minIntensity, MAX_INTENSITY);
-    }
-
-    public int getThunderTimer() {
-        return this.thunderTimer;
-    }
-
-    public void setThunderTimer(final int time) {
-        this.thunderTimer = MathStuff.clamp(time, 0, Integer.MAX_VALUE);
-    }
-
-    public void randomizeRain() {
-        final float result;
-        final float delta = this.maxIntensity - this.minIntensity;
-        if (delta <= 0.0F) {
-            result = this.minIntensity;
-        } else {
-            final float mid = delta / 2.0F;
-            result = this.minIntensity + this.RANDOM.nextFloat() * mid + this.RANDOM.nextFloat() * mid;
-        }
-        setRainIntensity(MathStuff.clamp(result, 0.01F, MAX_INTENSITY));
-        setCurrentRainIntensity(0.0F);
-    }
-
-    @Nonnull
-    public String configString() {
-        return "dim " + getId() + ": " +
-                "rainIntensity [" + FORMATTER.format(getMinRainIntensity() * 100) +
-                "," + FORMATTER.format(getMaxRainIntensity() * 100) +
-                "]";
-    }
-
-    @Nonnull
-    public String toString() {
-        // Dump out some diagnostics for the current dimension
-        return "dim " + getId() + ": " +
-                "rainIntensity: " + FORMATTER.format(getRainIntensity() * 100) +
-                '/' + FORMATTER.format(getCurrentRainIntensity() * 100) +
-                " [" + FORMATTER.format(getMinRainIntensity() * 100) +
-                "," + FORMATTER.format(getMaxRainIntensity() * 100) +
-                "], thunderTimer: " + getThunderTimer();
     }
 
 }

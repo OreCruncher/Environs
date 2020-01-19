@@ -54,17 +54,6 @@
       ]
     },
     {
-      "conditions": "biome.isJungle && biome.isWet && !biome.isForest",
-      "_comment": "Primates",
-      "acoustics": [
-        {
-          "acoustic": "primates",
-          "conditions": "weather.isNotRaining() && diurnal.isDay()",
-          "type": "spot"
-        }
-      ]
-    },
-    {
       "conditions": "biome.isPlains && !(biome.isSnowy || biome.isHot || biome.isForest)",
       "_comment": "Basic Plains",
       "acoustics": [
@@ -143,7 +132,7 @@
     },
     {
       "conditions": "lib.oneof(biome.name, 'Frozen Ocean', 'Deep Frozen Ocean')",
-      "_comment": "Frozen Ocean explicit set",
+      "_comment": "Frozen Ocean/Deep Frozen Ocean explicit set",
       "fog": true,
       "fogColor": "220,219,223",
       "fogDensity": 0.4
@@ -201,16 +190,6 @@
       "fogDensity": 0.4
     },
     {
-      "conditions": "biome.isSwamp && !(biome.isDead || biome.isHills || biome.isMountain || biome.isCold || biome.isSnowy || biome.isForest)",
-      "_comment": "Crocodiles",
-      "acoustics": [
-        {
-          "acoustic": "crocodile",
-          "type": "spot"
-        }
-      ]
-    },
-    {
       "conditions": "biome.rainfall < 0.1 && (biome.isSandy || biome.isMesa || (biome.isWasteland && !(biome.isCold || biome.isSnowy || biome.isSwamp)))",
       "_comment": "Dust for desert like biomes",
       "dust": true,
@@ -220,7 +199,7 @@
       "conditions": "biome.name == 'Cold Desert'",
       "_comment": "Cold Desert dust explicit set",
       "dust": true,
-      "dustColor": "255,255,255"
+      "fogColor": "220,219,223"
     },
     {
       "conditions": "!(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd || biome.isMushroom) && !(biome.isFake || biome.isSnowy || biome.isSwamp || biome.isJungle || biome.isBeach || biome.isWasteland || biome.isWet)",
@@ -398,33 +377,6 @@
       "acoustics": [
         {
           "acoustic": "wind"
-        }
-      ]
-    },
-    {
-      "conditions": "biome.name == 'Village'",
-      "_comment": "Village explicit set",
-      "acoustics": [
-        {
-          "acoustic": "village.rooster",
-          "conditions": "dim.getId() == 0 && !state.isInside() && diurnal.isSunrise() && weather.isNotRaining()",
-          "type": "periodic",
-          "repeatDelay": 100,
-          "repeatDelayRandom": 100
-        },
-        {
-          "acoustic": "village.anvil",
-          "conditions": "dim.getId() == 0 && !state.isInside() && diurnal.isDay() && weather.isNotRaining()",
-          "type": "periodic",
-          "repeatDelay": 1200,
-          "repeatDelayRandom": 2400
-        },
-        {
-          "acoustic": "village.dogbark",
-          "conditions": "dim.getId() == 0 && !state.isInside() && weather.isNotRaining()",
-          "type": "periodic",
-          "repeatDelay": 200,
-          "repeatDelayRandom": 200
         }
       ]
     },

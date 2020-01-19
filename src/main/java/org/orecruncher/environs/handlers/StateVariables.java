@@ -52,11 +52,6 @@ public class StateVariables extends VariableSet<IStateVariables> implements ISta
     }
 
     @Override
-    public boolean isInVillage() {
-        return CommonState.isInVillage();
-    }
-
-    @Override
     public boolean isUnderground() {
         return CommonState.isUnderground();
     }

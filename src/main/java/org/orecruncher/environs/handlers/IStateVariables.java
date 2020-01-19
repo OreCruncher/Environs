@@ -28,8 +28,6 @@ public interface IStateVariables {
 
     float getCurrentTemperature();
 
-    boolean isInVillage();
-
     boolean isUnderground();
 
     boolean isInClouds();

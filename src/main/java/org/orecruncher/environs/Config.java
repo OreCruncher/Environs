@@ -77,7 +77,6 @@ public final class Config {
     public static class Client {
 
         public final Logging logging;
-        public final Rain rain;
         public final Biome biome;
         public final Effects effects;
         public final Aurora aurora;
@@ -85,7 +84,6 @@ public final class Config {
 
         Client(@Nonnull final ForgeConfigSpec.Builder builder) {
             this.logging = new Logging(builder);
-            this.rain = new Rain(builder);
             this.biome = new Biome(builder);
             this.effects = new Effects(builder);
             this.aurora = new Aurora(builder);
@@ -94,7 +92,6 @@ public final class Config {
 
         void update() {
             this.logging.update();
-            this.rain.update();
             this.biome.update();
             this.effects.update();
             this.aurora.update();
@@ -149,45 +146,6 @@ public final class Config {
 
             public int get_flagMask() {
                 return this._flagMask;
-            }
-        }
-
-        public static class Rain {
-
-            private final IntValue defaultMinRainStrength;
-            private final IntValue defaultMaxRainStrength;
-
-            private float _defaultMinRainStrength;
-            private float _defaultMaxRaniStrength;
-
-            Rain(@Nonnull final ForgeConfigSpec.Builder builder) {
-                builder.comment("Define parameters for rain effects")
-                        .push("Rain Options");
-
-                this.defaultMinRainStrength = builder
-                        .comment("Minimum rain strength for rain effect")
-                        .translation("environs.cfg.rain.MinStrength")
-                        .defineInRange("Minimum Rain Strength", 100, 0, 100);
-
-                this.defaultMaxRainStrength = builder
-                        .comment("Maximum rain strength for rain effect")
-                        .translation("environs.cfg.rain.MaxStrength")
-                        .defineInRange("Maximum Rain Strength", 100, 0, 100);
-
-                builder.pop();
-            }
-
-            public void update() {
-                this._defaultMinRainStrength = this.defaultMinRainStrength.get();
-                this._defaultMaxRaniStrength = this.defaultMaxRainStrength.get();
-            }
-
-            public float get_defaultMinRainStrength() {
-                return this._defaultMinRainStrength;
-            }
-
-            public float get_defaultMaxRainStrength() {
-                return this._defaultMaxRaniStrength;
             }
         }
 
