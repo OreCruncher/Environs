@@ -18,19 +18,22 @@
 
 package org.orecruncher.environs.library;
 
+import com.google.common.collect.ImmutableList;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.environs.Environs;
-import org.orecruncher.environs.effects.BlockEffect;
 import org.orecruncher.environs.effects.BlockEffectType;
 import org.orecruncher.environs.library.config.AcousticConfig;
 import org.orecruncher.environs.library.config.BlockConfig;
 import org.orecruncher.environs.library.config.EffectConfig;
 import org.orecruncher.environs.library.config.ModConfig;
+import org.orecruncher.lib.TagUtils;
 import org.orecruncher.lib.blockstate.BlockStateMatcher;
 import org.orecruncher.lib.blockstate.BlockStateMatcherMap;
 import org.orecruncher.lib.fml.ForgeUtils;
@@ -39,11 +42,13 @@ import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
 import org.orecruncher.sndctrl.library.AcousticLibrary;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
 public final class BlockStateLibrary {
+
+    private static final String TAG_SPECIFIER = "#";
 
     private static final IModLog LOGGER = Environs.LOGGER.createChild(BlockStateLibrary.class);
     private static final BlockStateMatcherMap<BlockStateData> registry = new BlockStateMatcherMap<>();
@@ -80,11 +85,8 @@ public final class BlockStateLibrary {
         return profile;
     }
 
-    @Nullable
+    @Nonnull
     private static BlockStateData getOrCreateProfile(@Nonnull final BlockStateMatcher info) {
-        if (info.isEmpty())
-            return null;
-
         BlockStateData profile = registry.get(info);
         if (profile == null) {
             profile = new BlockStateData();
@@ -99,50 +101,66 @@ public final class BlockStateLibrary {
             return;
 
         for (final String blockName : entry.blocks) {
-            final BlockStateMatcher blockInfo = BlockStateMatcher.create(blockName);
+            final Collection<BlockStateMatcher> list = expand(blockName);
 
-            final BlockStateData blockData = getOrCreateProfile(blockInfo);
-            if (blockData == null) {
-                LOGGER.warn("Unknown block [%s] in block config file", blockName);
-                continue;
-            }
+            for (final BlockStateMatcher blockInfo : list) {
+                final BlockStateData blockData = getOrCreateProfile(blockInfo);
 
-            // Reset of a block clears all registry
-            if (entry.soundReset != null && entry.soundReset)
-                blockData.clearSounds();
-            if (entry.effectReset != null && entry.effectReset)
-                blockData.clearEffects();
+                // Reset of a block clears all registry
+                if (entry.soundReset != null && entry.soundReset)
+                    blockData.clearSounds();
+                if (entry.effectReset != null && entry.effectReset)
+                    blockData.clearEffects();
 
-            if (entry.chance != null)
-                blockData.setChance(entry.chance);
+                if (entry.chance != null)
+                    blockData.setChance(entry.chance);
 
-            for (final AcousticConfig sr : entry.acoustics) {
-                if (sr.acoustic != null) {
-                    final ResourceLocation res = AcousticLibrary.resolveResource(Environs.MOD_ID, sr.acoustic);
-                    final IAcoustic acoustic = AcousticLibrary.resolve(res, sr.acoustic);
-                    final int weight = sr.weight;
-                    final WeightedAcousticEntry acousticEntry = new WeightedAcousticEntry(acoustic, sr.conditions, weight);
-                    blockData.addSound(acousticEntry);
+                for (final AcousticConfig sr : entry.acoustics) {
+                    if (sr.acoustic != null) {
+                        final ResourceLocation res = AcousticLibrary.resolveResource(Environs.MOD_ID, sr.acoustic);
+                        final IAcoustic acoustic = AcousticLibrary.resolve(res, sr.acoustic);
+                        final int weight = sr.weight;
+                        final WeightedAcousticEntry acousticEntry = new WeightedAcousticEntry(acoustic, sr.conditions, weight);
+                        blockData.addSound(acousticEntry);
+                    }
                 }
-            }
 
-            for (final EffectConfig e : entry.effects) {
-                if (StringUtils.isEmpty(e.effect))
-                    continue;
-                final BlockEffectType type = BlockEffectType.get(e.effect);
-                if (type == BlockEffectType.UNKNOWN) {
-                    LOGGER.warn("Unknown block effect type in configuration: [%s]", e.effect);
-                } else if (type.isEnabled()) {
-                    final int chance = e.chance != null ? e.chance : 100;
-                    type.getInstance(chance).ifPresent(
-                            be -> {
-                                if (e.conditions != null)
-                                    be.setConditions(e.conditions);
-                                blockData.addEffect(be);
-                            });
+                for (final EffectConfig e : entry.effects) {
+                    if (StringUtils.isEmpty(e.effect))
+                        continue;
+                    final BlockEffectType type = BlockEffectType.get(e.effect);
+                    if (type == BlockEffectType.UNKNOWN) {
+                        LOGGER.warn("Unknown block effect type in configuration: [%s]", e.effect);
+                    } else if (type.isEnabled()) {
+                        final int chance = e.chance != null ? e.chance : 100;
+                        type.getInstance(chance).ifPresent(
+                                be -> {
+                                    if (e.conditions != null)
+                                        be.setConditions(e.conditions);
+                                    blockData.addEffect(be);
+                                });
+                    }
                 }
             }
         }
+    }
+
+    private static Collection<BlockStateMatcher> expand(@Nonnull final String blockName) {
+        if (blockName.startsWith(TAG_SPECIFIER)) {
+            final String tagName = blockName.substring(1);
+            final Tag<Block> tag = TagUtils.getBlockTag(tagName);
+            if (tag != null) {
+                return tag.getAllElements().stream().map(BlockStateMatcher::create).filter(m -> !m.isEmpty()).collect(Collectors.toList());
+            }
+            LOGGER.warn("Unknown block tag '%s' in Block specification", tagName);
+        } else {
+            final BlockStateMatcher matcher = BlockStateMatcher.create(blockName);
+            if (!matcher.isEmpty()) {
+                return ImmutableList.of(matcher);
+            }
+            LOGGER.warn("Unknown block name '%s' in Block Specification", blockName);
+        }
+        return ImmutableList.of();
     }
 
 }
