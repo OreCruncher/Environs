@@ -66,6 +66,7 @@ public class Manager {
         register(new BiomeSoundEffects());
         register(new ParticleSystems());
         register(new AuroraHandler());
+        register(new FogHandler());
     }
 
     private void onConnect() {

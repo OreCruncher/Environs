@@ -82,6 +82,7 @@ public final class Config {
         public final Biome biome;
         public final Effects effects;
         public final Aurora aurora;
+        public final Fog fog;
 
         Client(@Nonnull final ForgeConfigSpec.Builder builder) {
             this.logging = new Logging(builder);
@@ -89,6 +90,7 @@ public final class Config {
             this.biome = new Biome(builder);
             this.effects = new Effects(builder);
             this.aurora = new Aurora(builder);
+            this.fog = new Fog(builder);
         }
 
         void update() {
@@ -97,6 +99,7 @@ public final class Config {
             this.biome.update();
             this.effects.update();
             this.aurora.update();
+            this.fog.update();
         }
 
         public static class Logging {
@@ -378,6 +381,62 @@ public final class Config {
 
             public int get_maxBands() {
                 return this._maxBands;
+            }
+        }
+
+        public static class Fog {
+
+            private boolean _enableFog;
+            private boolean _enableBiomeFog;
+            private boolean _enableElevationHaze;
+            private boolean _enableMorningFog;
+            private boolean _enableBedrockFog;
+            private boolean _enableWeatherFog;
+            private int _morningFogChance;
+
+            Fog(@Nonnull final ForgeConfigSpec.Builder builder) {
+                builder.comment("Options for controlling various effects")
+                        .push("Effect Options");
+
+                builder.pop();
+            }
+
+            public void update() {
+                this._enableFog = true;
+                this._enableBiomeFog = true;
+                this._enableElevationHaze = true;
+                this._enableMorningFog = true;
+                this._enableBedrockFog = true;
+                this._enableWeatherFog = true;
+                this._morningFogChance = 1;
+            }
+
+            public boolean get_enableFog() {
+                return this._enableFog;
+            }
+
+            public boolean get_enableBiomeFog() {
+                return this._enableBiomeFog;
+            }
+
+            public boolean get_enableElevationHaze() {
+                return this._enableElevationHaze;
+            }
+
+            public boolean get_enableMorningFog() {
+                return this._enableMorningFog;
+            }
+
+            public boolean get_enableBedrockFog() {
+                return this._enableBedrockFog;
+            }
+
+            public boolean get_enableWeatherFog() {
+                return this._enableWeatherFog;
+            }
+
+            public int get_morningFogChance() {
+                return this._morningFogChance;
             }
         }
     }

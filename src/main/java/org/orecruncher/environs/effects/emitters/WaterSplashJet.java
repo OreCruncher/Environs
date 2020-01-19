@@ -88,30 +88,24 @@ public class WaterSplashJet extends Jet {
 				&& !WaterSplashJetEffect.isValidSpawnBlock(this.world, this.position);
 	}
 
-	private boolean setupSound() {
-		return this.sound == null && RANDOM.nextInt(6) == 0;
-	}
-
 	@Override
 	protected void soundUpdate() {
 		if (!isAlive())
 			return;
 
-		if (setupSound()) {
+		if (this.sound == null) {
 			final int idx = MathStuff.clamp(this.jetStrength, 0, waterfallAcoustics.length - 1);
 			final IAcoustic acoustic = AcousticLibrary.resolve(waterfallAcoustics[idx]);
 			this.sound = new LoopingSoundInstance(acoustic.getFactory().createSoundAt(this.position));
 		}
 
-		if (this.sound != null) {
-			final boolean inRange = SoundUtils.inRange(CommonState.getPlayerEyePosition(), this.sound);
-			final boolean isActive = this.sound.getState().isActive();
+		final boolean inRange = SoundUtils.inRange(CommonState.getPlayerEyePosition(), this.sound, 4);
+		final boolean isActive = this.sound.getState().isActive();
 
-			if (inRange && !isActive) {
-				AudioEngine.play(this.sound);
-			} else if (!inRange && isActive) {
-				AudioEngine.stop(this.sound);
-			}
+		if (inRange && !isActive) {
+			AudioEngine.play(this.sound);
+		} else if (!inRange && isActive) {
+			AudioEngine.stop(this.sound);
 		}
 	}
 

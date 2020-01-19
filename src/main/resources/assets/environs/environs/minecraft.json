@@ -532,6 +532,8 @@
     {
       "blocks": [
         "minecraft:rose_bush",
+        "minecraft:peony",
+        "ninecraft:lilac",
         "minecraft:yellow_flower",
         "minecraft:double_plant"
       ],
