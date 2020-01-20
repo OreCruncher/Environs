@@ -28,16 +28,10 @@ import com.google.gson.annotations.SerializedName;
 public class AcousticConfig {
 	@SerializedName("acoustic")
 	public String acoustic = null;
-	@SerializedName("title")
-	public String title = null;
 	@SerializedName("conditions")
 	public String conditions = StringUtils.EMPTY;
 	@SerializedName("weight")
 	public Integer weight = 10;
-	@SerializedName("repeatDelayRandom")
-	public Integer repeatDelayRandom = null;
-	@SerializedName("repeatDelay")
-	public Integer repeatDelay = null;
 	@SerializedName("type")
 	public String type = "background";
 

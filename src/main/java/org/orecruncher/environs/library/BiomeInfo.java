@@ -54,7 +54,6 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	protected final IBiome biome;
 
-	protected boolean hasPrecipitation;
 	protected boolean hasDust;
 	protected boolean hasAurora;
 	protected boolean hasFog;
@@ -77,10 +76,6 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	public BiomeInfo(@Nonnull final IBiome biome) {
 		this.biome = biome;
-
-		if (!isFake()) {
-			this.hasPrecipitation = this.biome.getPrecipitationType() != Biome.RainType.NONE;
-		}
 
 		this.isRiver = this.biome.getTypes().contains(Type.RIVER);
 		this.isOcean = this.biome.getTypes().contains(Type.OCEAN);
@@ -130,20 +125,8 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 		return this.biome.getName();
 	}
 
-	public boolean hasWeatherEffect() {
-		return getHasPrecipitation() || getHasDust();
-	}
-
-	public boolean getHasPrecipitation() {
-		return this.hasPrecipitation;
-	}
-
 	public Biome.RainType getPrecipitationType() {
 		return this.biome.getPrecipitationType();
-	}
-
-	void setHasPrecipitation(final boolean flag) {
-		this.hasPrecipitation = flag;
 	}
 
 	public boolean getHasDust() {
@@ -252,8 +235,6 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	public void update(@Nonnull final BiomeConfig entry) {
 		addComment(entry.comment);
 
-		if (entry.hasPrecipitation != null)
-			setHasPrecipitation(entry.hasPrecipitation);
 		if (entry.hasAurora != null)
 			setHasAurora(entry.hasAurora);
 		if (entry.hasDust != null)
@@ -314,8 +295,6 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			builder.append(" rain: ").append(getRainfall());
 		}
 
-		if (this.hasPrecipitation)
-			builder.append(" PRECIPITATION");
 		if (this.hasDust)
 			builder.append(" DUST");
 		if (this.hasAurora)

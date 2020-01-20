@@ -46,7 +46,6 @@ public class DimensionInfo {
     protected int spaceHeight;
     protected boolean hasHaze = false;
     protected boolean hasAuroras = false;
-    protected boolean hasWeather = false;
     protected boolean hasFog = false;
     protected boolean alwaysOutside = false;
     protected boolean playBiomeSounds = true;
@@ -66,7 +65,6 @@ public class DimensionInfo {
         this.spaceHeight = this.skyHeight + SPACE_HEIGHT_OFFSET;
 
         if (world.getDimension().isSurfaceWorld() && world.getDimension().hasSkyLight()) {
-            this.hasWeather = true;
             this.hasAuroras = true;
             this.hasFog = true;
         }
@@ -92,8 +90,6 @@ public class DimensionInfo {
                 this.hasHaze = dimConfig.hasHaze;
             if (dimConfig.hasAurora != null)
                 this.hasAuroras = dimConfig.hasAurora;
-            if (dimConfig.hasWeather != null)
-                this.hasWeather = dimConfig.hasWeather;
             if (dimConfig.cloudHeight != null)
                 this.cloudHeight = dimConfig.cloudHeight;
             else

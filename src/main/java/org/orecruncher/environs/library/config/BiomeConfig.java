@@ -22,19 +22,16 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.annotations.SerializedName;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public final class BiomeConfig {
-	@SerializedName("biomeName")
-	public String biomeName = null;
 	@SerializedName("conditions")
-	public String conditions = null;
+	public String conditions = StringUtils.EMPTY;
 	@SerializedName("_comment")
 	public String comment = null;
-	@SerializedName("precipitation")
-	public Boolean hasPrecipitation = null;
 	@SerializedName("dust")
 	public Boolean hasDust = null;
 	@SerializedName("aurora")

@@ -52,7 +52,7 @@ public final class BackgroundAcousticEmitter implements ITickable {
 	@Override
 	public void tick() {
 
-		// Allocate a new sound to send down if needed
+		// If the current sound is playing and the sound is fading just terminate the sound.
 		if (this.activeSound.getState().isActive()) {
 			if ((isFading() && this.activeSound.getState() == SoundState.DELAYED)) {
 				AudioEngine.stop(this.activeSound);

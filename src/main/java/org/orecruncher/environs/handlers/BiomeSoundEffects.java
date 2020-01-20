@@ -103,6 +103,7 @@ public class BiomeSoundEffects extends HandlerBase {
 
             final ObjectArray<IAcoustic> playerSounds = new ObjectArray<>();
             BiomeLibrary.PLAYER_INFO.findSoundMatches(playerSounds);
+            BiomeLibrary.VILLAGE_INFO.findSoundMatches(playerSounds);
             playerSounds.forEach(fx -> sounds.put(fx, 1.0F));
 
             if (doBiomeSounds()) {

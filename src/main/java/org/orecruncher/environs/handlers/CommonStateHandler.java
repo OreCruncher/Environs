@@ -19,6 +19,7 @@
 package org.orecruncher.environs.handlers;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tileentity.BellTileEntity;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -31,13 +32,17 @@ import org.orecruncher.environs.library.DimensionLibrary;
 import org.orecruncher.environs.scanner.CeilingCoverage;
 import org.orecruncher.lib.DayCycle;
 import org.orecruncher.lib.GameUtils;
+import org.orecruncher.lib.TickCounter;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.events.DiagnosticEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 class CommonStateHandler extends HandlerBase {
+
+    private static final double VILLAGE_RANGE = 48 * 48;
 
     protected final CeilingCoverage ceilingCoverage = new CeilingCoverage();
 
@@ -48,6 +53,7 @@ class CommonStateHandler extends HandlerBase {
     @Override
     public void process(@Nonnull final PlayerEntity player) {
 
+        final long currentTick = TickCounter.getTickCount();
         final CommonState data = CommonState.getData();
         final World world = player.getEntityWorld();
 
@@ -73,16 +79,35 @@ class CommonStateHandler extends HandlerBase {
         final int skyLight = world.getLightFor(LightType.SKY, data.playerPosition) - world.getLightSubtracted(data.playerPosition, 0);
         data.lightLevel = Math.max(blockLight, skyLight);
 
+        // Only check once a second
+        if (currentTick % 20 == 0) {
+            // Only for surface worlds
+            if (world.getDimension().isSurfaceWorld()) {
+                // Villages changed with 1.14.  There is no independent tracking of village centers.  Everything is centered
+                // on village bells.  Determine village based on that.
+                final Optional<BellTileEntity> bell = GameUtils.getWorld().loadedTileEntityList.stream()
+                        .filter(te -> te instanceof BellTileEntity)
+                        .map(te -> (BellTileEntity) te)
+                        .filter(bte -> bte.getDistanceSq(data.playerEyePosition.x, data.playerEyePosition.y, data.playerEyePosition.z) <= VILLAGE_RANGE)
+                        .findAny();
+
+                data.isInVillage = bell.isPresent();
+            } else {
+                data.isInVillage = false;
+            }
+        }
+
         // Resets cached script variables so they are updated
         ConditionEvaluator.INSTANCE.tick();
     }
 
     private final static String[] scripts = {
-        "'Dim: ' + dim.getId() + '/' + dim.getDimName()",
-        "'Biome: ' + biome.getName() + '; Temp ' + biome.getTemperature() + '/' + state.getCurrentTemperature() + ' rainfall: ' + biome.getRainfall() + ' traits: ' + biome.getTraits()",
-        "'Weather: ' + lib.iif(weather.isRaining(),'rainfall: ' + weather.getRainFall(),'not raining') + lib.iif(weather.isThundering(),' thundering','') + ' Temp: ' + weather.getTemperature() + ' ice: ' + lib.iif(weather.getTemperature() < 0.15, 'true', 'false') + ' ' + lib.iif(weather.getTemperature() < 0.2, '(breath)', '')",
-        "'Diurnal: ' + lib.iif(diurnal.isNight(),' night',' day') + lib.iif(state.isInside(),' inside',' outside')",
-        "'Player: health ' + player.getHealth() + '/' + player.getMaxHealth() + 'pos: (' + player.getX() + ',' + player.getY() + ',' + player.getZ() + ') light: ' + state.getLightLevel()"
+            "'Dim: ' + dim.getId() + '/' + dim.getDimName()",
+            "'Biome: ' + biome.getName() + '; Temp ' + biome.getTemperature() + '/' + state.getCurrentTemperature() + ' rainfall: ' + biome.getRainfall() + ' traits: ' + biome.getTraits()",
+            "'Weather: ' + lib.iif(weather.isRaining(),'rainfall: ' + weather.getRainFall(),'not raining') + lib.iif(weather.isThundering(),' thundering','') + ' Temp: ' + weather.getTemperature() + ' ice: ' + lib.iif(weather.getTemperature() < 0.15, 'true', 'false') + ' ' + lib.iif(weather.getTemperature() < 0.2, '(breath)', '')",
+            "'Diurnal: ' + lib.iif(diurnal.isNight(),' night',' day') + lib.iif(state.isInside(),' inside',' outside')",
+            "'Player: health ' + player.getHealth() + '/' + player.getMaxHealth() + 'pos: (' + player.getX() + ',' + player.getY() + ',' + player.getZ() + ') light: ' + state.getLightLevel()",
+            "'Village: ' + state.isInVillage()"
     };
 
     @SubscribeEvent(priority = EventPriority.HIGH)

@@ -54,6 +54,7 @@ public final class CommonState {
     boolean isUnderground;
     boolean isInSpace;
     boolean isInClouds;
+    boolean isInVillage;
     int lightLevel;
 
     DayCycle dayCycle = DayCycle.NO_SKY;
@@ -107,6 +108,10 @@ public final class CommonState {
 
     public static boolean isInSpace() {
         return instance.isInSpace;
+    }
+
+    public static boolean isInVillage() {
+        return instance.isInVillage;
     }
 
     public static int getLightLevel() {

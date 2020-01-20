@@ -34,6 +34,8 @@ public interface IStateVariables {
 
     boolean isInSpace();
 
+    boolean isInVillage();
+
     int getLightLevel();
 
 }

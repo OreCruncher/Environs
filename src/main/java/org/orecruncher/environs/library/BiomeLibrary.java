@@ -58,6 +58,7 @@ public final class BiomeLibrary {
 	public static final FakeBiome UNDERRIVER = new FakeBiome("UnderRVR");
 	public static final FakeBiome OUTERSPACE = new FakeBiome("OuterSpace");
 	public static final FakeBiome CLOUDS = new FakeBiome("Clouds");
+	public static final FakeBiome VILLAGE = new FakeBiome("Village");
 
 	public static BiomeInfo UNDERGROUND_INFO;
 	public static BiomeInfo PLAYER_INFO;
@@ -66,8 +67,9 @@ public final class BiomeLibrary {
 	public static BiomeInfo UNDERDEEPOCEAN_INFO;
 	public static BiomeInfo UNDERWATER_INFO;
 
-	public static BiomeInfo CLOUDS_INFO;
 	public static BiomeInfo OUTERSPACE_INFO;
+	public static BiomeInfo CLOUDS_INFO;
+	public static BiomeInfo VILLAGE_INFO;
 	public static BiomeInfo WTF_INFO;
 
 	// This is for cases when the biome coming in doesn't make sense
@@ -92,6 +94,7 @@ public final class BiomeLibrary {
 		register(PLAYER);
 		register(UNDERGROUND);
 		register(CLOUDS);
+		register(VILLAGE);
 		register(OUTERSPACE);
 
 		UNDERGROUND_INFO = resolve(UNDERGROUND);
@@ -102,6 +105,7 @@ public final class BiomeLibrary {
 
 		UNDERWATER_INFO = resolve(UNDERWATER);
 		CLOUDS_INFO = resolve(CLOUDS);
+		VILLAGE_INFO = resolve(VILLAGE);
 		OUTERSPACE_INFO = resolve(OUTERSPACE);
 
 		// WTF is a strange animal

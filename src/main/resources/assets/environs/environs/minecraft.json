@@ -298,12 +298,7 @@
       "conditions": "biome.isEnd || biome.name == 'The Void'",
       "_comment": "It's The End!",
       "soundReset": true,
-      "aurora": false,
-      "acoustics": [
-        {
-          "acoustic": "dimension/theend"
-        }
-      ]
+      "aurora": false
     },
     {
       "conditions": "biome.name == 'Underground'",
@@ -345,7 +340,7 @@
       "_comment": "Under Deep Ocean explicit set",
       "acoustics": [
         {
-          "acoustic": "biome/ocnea/deep/under"
+          "acoustic": "biome/ocean/deep/under"
         },
         {
           "acoustic": "whale",
@@ -381,12 +376,33 @@
       ]
     },
     {
+      "conditions": "biome.name == 'Village'",
+      "_comment": "Village explicit set",
+      "acoustics": [
+        {
+          "acoustic": "village/rooster",
+          "conditions": "state.isInVillage() && !state.isInside() && diurnal.isSunrise() && weather.isNotRaining()"
+        },
+        {
+          "acoustic": "village/anvil",
+          "conditions": "state.isInVillage() && !state.isInside() && diurnal.isDay() && weather.isNotRaining()"
+        },
+        {
+          "acoustic": "village/dogbark",
+          "conditions": "state.isInVillage() && !state.isInside() && weather.isNotRaining()"
+        }
+      ]
+    },    {
       "conditions": "biome.name == 'Player'",
       "_comment": "Player explicit set",
       "acoustics": [
         {
           "acoustic": "dimension/nether",
           "conditions": "dim.getId() == -1"
+        },
+        {
+          "acoustic": "dimension/theend",
+          "conditions": "dim.getId() == 1"
         }
       ]
     },
@@ -508,14 +524,12 @@
   "dimensions": [
     {
       "dimId": 0,
-      "weather": true,
       "fog": true,
       "haze": true,
       "aurora": true
     },
     {
       "dimId": -1,
-      "weather": true,
       "fog": true,
       "seaLevel": 0
     },

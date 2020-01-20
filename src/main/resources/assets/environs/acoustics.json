@@ -88,12 +88,36 @@
     "repeatable": true
   },
 
+  "village/rooster": {
+    "name": "environs:village.rooster",
+    "category": "biomes",
+    "repeatable": true,
+    "repeat_delay_min": 100,
+    "repeat_delay_max": 200
+  },
+  "village/anvil": {
+    "name": "environs:village.anvil",
+    "category": "biomes",
+    "repeatable": true,
+    "repeat_delay_min": 1200,
+    "repeat_delay_max": 2400
+  },
+  "village/dogbark": {
+    "name": "environs:village.dogbark",
+    "category": "biomes",
+    "repeatable": true,
+    "repeat_delay_min": 200,
+    "repeat_delay_max": 300
+  },
+
   "dimension/theend": {
     "name": "environs:theend",
+    "category": "biomes",
     "repeatable": true
   },
   "dimension/nether": {
     "name": "environs:dimension.nether",
+    "category": "biomes",
     "repeatable": true
   },
 
