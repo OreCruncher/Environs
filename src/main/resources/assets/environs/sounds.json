@@ -686,7 +686,8 @@
 		"sounds": [
 			{
 				"name": "environs:ambient/stream/waterfall0",
-				"attenuation_distance": 12
+				"attenuation_distance": 12,
+				"preload": true
 			}
 		]
 	},
@@ -700,7 +701,8 @@
 		"sounds": [
 			{
 				"name": "environs:ambient/stream/waterfall1",
-				"attenuation_distance": 16
+				"attenuation_distance": 16,
+				"preload": true
 			}
 		]
 	},
@@ -714,7 +716,8 @@
 		"sounds": [
 			{
 				"name": "environs:ambient/stream/waterfall2",
-				"attenuation_distance": 18
+				"attenuation_distance": 18,
+				"preload": true
 			}
 		]
 	},
@@ -728,7 +731,8 @@
 		"sounds": [
 			{
 				"name": "environs:ambient/stream/waterfall3",
-				"attenuation_distance": 20
+				"attenuation_distance": 20,
+				"preload": true
 			}
 		]
 	},
@@ -742,7 +746,8 @@
 		"sounds": [
 			{
 				"name": "environs:ambient/stream/waterfall4",
-				"attenuation_distance": 22
+				"attenuation_distance": 22,
+				"preload": true
 			}
 		]
 	},
@@ -756,7 +761,8 @@
 		"sounds": [
 			{
 				"name": "environs:ambient/stream/waterfall5",
-				"attenuation_distance": 24
+				"attenuation_distance": 24,
+				"preload": true
 			}
 		]
 	},
