@@ -18,8 +18,12 @@
 
 package org.orecruncher.environs.handlers;
 
+import com.google.common.collect.Streams;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.BellTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -81,17 +85,24 @@ class CommonStateHandler extends HandlerBase {
 
         // Only check once a second
         if (currentTick % 20 == 0) {
-            // Only for surface worlds
+            // Only for surface worlds.  Other types of worlds are interpreted as not having villages.
             if (world.getDimension().isSurfaceWorld()) {
-                // Villages changed with 1.14.  There is no independent tracking of village centers.  Everything is centered
-                // on village bells.  Determine village based on that.
-                final Optional<BellTileEntity> bell = GameUtils.getWorld().loadedTileEntityList.stream()
+                // Look for a bell within range of the player
+                final Optional<TileEntity> bell = GameUtils.getWorld().loadedTileEntityList.stream()
                         .filter(te -> te instanceof BellTileEntity)
-                        .map(te -> (BellTileEntity) te)
-                        .filter(bte -> bte.getDistanceSq(data.playerEyePosition.x, data.playerEyePosition.y, data.playerEyePosition.z) <= VILLAGE_RANGE)
+                        .filter(te -> te.getDistanceSq(data.playerEyePosition.x, data.playerEyePosition.y, data.playerEyePosition.z) <= VILLAGE_RANGE)
                         .findAny();
 
+                // If a bell is found, look for a villager within range
                 data.isInVillage = bell.isPresent();
+                if (data.isInVillage) {
+                    // Next is that there must be a villager within range the player.
+                    final Optional<Entity> entity = Streams.stream(GameUtils.getWorld().getAllEntities())
+                            .filter(e -> e instanceof VillagerEntity)
+                            .filter(e -> e.getDistanceSq(data.playerEyePosition.x, data.playerEyePosition.y, data.playerEyePosition.z) <= VILLAGE_RANGE)
+                            .findAny();
+                    data.isInVillage = entity.isPresent();
+                }
             } else {
                 data.isInVillage = false;
             }
