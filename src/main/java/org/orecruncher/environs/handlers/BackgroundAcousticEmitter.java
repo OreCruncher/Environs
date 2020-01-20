@@ -39,26 +39,21 @@ import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
 @OnlyIn(Dist.CLIENT)
 public final class BackgroundAcousticEmitter implements ITickable {
 
-	protected final IAcoustic effect;
-	protected BackgroundSoundInstance activeSound;
+	@Nonnull
+	protected final BackgroundSoundInstance activeSound;
+
 	protected boolean done = false;
 
-	public BackgroundAcousticEmitter(@Nonnull final IAcoustic sound) {
-		this.effect = sound;
-	}
-
-	protected BackgroundSoundInstance createSound() {
-		final ISoundInstance sound = this.effect.getFactory().createSound();
-		return new BackgroundSoundInstance(sound);
+	public BackgroundAcousticEmitter(@Nonnull final IAcoustic acoustic) {
+		final ISoundInstance sound = acoustic.getFactory().createSound();
+		this.activeSound = new BackgroundSoundInstance(sound);
 	}
 
 	@Override
 	public void tick() {
 
 		// Allocate a new sound to send down if needed
-		if (this.activeSound == null) {
-			this.activeSound = createSound();
-		} else if (this.activeSound.getState().isActive()) {
+		if (this.activeSound.getState().isActive()) {
 			if ((isFading() && this.activeSound.getState() == SoundState.DELAYED)) {
 				AudioEngine.stop(this.activeSound);
 			}
@@ -79,46 +74,34 @@ public final class BackgroundAcousticEmitter implements ITickable {
 	}
 
 	public void setVolumeThrottle(final float throttle) {
-		if (this.activeSound != null)
-			this.activeSound.setFadeScaleTarget(throttle);
+		this.activeSound.setFadeScaleTarget(throttle);
 	}
 
 	public void fade() {
-		if (this.activeSound != null) {
-			Environs.LOGGER.debug("FADE: %s", this.activeSound.toString());
-			this.activeSound.fade();
-		}
+		Environs.LOGGER.debug("FADE: %s", this.activeSound.toString());
+		this.activeSound.fade();
 	}
 
 	public boolean isFading() {
-		if (this.activeSound != null) {
-			return this.activeSound.isFading();
-		}
-		return false;
+		return this.activeSound.isFading();
 	}
 
 	public void unfade() {
-		if (this.activeSound != null) {
-			Environs.LOGGER.debug("UNFADE: %s", this.activeSound.toString());
-			this.activeSound.unfade();
-		}
+		Environs.LOGGER.debug("UNFADE: %s", this.activeSound.toString());
+		this.activeSound.unfade();
 	}
 
 	public boolean isDonePlaying() {
-		if (this.activeSound != null)
-			return this.done || this.activeSound.isDonePlaying();
-		return this.done;
+		return this.done || this.activeSound.isDonePlaying();
 	}
 
 	public void stop() {
-		if (this.activeSound != null) {
-			AudioEngine.stop(this.activeSound);
-		}
+		AudioEngine.stop(this.activeSound);
 	}
 
 	@Override
 	public String toString() {
-		return this.activeSound != null ? this.activeSound.toString() : "<NOT SET>";
+		return this.activeSound.toString();
 	}
 
 }

@@ -5,7 +5,7 @@
       "_comment": "Wind for Hills/Wasteland",
       "acoustics": [
         {
-          "acoustic": "wind/hills"
+          "acoustic": "biome/wind/hills"
         }
       ]
     },
@@ -14,7 +14,7 @@
       "_comment": "Wind for Mountain",
       "acoustics": [
         {
-          "acoustic": "wind/mountains"
+          "acoustic": "biome/wind/mountains"
         }
       ]
     },
@@ -23,7 +23,7 @@
       "_comment": "Desert wind",
       "acoustics": [
         {
-          "acoustic": "wind/desert"
+          "acoustic": "biome/wind/desert"
         }
       ]
     },
@@ -33,7 +33,7 @@
       "soundReset": true,
       "acoustics": [
         {
-          "acoustic": "jungle",
+          "acoustic": "biome/jungle",
           "conditions": "weather.isNotRaining()"
         }
       ]
@@ -44,11 +44,11 @@
       "soundReset": true,
       "acoustics": [
         {
-          "acoustic": "savanna.day",
+          "acoustic": "biome/savanna/day",
           "conditions": "diurnal.isDay()"
         },
         {
-          "acoustic": "savanna.night",
+          "acoustic": "biome/savanna/night",
           "conditions": "diurnal.isNight()"
         }
       ]
@@ -58,11 +58,11 @@
       "_comment": "Basic Plains",
       "acoustics": [
         {
-          "acoustic": "plains",
+          "acoustic": "biome/plains",
           "conditions": "weather.isNotRaining() && !weather.canWaterFreeze() && diurnal.isDay()"
         },
         {
-          "acoustic": "crickets",
+          "acoustic": "biome/crickets",
           "conditions": "weather.isNotRaining() && !weather.canWaterFreeze() && diurnal.isNight()"
         }
       ]
@@ -72,11 +72,11 @@
       "_comment": "Basic Forest w/Crickets",
       "acoustics": [
         {
-          "acoustic": "forest",
+          "acoustic": "biome/forest",
           "conditions": "weather.isNotRaining() && !weather.canWaterFreeze() && diurnal.isDay()"
         },
         {
-          "acoustic": "crickets",
+          "acoustic": "biome/crickets",
           "conditions": "weather.isNotRaining() && !weather.canWaterFreeze() && diurnal.isNight()"
         }
       ]
@@ -86,11 +86,11 @@
       "_comment": "Deep Forest w/Crickets",
       "acoustics": [
         {
-          "acoustic": "deep_forest",
+          "acoustic": "biome/forest/deep",
           "conditions": "weather.isNotRaining() && !weather.canWaterFreeze() && diurnal.isDay()"
         },
         {
-          "acoustic": "deep_crickets",
+          "acoustic": "biome/crickets/deep",
           "conditions": "weather.isNotRaining() && !weather.canWaterFreeze() && diurnal.isNight()"
         }
       ]
@@ -100,7 +100,7 @@
       "_comment": "Simple Forest",
       "acoustics": [
         {
-          "acoustic": "forest",
+          "acoustic": "biome/forest",
           "conditions": "weather.isNotRaining() && !weather.canWaterFreeze() && diurnal.isDay()"
         }
       ]
@@ -121,7 +121,7 @@
       "_comment": "Beach",
       "acoustics": [
         {
-          "acoustic": "beach"
+          "acoustic": "biome/beach"
         },
         {
           "acoustic": "seagulls",
@@ -142,7 +142,7 @@
       "_comment": "River",
       "acoustics": [
         {
-          "acoustic": "river"
+          "acoustic": "biome/river"
         }
       ]
     },
@@ -168,7 +168,7 @@
       "_comment": "Basic Swamp Sounds",
       "acoustics": [
         {
-          "acoustic": "crickets"
+          "acoustic": "biome/crickets"
         }
       ]
     },
@@ -177,11 +177,11 @@
       "_comment": "Special Swamps such as Fen, Bog, Marsh, etc.",
       "acoustics": [
         {
-          "acoustic": "bog",
+          "acoustic": "biome/bog",
           "conditions": "weather.isNotRaining() && !weather.canWaterFreeze() && diurnal.isDay()"
         },
         {
-          "acoustic": "crickets",
+          "acoustic": "biome/crickets",
           "conditions": "!weather.canWaterFreeze() && diurnal.isNight()"
         }
       ],
@@ -301,7 +301,7 @@
       "aurora": false,
       "acoustics": [
         {
-          "acoustic": "theend"
+          "acoustic": "dimension/theend"
         }
       ]
     },
@@ -310,7 +310,7 @@
       "_comment": "Underground explicit set",
       "acoustics": [
         {
-          "acoustic": "underground",
+          "acoustic": "biome/underground",
           "conditions": "state.isInside() && player.getY() < 33"
         },
         {
@@ -336,7 +336,7 @@
       "_comment": "Under Ocean explicit set",
       "acoustics": [
         {
-          "acoustic": "underocean"
+          "acoustic": "biome/ocean/under"
         }
       ]
     },
@@ -345,7 +345,7 @@
       "_comment": "Under Deep Ocean explicit set",
       "acoustics": [
         {
-          "acoustic": "underdeepocean"
+          "acoustic": "biome/ocnea/deep/under"
         },
         {
           "acoustic": "whale",
@@ -358,7 +358,7 @@
       "_comment": "Under River explicit set",
       "acoustics": [
         {
-          "acoustic": "underriver"
+          "acoustic": "biome/river/under"
         }
       ]
     },
@@ -367,7 +367,7 @@
       "_comment": "Underwater explicit set",
       "acoustics": [
         {
-          "acoustic": "underwater"
+          "acoustic": "biome/water/under"
         }
       ]
     },
@@ -376,7 +376,7 @@
       "_comment": "Clouds explicit set",
       "acoustics": [
         {
-          "acoustic": "wind"
+          "acoustic": "biomes/wind"
         }
       ]
     },
@@ -385,7 +385,7 @@
       "_comment": "Player explicit set",
       "acoustics": [
         {
-          "acoustic": "dimension.nether",
+          "acoustic": "dimension/nether",
           "conditions": "dim.getId() == -1"
         }
       ]
