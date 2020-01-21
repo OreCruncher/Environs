@@ -416,6 +416,17 @@
   "blocks": [
     {
       "blocks": [
+        "minecraft:nether_wart[age=3]"
+      ],
+      "effects": [
+        {
+          "effect": "fire",
+          "chance": 200
+        }
+      ]
+    },
+    {
+      "blocks": [
         "minecraft:dirt"
       ],
       "effects": [
@@ -486,7 +497,8 @@
       "chance": 8000,
       "acoustics": [
         {
-          "acoustic": "soulsand/laughter"
+          "acoustic": "soulsand/laughter",
+          "conditions": "dim.getId() == -1"
         }
       ]
     },

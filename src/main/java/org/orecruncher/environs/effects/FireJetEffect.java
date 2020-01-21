@@ -19,7 +19,6 @@
 package org.orecruncher.environs.effects;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,33 +45,34 @@ public class FireJetEffect extends JetEffect {
     @Override
     public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
                               @Nonnull final BlockPos pos, @Nonnull final Random random) {
-        if (LAVA_PREDICATE.test(state) || SOLID_PREDICATE.test(state))
-            return provider.isAirBlock(pos.up()) && super.canTrigger(provider, state, pos, random);
-        return false;
+        return provider.isAirBlock(pos.up()) && super.canTrigger(provider, state, pos, random);
     }
 
     @Override
     public void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
                          @Nonnull final BlockPos pos, @Nonnull final Random random) {
 
-        final Material blockMaterial = state.getMaterial();
         final int blockCount;
         final float spawnHeight;
+        final boolean isSolid;
 
-        if (blockMaterial.isSolid()) {
-            blockCount = 2;
-            spawnHeight = pos.getY() + 1.1F;
-        } else if (blockMaterial.isLiquid()) {
+        if (!state.getFluidState().isEmpty()) {
             blockCount = countVerticalBlocks(provider, pos, LAVA_PREDICATE, -1);
             spawnHeight = pos.getY() + state.getFluidState().getHeight() + 0.1F;
+            isSolid = false;
         } else {
-            // Fail safe - shouldn't get here
-            return;
+            final double blockHeight = state.getRenderShape(provider, pos).getBoundingBox().maxY;
+            spawnHeight = (float) (pos.getY() + blockHeight);
+            isSolid = true;
+            if (state.isSolid()) {
+                blockCount = 2;
+            } else {
+                blockCount = 1;
+            }
         }
 
         if (blockCount > 0) {
-            final Jet effect = new FireJet(blockCount, provider, pos.getX() + 0.5D,
-                    spawnHeight, pos.getZ() + 0.5D);
+            final Jet effect = new FireJet(blockCount, provider, pos.getX() + 0.5D, spawnHeight, pos.getZ() + 0.5D, isSolid);
             addEffect(effect);
         }
     }
