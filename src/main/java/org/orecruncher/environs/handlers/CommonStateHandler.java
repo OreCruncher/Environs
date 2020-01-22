@@ -31,6 +31,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.orecruncher.environs.handlers.scripts.ConditionEvaluator;
 import org.orecruncher.environs.library.BiomeLibrary;
 import org.orecruncher.environs.library.DimensionLibrary;
 import org.orecruncher.environs.scanner.CeilingCoverage;
@@ -46,7 +47,7 @@ import java.util.Optional;
 @OnlyIn(Dist.CLIENT)
 class CommonStateHandler extends HandlerBase {
 
-    private static final double VILLAGE_RANGE = 48 * 48;
+    private static final double VILLAGE_RANGE = 64 * 64;
 
     protected final CeilingCoverage ceilingCoverage = new CeilingCoverage();
 

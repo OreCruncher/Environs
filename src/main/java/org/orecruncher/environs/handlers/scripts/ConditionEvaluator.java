@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package org.orecruncher.environs.handlers;
+package org.orecruncher.environs.handlers.scripts;
 
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraftforge.api.distmarker.Dist;

@@ -78,8 +78,8 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 			float green = 0;
 			float blue = 0;
 
-			for (int x = -distance; x <= distance; ++x) {
-				for (int z = -distance; z <= distance; ++z) {
+			for (int z = -distance; z <= distance; ++z) {
+				for (int x = -distance; x <= distance; ++x) {
 					pos.setPos(playerX + x, 0, playerZ + z);
 
 					// If the chunk is not available doScan will be set true. This will force

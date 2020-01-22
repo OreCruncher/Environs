@@ -16,16 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package org.orecruncher.environs.handlers;
+package org.orecruncher.environs.handlers.scripts;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.orecruncher.environs.handlers.CommonState;
 import org.orecruncher.lib.scripting.VariableSet;
 
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
-public class StateVariables extends VariableSet<IStateVariables> implements IStateVariables {
+class StateVariables extends VariableSet<IStateVariables> implements IStateVariables {
 
     public StateVariables() {
         super("state");

@@ -87,8 +87,8 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 		ctx.rain = rainStr;
 		ctx.doScan = false;
 
-		for (int x = -DISTANCE; x <= DISTANCE; ++x) {
-			for (int z = -DISTANCE; z <= DISTANCE; ++z) {
+		for (int z = -DISTANCE; z <= DISTANCE; ++z) {
+			for (int x = -DISTANCE; x <= DISTANCE; ++x) {
 				pos.setPos(playerX + x, 0, playerZ + z);
 
 				// If the chunk is not available doScan will be set true. This will force

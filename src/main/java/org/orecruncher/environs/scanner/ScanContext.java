@@ -35,18 +35,18 @@ public class ScanContext {
 
 	private final Supplier<IWorldReader> worldReader;
 	private final Supplier<BlockPos> scanCenter;
-	private final Supplier<Integer> worldRefCount;
+	private final Supplier<Integer> worldReference;
 	private final Supplier<IModLog> logger;
 
 	public ScanContext(
 			@Nonnull final Supplier<IWorldReader> worldReader,
 			@Nonnull final Supplier<BlockPos> scanCenter,
 			@Nonnull final Supplier<IModLog> logger,
-			@Nonnull final Supplier<Integer> worldRefCount
+			@Nonnull final Supplier<Integer> worldReference
 	) {
 		this.worldReader = worldReader;
 		this.scanCenter = scanCenter;
-		this.worldRefCount = worldRefCount;
+		this.worldReference = worldReference;
 		this.logger = logger;
 	}
 
@@ -66,7 +66,7 @@ public class ScanContext {
 	}
 
 	public int getReference() {
-		return this.worldRefCount.get();
+		return this.worldReference.get();
 	}
 
 	@Override

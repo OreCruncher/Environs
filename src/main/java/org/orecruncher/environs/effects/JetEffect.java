@@ -32,7 +32,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.util.math.BlockPos;
 import org.orecruncher.environs.effects.emitters.Jet;
-import org.orecruncher.environs.handlers.ConditionEvaluator;
+import org.orecruncher.environs.handlers.scripts.ConditionEvaluator;
 import org.orecruncher.environs.handlers.ParticleSystems;
 import org.orecruncher.lib.math.MathStuff;
 

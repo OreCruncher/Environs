@@ -22,6 +22,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import org.orecruncher.environs.Environs;
+import org.orecruncher.environs.handlers.CommonState;
 import org.orecruncher.lib.GameUtils;
 
 @OnlyIn(Dist.CLIENT)
@@ -29,10 +30,10 @@ public class ClientPlayerLocus extends ScanContext {
 
 	public ClientPlayerLocus() {
 		super(
-				() -> GameUtils.getWorld(),
-				() -> GameUtils.getPlayer().getPosition(),
+				GameUtils::getWorld,
+				CommonState::getPlayerPosition,
 				() -> Environs.LOGGER,
-				() -> 0
+				CommonState::getDimensionId
 		);
 	}
 

@@ -22,7 +22,7 @@ import com.google.common.base.MoreObjects;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
-import org.orecruncher.environs.handlers.ConditionEvaluator;
+import org.orecruncher.environs.handlers.scripts.ConditionEvaluator;
 import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
 
 import javax.annotation.Nonnull;
