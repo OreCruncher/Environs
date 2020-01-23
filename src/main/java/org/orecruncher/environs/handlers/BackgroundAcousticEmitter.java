@@ -24,11 +24,11 @@ import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Environs;
+import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
+import org.orecruncher.sndctrl.api.acoustics.ISoundInstance;
 import org.orecruncher.sndctrl.audio.AudioEngine;
 import org.orecruncher.sndctrl.audio.BackgroundSoundInstance;
-import org.orecruncher.sndctrl.audio.ISoundInstance;
 import org.orecruncher.sndctrl.audio.SoundState;
-import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
 
 /*
  * Emitters are used to produce sounds that are continuous
@@ -39,9 +39,14 @@ import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
 @OnlyIn(Dist.CLIENT)
 public final class BackgroundAcousticEmitter implements ITickable {
 
+	// Number of ticks to standoff requing a sound if for some reason it is replaced
+	// by mod logic.  Don't want to keep spamming.
+	private static final int REPLACED_STANDOFF = 33;
+
 	@Nonnull
 	protected final BackgroundSoundInstance activeSound;
 
+	protected int standoff = 0;
 	protected boolean done = false;
 
 	public BackgroundAcousticEmitter(@Nonnull final IAcoustic acoustic) {
@@ -69,8 +74,17 @@ public final class BackgroundAcousticEmitter implements ITickable {
 		}
 
 		// Play the sound if need be
-		if (!this.activeSound.getState().isActive())
-			AudioEngine.play(this.activeSound);
+		if (!this.activeSound.getState().isActive()) {
+			// Don't proceed if we are standing off
+			if (this.standoff > 0) {
+				this.standoff--;
+			} else {
+				AudioEngine.play(this.activeSound);
+				if (this.activeSound.getState() == SoundState.REPLACED) {
+					this.standoff = REPLACED_STANDOFF;
+				}
+			}
+		}
 	}
 
 	public void setVolumeThrottle(final float throttle) {

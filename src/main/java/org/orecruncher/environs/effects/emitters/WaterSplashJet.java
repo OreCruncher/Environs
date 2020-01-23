@@ -33,10 +33,10 @@ import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.util.math.BlockPos;
+import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
 import org.orecruncher.sndctrl.audio.AudioEngine;
 import org.orecruncher.sndctrl.audio.LoopingSoundInstance;
 import org.orecruncher.sndctrl.audio.SoundUtils;
-import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
 import org.orecruncher.sndctrl.library.AcousticLibrary;
 
 import java.util.Arrays;

@@ -29,7 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.effects.BlockEffect;
 import org.orecruncher.lib.WeightTable;
 import org.orecruncher.lib.collections.ObjectArray;
-import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
+import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
 
 /**
  * Base class for the data being assigned into the IBlockState implementation.

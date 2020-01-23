@@ -32,7 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import org.orecruncher.environs.effects.BlockEffect;
 import org.orecruncher.environs.library.BlockStateData;
 import org.orecruncher.environs.library.BlockStateUtil;
-import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
+import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
 
 /**
  * Modeled after WorldClient::doVoidFogParticles() which handles the random

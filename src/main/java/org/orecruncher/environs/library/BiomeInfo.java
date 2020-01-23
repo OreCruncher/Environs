@@ -40,7 +40,7 @@ import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.gui.Color;
-import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
+import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
 import org.orecruncher.sndctrl.library.AcousticLibrary;
 
 @OnlyIn(Dist.CLIENT)

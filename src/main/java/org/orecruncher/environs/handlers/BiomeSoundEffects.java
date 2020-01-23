@@ -33,8 +33,8 @@ import org.orecruncher.lib.GameUtils;
 import org.orecruncher.lib.TickCounter;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.events.DiagnosticEvent;
+import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
 import org.orecruncher.sndctrl.audio.AudioEngine;
-import org.orecruncher.sndctrl.audio.acoustic.IAcoustic;
 
 import javax.annotation.Nonnull;
 

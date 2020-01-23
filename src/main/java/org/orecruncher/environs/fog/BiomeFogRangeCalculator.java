@@ -27,6 +27,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.library.BiomeInfo;
 import org.orecruncher.environs.library.BiomeUtil;
 import org.orecruncher.lib.GameUtils;
+import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.util.math.BlockPos;
@@ -71,7 +72,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 		final int playerX = MathStuff.floor(player.posX);
 		final int playerZ = MathStuff.floor(player.posZ);
 		final World world = GameUtils.getWorld();
-		final float rainStr = world.getRainStrength((float) partialTicks);
+		final float rainStr = WorldUtils.getRainStrength(world, (float) partialTicks);
 
 		final Context ctx = this.context[event.getFogMode() == -1 ? 0 : 1];
 

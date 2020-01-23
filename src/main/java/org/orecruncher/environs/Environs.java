@@ -36,7 +36,7 @@ import org.orecruncher.environs.library.Libraries;
 import org.orecruncher.lib.fml.ConfigUtils;
 import org.orecruncher.lib.fml.UpdateChecker;
 import org.orecruncher.lib.logging.ModLog;
-import org.orecruncher.sndctrl.IMC;
+import org.orecruncher.sndctrl.api.IMC;
 
 import javax.annotation.Nonnull;
 import java.nio.file.Path;

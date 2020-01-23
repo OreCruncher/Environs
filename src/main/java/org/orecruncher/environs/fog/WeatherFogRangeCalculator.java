@@ -25,6 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import org.orecruncher.lib.GameUtils;
+import org.orecruncher.lib.WorldUtils;
 
 /**
  * Calculates the fog ranges based on current weather. The stronger the
@@ -43,7 +44,7 @@ public class WeatherFogRangeCalculator extends VanillaFogRangeCalculator {
 	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 		// Start with what vanilla thinks
 		this.cache.set(event);
-		final float rainStr = GameUtils.getWorld().getRainStrength((float) event.getRenderPartialTicks());
+		final float rainStr = WorldUtils.getRainStrength(GameUtils.getWorld(), (float) event.getRenderPartialTicks());
 		if (rainStr > 0) {
 			// Calculate our scaling factor
 			final float startScale = 1F - (START_IMPACT * rainStr);
