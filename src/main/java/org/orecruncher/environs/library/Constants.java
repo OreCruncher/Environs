@@ -20,6 +20,7 @@ package org.orecruncher.environs.library;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.orecruncher.environs.Config;
 import org.orecruncher.sndctrl.api.acoustics.ISoundCategory;
 import org.orecruncher.sndctrl.audio.Category;
 
@@ -29,6 +30,6 @@ public final class Constants {
 
     }
 
-    public static final ISoundCategory BIOMES = new Category("biomes", () -> 1F);
-    public static final ISoundCategory SPOT_SOUNDS = new Category("spot", () -> 1F);
+    public static final ISoundCategory BIOMES = new Category("biomes", Config.CLIENT.sound::get_biomeSoundVolume);
+    public static final ISoundCategory SPOT_SOUNDS = new Category("spot", Config.CLIENT.sound::get_spotSoundVolume);
 }

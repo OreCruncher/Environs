@@ -81,6 +81,7 @@ public final class Config {
         public final Effects effects;
         public final Aurora aurora;
         public final Fog fog;
+        public final Sound sound;
 
         Client(@Nonnull final ForgeConfigSpec.Builder builder) {
             this.logging = new Logging(builder);
@@ -88,6 +89,7 @@ public final class Config {
             this.effects = new Effects(builder);
             this.aurora = new Aurora(builder);
             this.fog = new Fog(builder);
+            this.sound = new Sound(builder);
         }
 
         void update() {
@@ -96,6 +98,7 @@ public final class Config {
             this.effects.update();
             this.aurora.update();
             this.fog.update();
+            this.sound.update();
         }
 
         public static class Logging {
@@ -343,6 +346,14 @@ public final class Config {
 
         public static class Fog {
 
+            private final BooleanValue enableFog;
+            private final BooleanValue enableBiomeFog;
+            private final BooleanValue enableElevationHaze;
+            private final BooleanValue enableMorningFog;
+            private final BooleanValue enableBedrockFog;
+            private final BooleanValue enableWeatherFog;
+            private final IntValue morningFogChance;
+
             private boolean _enableFog;
             private boolean _enableBiomeFog;
             private boolean _enableElevationHaze;
@@ -352,20 +363,62 @@ public final class Config {
             private int _morningFogChance;
 
             Fog(@Nonnull final ForgeConfigSpec.Builder builder) {
-                builder.comment("Options for controlling various effects")
-                        .push("Effect Options");
+                builder.comment("Options that control the various fog effects in the client")
+                        .push("Fog Options");
+
+                this.enableFog = builder
+                        .worldRestart()
+                        .comment("Enable/disable fog processing")
+                        .translation("environs.cfg.fog.Enable")
+                        .define("Enable Fog Processing", true);
+
+                this.enableBiomeFog = builder
+                        .worldRestart()
+                        .comment("Enable biome specific fog density and color")
+                        .translation("environs.cfg.fog.Biome")
+                        .define("Biome Fog", true);
+
+                this.enableElevationHaze = builder
+                        .worldRestart()
+                        .comment("Higher the player elevation the more haze that is experienced")
+                        .translation("environs.cfg.fog.Haze")
+                        .define("Elevation Haze", true);
+
+                this.enableMorningFog = builder
+                        .worldRestart()
+                        .comment("Show morning fog that eventually burns off")
+                        .translation("environs.cfg.fog.Morning")
+                        .define("Morning Fog", true);
+
+                this.enableBedrockFog = builder
+                        .worldRestart()
+                        .comment("Increase fog at bedrock layers")
+                        .translation("environs.cfg.fog.Bedrock")
+                        .define("Bedrock Fog", true);
+
+                this.enableWeatherFog = builder
+                        .worldRestart()
+                        .comment("Increase fog based on the strength of rain")
+                        .translation("environs.cfg.fog.Weather")
+                        .define("Weather Fog", true);
+
+                this.morningFogChance = builder
+                        .worldRestart()
+                        .comment("Chance morning fog will occurs expressed as 1 in N")
+                        .translation("environs.cfg.fog.MorningChance")
+                        .defineInRange("Morning Fog Chance", 1, 0, Integer.MAX_VALUE);
 
                 builder.pop();
             }
 
             public void update() {
-                this._enableFog = true;
-                this._enableBiomeFog = true;
-                this._enableElevationHaze = true;
-                this._enableMorningFog = true;
-                this._enableBedrockFog = true;
-                this._enableWeatherFog = true;
-                this._morningFogChance = 1;
+                this._enableFog = this.enableFog.get();
+                this._enableBiomeFog = this.enableBiomeFog.get();
+                this._enableElevationHaze = this.enableElevationHaze.get();
+                this._enableMorningFog = this.enableMorningFog.get();
+                this._enableBedrockFog = this.enableBedrockFog.get();
+                this._enableWeatherFog = this.enableWeatherFog.get();
+                this._morningFogChance = this.morningFogChance.get();
             }
 
             public boolean get_enableFog() {
@@ -394,6 +447,44 @@ public final class Config {
 
             public int get_morningFogChance() {
                 return this._morningFogChance;
+            }
+        }
+
+        public static class Sound {
+
+            private final IntValue biomeSoundVolume;
+            private final IntValue spotSoundVolume;
+            private float _biomeSoundVolume;
+            private float _spotSoundVolume;
+
+            Sound(@Nonnull final ForgeConfigSpec.Builder builder) {
+                builder.comment("Options for defining sound behavior")
+                        .push("Sound Options");
+
+                this.biomeSoundVolume = builder
+                        .comment("Scaling factor to apply to biome sounds")
+                        .translation("environs.cfg.sound.BiomeVolume")
+                        .defineInRange("Biome Sound Volume", 100, 0, 100);
+
+                this.spotSoundVolume = builder
+                        .comment("Scaling factor to apply to spot sounds")
+                        .translation("environs.cfg.sound.SpotVolume")
+                        .defineInRange("Spot Sound Volume", 100, 0, 100);
+
+                builder.pop();
+            }
+
+            public void update() {
+                this._biomeSoundVolume = this.biomeSoundVolume.get() / 100F;
+                this._spotSoundVolume = this.spotSoundVolume.get() / 100F;
+            }
+
+            public float get_biomeSoundVolume() {
+                return this._biomeSoundVolume;
+            }
+
+            public float get_spotSoundVolume() {
+                return this._spotSoundVolume;
             }
         }
     }
