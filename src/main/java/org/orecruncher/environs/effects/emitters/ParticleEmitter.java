@@ -23,7 +23,6 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,7 +33,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.util.math.BlockPos;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class ParticleEmitter implements ITickable {
+public abstract class ParticleEmitter {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 
@@ -95,7 +94,6 @@ public abstract class ParticleEmitter implements ITickable {
 	 * Minecraft particle system or to a ParticleCollection so they do not have to
 	 * be ticked.
 	 */
-	@Override
 	public void tick() {
 		if (shouldDie()) {
 			setExpired();

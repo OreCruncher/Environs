@@ -18,7 +18,6 @@
 
 package org.orecruncher.environs.scanner;
 
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,7 +35,7 @@ import org.orecruncher.lib.GameUtils;
  * biomes in the local area.
  */
 @OnlyIn(Dist.CLIENT)
-public final class BiomeScanner implements ITickable {
+public final class BiomeScanner {
 
 	private static final int BIOME_SURVEY_RANGE = 20;
 	private static final int MAX_BIOME_AREA = (int) Math.pow(BIOME_SURVEY_RANGE * 2 + 1, 2);
@@ -51,7 +50,6 @@ public final class BiomeScanner implements ITickable {
 	private int surveyedDimension = 0;
 	private BlockPos surveyedPosition = BlockPos.ZERO;
 
-	@Override
 	public void tick() {
 		final BlockPos position = GameUtils.getPlayer().getPosition();
 		final BiomeInfo playerBiome = BiomeLibrary.getPlayerBiome(GameUtils.getPlayer(), false);

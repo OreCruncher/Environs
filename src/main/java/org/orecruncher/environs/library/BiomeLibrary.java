@@ -146,6 +146,7 @@ public final class BiomeLibrary {
 			LOGGER.info("*** BIOME REGISTRY ***");
 			getCombinedStream().stream().sorted().map(Object::toString).forEach(LOGGER::info);
 		}
+		getCombinedStream().forEach(BiomeInfo::trim);
 	}
 
 	private static void register(@Nonnull final Biome biome) {

@@ -39,6 +39,8 @@ class AreaBlockEffects extends HandlerBase {
     protected RandomBlockEffectScanner farEffects;
     protected AlwaysOnBlockEffectScanner alwaysOn;
 
+    protected long nanos;
+
     public AreaBlockEffects() {
         super("Area Block Effects");
     }
@@ -48,6 +50,8 @@ class AreaBlockEffects extends HandlerBase {
         this.nearEffects.tick();
         this.farEffects.tick();
         this.alwaysOn.tick();
+        this.blockChange.update(nanos);
+        this.nanos = 0;
     }
 
     @Override
@@ -73,8 +77,8 @@ class AreaBlockEffects extends HandlerBase {
 
     @SubscribeEvent
     public void onBlockUpdate(@Nonnull final BlockUpdateEvent event) {
-        this.blockChange.begin();
+        final long start = System.nanoTime();
         event.getExpandedPositions().forEach(this.alwaysOn::onBlockUpdate);
-        this.blockChange.end();
+        this.nanos += System.nanoTime() - start;
     }
 }

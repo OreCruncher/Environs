@@ -20,14 +20,12 @@ package org.orecruncher.environs.handlers;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Environs;
 import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
-import org.orecruncher.sndctrl.api.acoustics.ISoundInstance;
+import org.orecruncher.sndctrl.api.acoustics.IFadableSoundInstance;
 import org.orecruncher.sndctrl.audio.AudioEngine;
-import org.orecruncher.sndctrl.audio.BackgroundSoundInstance;
 import org.orecruncher.sndctrl.audio.SoundState;
 
 /*
@@ -37,24 +35,22 @@ import org.orecruncher.sndctrl.audio.SoundState;
  * cancels the sound.
  */
 @OnlyIn(Dist.CLIENT)
-public final class BackgroundAcousticEmitter implements ITickable {
+public final class BackgroundAcousticEmitter {
 
 	// Number of ticks to standoff requing a sound if for some reason it is replaced
 	// by mod logic.  Don't want to keep spamming.
 	private static final int REPLACED_STANDOFF = 33;
 
 	@Nonnull
-	protected final BackgroundSoundInstance activeSound;
+	protected final IFadableSoundInstance activeSound;
 
 	protected int standoff = 0;
 	protected boolean done = false;
 
 	public BackgroundAcousticEmitter(@Nonnull final IAcoustic acoustic) {
-		final ISoundInstance sound = acoustic.getFactory().createSound();
-		this.activeSound = new BackgroundSoundInstance(sound);
+		this.activeSound = acoustic.getFactory().createBackgroundSound();
 	}
 
-	@Override
 	public void tick() {
 
 		// If the current sound is playing and the sound is fading just terminate the sound.
@@ -88,7 +84,7 @@ public final class BackgroundAcousticEmitter implements ITickable {
 	}
 
 	public void setVolumeThrottle(final float throttle) {
-		this.activeSound.setFadeScaleTarget(throttle);
+		this.activeSound.setFadeVolume(throttle);
 	}
 
 	public void fade() {

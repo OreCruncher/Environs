@@ -18,7 +18,7 @@
 
 package org.orecruncher.environs.handlers.scripts;
 
-import net.minecraft.client.renderer.texture.ITickable;
+import net.minecraft.util.StringUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.lib.scripting.ExecutionContext;
@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
-public final class ConditionEvaluator implements ITickable {
+public final class ConditionEvaluator {
 
     public static final ConditionEvaluator INSTANCE = new ConditionEvaluator();
 
@@ -43,7 +43,6 @@ public final class ConditionEvaluator implements ITickable {
         this.context.add(new StateVariables());
     }
 
-    @Override
     public void tick() {
         this.context.update();
     }
@@ -54,7 +53,7 @@ public final class ConditionEvaluator implements ITickable {
     }
 
     public Object eval(@Nonnull final String conditions) {
-        if (conditions.length() == 0)
+        if (StringUtils.isNullOrEmpty(conditions))
             return true;
         final Optional<Object> result = this.context.eval(conditions);
         return result.orElse(false);

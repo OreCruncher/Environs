@@ -19,14 +19,15 @@
 package org.orecruncher.environs.scanner;
 
 import java.util.Random;
-import java.util.concurrent.Callable;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,7 +36,15 @@ import org.orecruncher.lib.random.XorShiftRandom;
 import net.minecraft.util.math.BlockPos;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class Scanner implements ITickable, Callable<Void> {
+public abstract class Scanner {
+
+	protected static final Set<BlockState> BLOCKSTATES_TO_IGNORE = new ReferenceOpenHashSet<>();
+
+	static {
+		BLOCKSTATES_TO_IGNORE.add(Blocks.AIR.getDefaultState());
+		BLOCKSTATES_TO_IGNORE.add(Blocks.CAVE_AIR.getDefaultState());
+		BLOCKSTATES_TO_IGNORE.add(Blocks.VOID_AIR.getDefaultState());
+	}
 
 	private final static int MAX_BLOCKS_TICK = 3000;
 
@@ -112,12 +121,6 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 		return state.getMaterial() != Material.AIR;
 	}
 
-	@Override
-	public Void call() {
-		tick();
-		return null;
-	}
-
 	public void preScan() {
 
 	}
@@ -126,7 +129,6 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 
 	}
 
-	@Override
 	public void tick() {
 
 		preScan();
@@ -137,6 +139,8 @@ public abstract class Scanner implements ITickable, Callable<Void> {
 			if (pos == null)
 				break;
 			final BlockState state = provider.getBlockState(pos);
+			if (BLOCKSTATES_TO_IGNORE.contains(state))
+				continue;
 			if (interestingBlock(state)) {
 				blockScan(state, pos, this.random);
 			}

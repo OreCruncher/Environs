@@ -71,6 +71,7 @@ public final class BlockStateLibrary {
     static void complete() {
         int blockStates = (int) ForgeUtils.getBlockStates().stream().map(BlockStateLibrary::get).count();
         LOGGER.info("%d block states processed, %d registry entries", blockStates, registry.size());
+        ForgeUtils.getBlockStates().stream().map(BlockStateLibrary::get).forEach(BlockStateData::trim);
     }
 
     @Nonnull

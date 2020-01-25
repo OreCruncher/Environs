@@ -25,7 +25,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -46,7 +45,7 @@ import net.minecraft.world.World;
  * Used to determine if the player is "inside" or "outside".
  */
 @OnlyIn(Dist.CLIENT)
-public final class CeilingCoverage implements ITickable {
+public final class CeilingCoverage {
 
 	private static final int SURVEY_INTERVAL = 4;
 	private static final int INSIDE_SURVEY_RANGE = 3;
@@ -74,18 +73,16 @@ public final class CeilingCoverage implements ITickable {
 
 	private boolean reallyInside = false;
 
-	@Override
 	public void tick() {
 		if (TickCounter.getTickCount() % SURVEY_INTERVAL == 0) {
 			final DimensionInfo dimInfo = DimensionLibrary.getData(GameUtils.getWorld());
-			float ceilingCoverageRatio = 0.0F;
 			if (dimInfo.getId() == -1 || dimInfo.alwaysOutside()) {
 				this.reallyInside = false;
 			} else {
 				final BlockPos pos = CommonState.getPlayerPosition();
 				float score = 0.0F;
 				for (Cell cell : cells) score += cell.score(pos);
-				ceilingCoverageRatio = 1.0F - (score / TOTAL_POINTS);
+				float ceilingCoverageRatio = 1.0F - (score / TOTAL_POINTS);
 				this.reallyInside = ceilingCoverageRatio > INSIDE_THRESHOLD;
 			}
 		}

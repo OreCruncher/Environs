@@ -36,6 +36,7 @@ public class FountainJetEffect extends JetEffect {
         super(chance);
     }
 
+    @Nonnull
     @Override
     public BlockEffectType getEffectType() {
         return BlockEffectType.FOUNTAIN_JET;

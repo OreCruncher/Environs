@@ -20,6 +20,7 @@ package org.orecruncher.environs.library;
 
 import java.util.Collection;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -39,10 +40,10 @@ public class BlockStateData {
 
 	public static final BlockStateData DEFAULT = new BlockStateData();
 
+	protected final ObjectArray<WeightedAcousticEntry> sounds = new ObjectArray<>();
+	protected final ObjectArray<BlockEffect> effects = new ObjectArray<>();
+	protected final ObjectArray<BlockEffect> alwaysOn = new ObjectArray<>();
 	protected int chance = 100;
-	protected ObjectArray<WeightedAcousticEntry> sounds = new ObjectArray<>(2);
-	protected ObjectArray<BlockEffect> effects = new ObjectArray<>(2);
-	protected ObjectArray<BlockEffect> alwaysOn = new ObjectArray<>(2);
 
 	public void setChance(final int chance) {
 		this.chance = chance;
@@ -88,8 +89,14 @@ public class BlockStateData {
 	}
 
 	public IAcoustic getSoundToPlay(@Nonnull final Random random) {
-		return this.sounds.size() > 0 && random.nextInt(getChance()) == 0 ? new WeightTable<>(this.sounds).next()
-				: null;
+		if (this.sounds.size() > 0 && random.nextInt(getChance()) == 0) {
+			final WeightTable<IAcoustic> table = new WeightTable<>();
+			for (final WeightedAcousticEntry ae : this.sounds)
+				if (ae.matches())
+					table.add(ae);
+			return table.next();
+		}
+		return null;
 	}
 
 	public boolean hasSoundsOrEffects() {
@@ -98,6 +105,12 @@ public class BlockStateData {
 
 	public boolean hasAlwaysOnEffects() {
 		return this.alwaysOn.size() > 0;
+	}
+
+	public void trim() {
+		this.sounds.trim();
+		this.effects.trim();
+		this.alwaysOn.trim();
 	}
 
 	@Nonnull
