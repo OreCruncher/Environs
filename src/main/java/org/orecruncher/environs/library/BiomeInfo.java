@@ -203,7 +203,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 
 	@Nonnull
 	public Collection<IAcoustic> findSoundMatches() {
-		return findSoundMatches(new ObjectArray<>(8));
+		return findSoundMatches(new ObjectArray<>());
 	}
 
 	@Nonnull

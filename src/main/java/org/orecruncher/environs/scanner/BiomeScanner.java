@@ -18,11 +18,11 @@
 
 package org.orecruncher.environs.scanner;
 
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import org.orecruncher.environs.library.BiomeInfo;
@@ -43,7 +43,7 @@ public final class BiomeScanner {
 	private final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
 	private int biomeArea;
-	private Reference2FloatOpenHashMap<BiomeInfo> weights = new Reference2FloatOpenHashMap<>();
+	private Reference2IntOpenHashMap<BiomeInfo> weights = new Reference2IntOpenHashMap<>(8);
 
 	// "Finger print" of the last area survey.
 	private BiomeInfo surveyedBiome = null;
@@ -64,21 +64,21 @@ public final class BiomeScanner {
 			this.surveyedPosition = position;
 
 			this.biomeArea = 0;
-			this.weights = new Reference2FloatOpenHashMap<>();
+			this.weights = new Reference2IntOpenHashMap<>(8);
 
 			if (playerBiome.isFake()) {
 				this.biomeArea = 1;
 				this.weights.put(playerBiome, 1);
 			} else {
 				final IWorldReader provider = GameUtils.getWorld();
-				for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++)
-					for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
+				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
+					for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++) {
 						this.mutable.setPos(this.surveyedPosition.getX() + dX, 0, this.surveyedPosition.getZ() + dZ);
 						final Biome biome = provider.getBiome(this.mutable);
 						final BiomeInfo info = BiomeUtil.getBiomeData(biome);
-						this.weights.addTo(info, 1F);
+						this.weights.addTo(info, 1);
 					}
-
+				}
 				this.biomeArea = MAX_BIOME_AREA;
 			}
 		}
@@ -88,7 +88,7 @@ public final class BiomeScanner {
 		return this.biomeArea;
 	}
 
-	public Reference2FloatOpenHashMap<BiomeInfo> getBiomes() {
+	public Reference2IntOpenHashMap<BiomeInfo> getBiomes() {
 		return this.weights;
 	}
 

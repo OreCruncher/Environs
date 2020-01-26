@@ -18,8 +18,7 @@
 
 package org.orecruncher.environs.handlers;
 
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,9 +26,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.orecruncher.environs.library.BiomeInfo;
 import org.orecruncher.environs.library.BiomeLibrary;
-import org.orecruncher.environs.library.DimensionLibrary;
 import org.orecruncher.environs.scanner.BiomeScanner;
-import org.orecruncher.lib.GameUtils;
 import org.orecruncher.lib.TickCounter;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.events.DiagnosticEvent;
@@ -37,20 +34,30 @@ import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
 import org.orecruncher.sndctrl.audio.AudioEngine;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
 
 @OnlyIn(Dist.CLIENT)
 public class BiomeSoundEffects extends HandlerBase {
 
     public static final int SCAN_INTERVAL = 4;
-    protected final BiomeScanner biomes = new BiomeScanner();
-    private final Object2ObjectOpenHashMap<IAcoustic, BackgroundAcousticEmitter> emitters = new Object2ObjectOpenHashMap<>();
+
+    // Reusable map for biome acoustic work
+    private static final Reference2FloatOpenHashMap<IAcoustic> WORK_MAP = new Reference2FloatOpenHashMap<>(8, 1F);
+
+    static {
+        WORK_MAP.defaultReturnValue(0F);
+    }
+
+    private final BiomeScanner biomes = new BiomeScanner();
+    private final Reference2ObjectOpenHashMap<IAcoustic, BackgroundAcousticEmitter> emitters = new Reference2ObjectOpenHashMap<>(8, 1F);
+
     BiomeSoundEffects() {
         super("Biome Sounds");
     }
 
     @Override
     public boolean doTick(final long tick) {
-        return DimensionLibrary.getData(GameUtils.getWorld()).playBiomeSounds();
+        return CommonState.getDimensionInfo().playBiomeSounds();
     }
 
     private boolean doBiomeSounds() {
@@ -58,15 +65,15 @@ public class BiomeSoundEffects extends HandlerBase {
                 || !CommonState.isInside();
     }
 
-    private void getBiomeSounds(@Nonnull final Object2FloatOpenHashMap<IAcoustic> result) {
-        // Need to collect sounds from all the applicable biomes
-        // along with their weights.
-        this.biomes.getBiomes().reference2FloatEntrySet()
-                .forEach(e -> e.getKey().findSoundMatches().forEach(fx -> result.addTo(fx, e.getFloatValue())));
-
-        // Scale the volumes in the resulting list based on the weights
+    private void generateBiomeSounds() {
         final float area = this.biomes.getBiomeArea();
-        result.replaceAll((fx, v) -> 0.1F + 0.9F * (v / area));
+        for (final Reference2IntMap.Entry<BiomeInfo> kvp : this.biomes.getBiomes().reference2IntEntrySet()) {
+            final Collection<IAcoustic> acoustics = kvp.getKey().findSoundMatches();
+            final float volume = 0.05F + 0.95F * (kvp.getIntValue() / area);
+            for (final IAcoustic acoustic : acoustics) {
+                WORK_MAP.put(acoustic, volume);
+            }
+        }
     }
 
     @Override
@@ -91,26 +98,28 @@ public class BiomeSoundEffects extends HandlerBase {
     private void handleBiomeSounds(@Nonnull final PlayerEntity player) {
         this.biomes.tick();
 
-        final Object2FloatOpenHashMap<IAcoustic> sounds = new Object2FloatOpenHashMap<>();
-        sounds.defaultReturnValue(0);
+        // Reset our map
+        WORK_MAP.clear();
 
         // Only gather data if the player is alive. If the player is dead the biome
         // sounds will cease playing.
         if (player.isAlive()) {
 
-            if (doBiomeSounds())
-                getBiomeSounds(sounds);
+            final boolean biomeSounds = doBiomeSounds();
+
+            if (biomeSounds)
+                generateBiomeSounds();
 
             final ObjectArray<IAcoustic> playerSounds = new ObjectArray<>();
             BiomeLibrary.PLAYER_INFO.findSoundMatches(playerSounds);
             BiomeLibrary.VILLAGE_INFO.findSoundMatches(playerSounds);
-            playerSounds.forEach(fx -> sounds.put(fx, 1.0F));
+            playerSounds.forEach(fx -> WORK_MAP.put(fx, 1.0F));
 
-            if (doBiomeSounds()) {
+            if (biomeSounds) {
                 final BiomeInfo playerBiome = CommonState.getPlayerBiome();
                 final IAcoustic sound = playerBiome.getSpotSound(this.RANDOM);
                 if (sound != null)
-                    sound.playAt(CommonState.getPlayerPosition());
+                    sound.playNear(player);
             }
 
             final IAcoustic sound = BiomeLibrary.PLAYER_INFO.getSpotSound(this.RANDOM);
@@ -118,16 +127,15 @@ public class BiomeSoundEffects extends HandlerBase {
                 sound.playNear(player);
         }
 
-        queueAmbientSounds(sounds);
+        queueAmbientSounds(WORK_MAP);
     }
 
-    private void queueAmbientSounds(@Nonnull final Object2FloatOpenHashMap<IAcoustic> sounds) {
-
+    private void queueAmbientSounds(@Nonnull final Reference2FloatOpenHashMap<IAcoustic> sounds) {
         // Iterate through the existing emitters:
         // * If done, remove
         // * If not in the incoming list, fade
         // * If it does exist, update volume throttle and unfade if needed
-        this.emitters.object2ObjectEntrySet().removeIf(entry -> {
+        this.emitters.reference2ObjectEntrySet().removeIf(entry -> {
             final BackgroundAcousticEmitter backgroundAcousticEmitter = entry.getValue();
             if (backgroundAcousticEmitter.isDonePlaying()) {
                 return true;
@@ -155,6 +163,7 @@ public class BiomeSoundEffects extends HandlerBase {
     public void clearSounds() {
         this.emitters.values().forEach(BackgroundAcousticEmitter::stop);
         this.emitters.clear();
+        WORK_MAP.clear();
         AudioEngine.stopAll();
     }
 

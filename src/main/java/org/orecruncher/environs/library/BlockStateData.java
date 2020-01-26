@@ -20,7 +20,6 @@ package org.orecruncher.environs.library;
 
 import java.util.Collection;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -44,6 +43,8 @@ public class BlockStateData {
 	protected final ObjectArray<BlockEffect> effects = new ObjectArray<>();
 	protected final ObjectArray<BlockEffect> alwaysOn = new ObjectArray<>();
 	protected int chance = 100;
+	protected boolean hasSoundsAndEffects;
+	protected boolean hasAlwaysOn;
 
 	public void setChance(final int chance) {
 		this.chance = chance;
@@ -100,17 +101,19 @@ public class BlockStateData {
 	}
 
 	public boolean hasSoundsOrEffects() {
-		return this.sounds.size() > 0 || this.effects.size() > 0;
+		return this.hasSoundsAndEffects;
 	}
 
 	public boolean hasAlwaysOnEffects() {
-		return this.alwaysOn.size() > 0;
+		return this.hasAlwaysOn;
 	}
 
 	public void trim() {
 		this.sounds.trim();
 		this.effects.trim();
 		this.alwaysOn.trim();
+		this.hasSoundsAndEffects = this.sounds.size() > 0 || this.effects.size() > 0;
+		this.hasAlwaysOn = this.alwaysOn.size() > 0;
 	}
 
 	@Nonnull
