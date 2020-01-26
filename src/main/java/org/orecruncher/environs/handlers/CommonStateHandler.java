@@ -115,10 +115,10 @@ class CommonStateHandler extends HandlerBase {
 
     private final static String[] scripts = {
             "'Dim: ' + dim.getId() + '/' + dim.getDimName()",
-            "'Biome: ' + biome.getName() + '(' + biome.getId() + '); Temp ' + biome.getTemperature() + '/' + state.getCurrentTemperature() + ' rainfall: ' + biome.getRainfall() + ' traits: ' + biome.getTraits()",
-            "'Weather: ' + lib.iif(weather.isRaining(),'rainfall: ' + weather.getRainFall(),'not raining') + lib.iif(weather.isThundering(),' thundering','') + ' Temp: ' + weather.getTemperature() + ' ice: ' + lib.iif(weather.getTemperature() < 0.15, 'true', 'false') + ' ' + lib.iif(weather.getTemperature() < 0.2, '(breath)', '')",
+            "'Biome: ' + biome.getName() + ' (' + biome.getId() + '); Temp ' + biome.getTemperature() + '/' + state.getCurrentTemperature() + ' rainfall: ' + biome.getRainfall() + ' traits: ' + biome.getTraits()",
+            "'Weather: ' + lib.iif(weather.isRaining(),'rain: ' + weather.getRainIntensity(),'not raining') + lib.iif(weather.isThundering(),' thundering','') + ' Temp: ' + weather.getTemperature() + ' ice: ' + lib.iif(weather.getTemperature() < 0.15, 'true', 'false') + ' ' + lib.iif(weather.getTemperature() < 0.2, '(breath)', '')",
             "'Diurnal: ' + lib.iif(diurnal.isNight(),' night,',' day,') + lib.iif(state.isInside(),' inside,',' outside,') + ' celestial angle: ' + diurnal.getCelestialAngle()",
-            "'Player: health ' + player.getHealth() + '/' + player.getMaxHealth() + ' pos: (' + player.getX() + ',' + player.getY() + ',' + player.getZ() + ') light: ' + state.getLightLevel()",
+            "'Player: health ' + player.getHealth() + '/' + player.getMaxHealth() + ' food ' + player.getFoodLevel() + '/' + player.getFoodSaturationLevel() + ' pos (' + player.getX() + ', ' + player.getY() + ', ' + player.getZ() + ') light ' + state.getLightLevel()",
             "'Village: ' + state.isInVillage()"
     };
 
@@ -126,7 +126,7 @@ class CommonStateHandler extends HandlerBase {
     public void diagnostics(@Nonnull final DiagnosticEvent event) {
         for (final String s : scripts) {
             final String result = ConditionEvaluator.INSTANCE.eval(s).toString();
-            event.getLeft().add(TextFormatting.YELLOW + result);
+            event.getLeft().add(TextFormatting.DARK_AQUA + result);
         }
     }
 

@@ -23,6 +23,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -81,6 +83,8 @@ public class WaterSplashJetEffect extends JetEffect {
 	private static boolean isValidSpawnBlock(final IWorldReader provider, final BlockState state,
 			final BlockPos pos) {
 		if (state.getFluidState().isEmpty())
+			return false;
+		if (provider.getFluidState(pos.up()).isEmpty())
 			return false;
 		if (isUnboundedLiquid(provider, pos)) {
 			final BlockPos down = pos.down();
