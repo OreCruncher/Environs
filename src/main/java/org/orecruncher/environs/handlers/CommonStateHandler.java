@@ -40,6 +40,7 @@ import org.orecruncher.lib.GameUtils;
 import org.orecruncher.lib.TickCounter;
 import org.orecruncher.lib.WorldUtils;
 import org.orecruncher.lib.events.DiagnosticEvent;
+import org.orecruncher.lib.seasons.Season;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -65,6 +66,7 @@ class CommonStateHandler extends HandlerBase {
         ceilingCoverage.tick();
 
         data.clock.update(world);
+        data.season = Season.getSeason(world);
         data.playerBiome = BiomeLibrary.getPlayerBiome(GameUtils.getPlayer(), false);
         data.truePlayerBiome = BiomeLibrary.getPlayerBiome(GameUtils.getPlayer(), true);
         data.dimensionId = world.getDimension().getType().getId();
@@ -118,6 +120,7 @@ class CommonStateHandler extends HandlerBase {
             "'Biome: ' + biome.getName() + ' (' + biome.getId() + '); Temp ' + biome.getTemperature() + '/' + state.getCurrentTemperature() + ' rainfall: ' + biome.getRainfall() + ' traits: ' + biome.getTraits()",
             "'Weather: ' + lib.iif(weather.isRaining(),'rain: ' + weather.getRainIntensity(),'not raining') + lib.iif(weather.isThundering(),' thundering','') + ' Temp: ' + weather.getTemperature() + ' ice: ' + lib.iif(weather.getTemperature() < 0.15, 'true', 'false') + ' ' + lib.iif(weather.getTemperature() < 0.2, '(breath)', '')",
             "'Diurnal: ' + lib.iif(diurnal.isNight(),' night,',' day,') + lib.iif(state.isInside(),' inside,',' outside,') + ' celestial angle: ' + diurnal.getCelestialAngle()",
+            "'Season: ' + season.getSeason()",
             "'Player: health ' + player.getHealth() + '/' + player.getMaxHealth() + ' food ' + player.getFoodLevel() + '/' + player.getFoodSaturationLevel() + ' pos (' + player.getX() + ', ' + player.getY() + ', ' + player.getZ() + ') light ' + state.getLightLevel()",
             "'Village: ' + state.isInVillage()"
     };

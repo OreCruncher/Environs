@@ -29,6 +29,7 @@ import org.orecruncher.environs.library.DimensionInfo;
 import org.orecruncher.lib.DayCycle;
 import org.orecruncher.lib.MinecraftClock;
 import org.orecruncher.lib.TickCounter;
+import org.orecruncher.lib.seasons.Season;
 
 @OnlyIn(Dist.CLIENT)
 public final class CommonState {
@@ -41,6 +42,7 @@ public final class CommonState {
 
     // State that is gathered from the various sources
     // to avoid requery. Used during the tick.
+    Season season = Season.NONE;
     BiomeInfo playerBiome = BiomeLibrary.WTF_INFO;
     BiomeInfo truePlayerBiome = BiomeLibrary.WTF_INFO;
     int dimensionId;
@@ -62,6 +64,10 @@ public final class CommonState {
     MinecraftClock clock = new MinecraftClock();
 
     CommonState() {
+    }
+
+    public static Season getSeason() {
+        return instance.season;
     }
 
     public static BiomeInfo getPlayerBiome() {

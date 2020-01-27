@@ -41,6 +41,7 @@ public final class ConditionEvaluator {
         this.context.add(new PlayerVariables());
         this.context.add(new WeatherVariables());
         this.context.add(new StateVariables());
+        this.context.add(new SeasonVariables());
     }
 
     public void tick() {

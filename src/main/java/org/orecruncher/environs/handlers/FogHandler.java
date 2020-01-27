@@ -115,9 +115,6 @@ public class FogHandler extends HandlerBase {
             this.fogRange.add(new HazeFogRangeCalculator());
 
         if (Config.CLIENT.fog.get_enableMorningFog()) {
-//			if (ModEnvironment.SereneSeasons.isLoaded())
-//				this.fogRange.add(new SeasonFogRangeCalculator());
-//			else
             this.fogRange.add(new MorningFogRangeCalculator());
         }
 
