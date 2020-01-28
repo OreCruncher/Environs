@@ -29,7 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraft.client.particle.Particle;
 import org.orecruncher.lib.GameUtils;
-import org.orecruncher.sndctrl.library.AcousticLibrary;
+import org.orecruncher.sndctrl.api.acoustics.Library;
 
 @OnlyIn(Dist.CLIENT)
 public class FireJet extends Jet {
@@ -52,7 +52,7 @@ public class FireJet extends Jet {
 		if (!this.soundFired) {
 			this.soundFired = true;
 			if (this.jetStrength > 1) {
-				AcousticLibrary.resolve(FIRE_ACOUSTIC).playAt(getPos());
+				Library.resolve(FIRE_ACOUSTIC).playAt(getPos());
 			}
 		}
 	}

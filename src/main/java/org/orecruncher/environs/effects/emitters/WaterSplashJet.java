@@ -34,10 +34,10 @@ import org.orecruncher.lib.math.MathStuff;
 
 import net.minecraft.util.math.BlockPos;
 import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
+import org.orecruncher.sndctrl.api.acoustics.Library;
 import org.orecruncher.sndctrl.audio.AudioEngine;
 import org.orecruncher.sndctrl.audio.LoopingSoundInstance;
 import org.orecruncher.sndctrl.audio.SoundUtils;
-import org.orecruncher.sndctrl.library.AcousticLibrary;
 
 import java.util.Arrays;
 
@@ -95,7 +95,7 @@ public class WaterSplashJet extends Jet {
 
 		if (this.sound == null) {
 			final int idx = MathStuff.clamp(this.jetStrength, 0, waterfallAcoustics.length - 1);
-			final IAcoustic acoustic = AcousticLibrary.resolve(waterfallAcoustics[idx]);
+			final IAcoustic acoustic = Library.resolve(waterfallAcoustics[idx]);
 			this.sound = new LoopingSoundInstance(acoustic.getFactory().createSoundAt(this.position));
 		}
 

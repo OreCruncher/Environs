@@ -41,7 +41,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.gui.Color;
 import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
-import org.orecruncher.sndctrl.library.AcousticLibrary;
+import org.orecruncher.sndctrl.api.acoustics.Library;
 
 @OnlyIn(Dist.CLIENT)
 public final class BiomeInfo implements Comparable<BiomeInfo> {
@@ -261,8 +261,8 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 			setSpotSoundChance(entry.spotSoundChance);
 
 		for (final AcousticConfig sr : entry.acoustics) {
-			final ResourceLocation res = AcousticLibrary.resolveResource(Environs.MOD_ID, sr.acoustic);
-			final IAcoustic acoustic = AcousticLibrary.resolve(res, sr.acoustic);
+			final ResourceLocation res = Library.resolveResource(Environs.MOD_ID, sr.acoustic);
+			final IAcoustic acoustic = Library.resolve(res, sr.acoustic);
 
 			if (sr.type.equalsIgnoreCase("spot")) {
 				final int weight = sr.weight;

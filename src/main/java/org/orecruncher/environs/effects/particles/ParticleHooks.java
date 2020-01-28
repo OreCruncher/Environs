@@ -33,7 +33,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Environs;
 import org.orecruncher.environs.effects.JetEffect;
 import org.orecruncher.lib.GameUtils;
-import org.orecruncher.sndctrl.library.AcousticLibrary;
+import org.orecruncher.sndctrl.api.acoustics.Library;
 
 import javax.annotation.Nonnull;
 
@@ -80,7 +80,7 @@ public final class ParticleHooks {
                 // Don't set expired - this will cause the logic in DripParticle to do a splash
                 acoustic = WATER_DROP_ACOUSTIC;
             }
-            AcousticLibrary.resolve(acoustic).playAt(vecPos);
+            Library.resolve(acoustic).playAt(vecPos);
             return;
         }
 
@@ -113,7 +113,7 @@ public final class ParticleHooks {
                     }
                 }
 
-                AcousticLibrary.resolve(acoustic).playAt(vecPos);
+                Library.resolve(acoustic).playAt(vecPos);
                 particle.setExpired();
             }
         }

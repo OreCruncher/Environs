@@ -39,7 +39,7 @@ import org.orecruncher.lib.blockstate.BlockStateMatcherMap;
 import org.orecruncher.lib.fml.ForgeUtils;
 import org.orecruncher.lib.logging.IModLog;
 import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
-import org.orecruncher.sndctrl.library.AcousticLibrary;
+import org.orecruncher.sndctrl.api.acoustics.Library;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -118,8 +118,8 @@ public final class BlockStateLibrary {
 
                 for (final AcousticConfig sr : entry.acoustics) {
                     if (sr.acoustic != null) {
-                        final ResourceLocation res = AcousticLibrary.resolveResource(Environs.MOD_ID, sr.acoustic);
-                        final IAcoustic acoustic = AcousticLibrary.resolve(res, sr.acoustic);
+                        final ResourceLocation res = Library.resolveResource(Environs.MOD_ID, sr.acoustic);
+                        final IAcoustic acoustic = Library.resolve(res, sr.acoustic);
                         final int weight = sr.weight;
                         final WeightedAcousticEntry acousticEntry = new WeightedAcousticEntry(acoustic, sr.conditions, weight);
                         blockData.addSound(acousticEntry);
