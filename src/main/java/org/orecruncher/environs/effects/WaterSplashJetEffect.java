@@ -72,6 +72,24 @@ public class WaterSplashJetEffect extends JetEffect {
 		return false;
 	}
 
+	/**
+	 * Similar to isUnboundedLiquid() but geared towards determine that the liquid is bound on all sides.
+	 */
+	private static boolean isBoundedLiquid(final IWorldReader provider, final BlockPos pos) {
+		for (final Vec3i cardinal_offset : cardinal_offsets) {
+			final BlockPos tp = pos.add(cardinal_offset);
+			final BlockState state = provider.getBlockState(tp);
+			if (state.getMaterial() == Material.AIR)
+				return false;
+			final IFluidState fluidState = provider.getFluidState(tp);
+			final int height = fluidState.getLevel();
+			if (height > 0 && height < 8)
+				return false;
+		}
+
+		return true;
+	}
+
 	private int liquidBlockCount(final IWorldReader provider, final BlockPos pos) {
 		return countVerticalBlocks(provider, pos, FLUID_PREDICATE, 1);
 	}
@@ -90,7 +108,7 @@ public class WaterSplashJetEffect extends JetEffect {
 			final BlockPos down = pos.down();
 			if (WorldUtils.isBlockSolid(provider, down))
 				return true;
-			return !isUnboundedLiquid(provider, down);
+			return isBoundedLiquid(provider, down);
 		}
 		return false;
 	}

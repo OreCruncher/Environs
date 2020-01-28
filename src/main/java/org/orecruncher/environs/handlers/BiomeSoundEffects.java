@@ -71,7 +71,7 @@ public class BiomeSoundEffects extends HandlerBase {
             final Collection<IAcoustic> acoustics = kvp.getKey().findSoundMatches();
             final float volume = 0.05F + 0.95F * (kvp.getIntValue() / area);
             for (final IAcoustic acoustic : acoustics) {
-                WORK_MAP.put(acoustic, volume);
+                WORK_MAP.addTo(acoustic, volume);
             }
         }
     }

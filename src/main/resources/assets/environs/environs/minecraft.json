@@ -152,7 +152,7 @@
       "soundReset": true,
       "acoustics": [
         {
-          "acoustic": "ocean/deep"
+          "acoustic": "biome/ocean/deep"
         }
       ]
     },
@@ -371,7 +371,7 @@
       "_comment": "Clouds explicit set",
       "acoustics": [
         {
-          "acoustic": "biomes/wind"
+          "acoustic": "biome/wind"
         }
       ]
     },
