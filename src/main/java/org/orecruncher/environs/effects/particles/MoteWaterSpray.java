@@ -31,6 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.orecruncher.environs.library.BiomeUtil;
 import org.orecruncher.lib.gui.Color;
 import org.orecruncher.lib.particles.MotionMote;
+import org.orecruncher.lib.particles.ParticleCollisionResult;
 import org.orecruncher.lib.random.XorShiftRandom;
 
 import javax.annotation.Nonnull;
@@ -78,9 +79,9 @@ public class MoteWaterSpray extends MotionMote {
 	}
 
 	@Override
-	public void handleCollision(@Nonnull final Pair<Vec3d, Boolean> collision) {
+	public void handleCollision(@Nonnull final ParticleCollisionResult collision) {
 		// Do the drip splash, but don't play the sound.  Sounds funny with waterfall effects
-		ParticleHooks.splashHandler(Fluids.WATER, collision.getLeft(), collision.getRight(), false);
+		ParticleHooks.splashHandler(Fluids.WATER, collision, false);
 		super.handleCollision(collision);
 	}
 

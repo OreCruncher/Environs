@@ -27,12 +27,14 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Environs;
 import org.orecruncher.environs.effects.JetEffect;
 import org.orecruncher.lib.GameUtils;
+import org.orecruncher.lib.particles.ParticleCollisionResult;
 import org.orecruncher.sndctrl.api.acoustics.Library;
 
 import javax.annotation.Nonnull;
@@ -123,15 +125,16 @@ public final class ParticleHooks {
      * Similar to drip handling, but generically handles the event of a fluid type falling and hitting a surface, wether
      * solid or liquid.
      */
-    public static void splashHandler(@Nonnull final Fluid fluidType, @Nonnull final Vec3d particlePos, final boolean onGround, final boolean playSound) {
+    public static void splashHandler(@Nonnull final Fluid fluidType, @Nonnull final ParticleCollisionResult collision, final boolean playSound) {
 
-        final World world = GameUtils.getWorld();
+        final IWorldReader world =collision.world;
         // Move down slightly on the Y.  Reason is that the particle may literally just above the block
+        final Vec3d particlePos = collision.position;
         final BlockPos pos = new BlockPos(particlePos.x, particlePos.y - 0.01D, particlePos.z);
-        final BlockState state = world.getBlockState(pos);
+        final BlockState state = collision.state;
 
-        // If the particle is hitting solid ground we need to play a splat
-        if (onGround) {
+        // If the particle is hitting solid ground we need to play a splat and generate a steam puff as needed
+        if (collision.onGround) {
             final ResourceLocation acoustic;
             if (doSteamHiss(fluidType, state)) {
                 createSteamCloud(world, particlePos);
@@ -146,8 +149,8 @@ public final class ParticleHooks {
         }
 
         // Could be falling into a fluid
-        final IFluidState fluidState = world.getFluidState(pos);
-        if (!fluidState.isEmpty()) {
+        final IFluidState fluidState = collision.fluidState;
+        if (!fluidState.isEmpty() && fluidState.isSource()) {
             final float actualHeight = fluidState.getActualHeight(world, pos) + pos.getY();
             if (particlePos.y <= actualHeight) {
                 // The position of the particle intersected with the fluid surface thus a hit.  The effect of a drop
@@ -179,8 +182,8 @@ public final class ParticleHooks {
         }
     }
 
-    private static void createSteamCloud(@Nonnull final World world, @Nonnull final Vec3d pos) {
-        final Particle steamCloud = new SteamCloudParticle(world, pos.x, pos.y + 0.01D, pos.z, 0.01D);
+    private static void createSteamCloud(@Nonnull final IWorldReader world, @Nonnull final Vec3d pos) {
+        final Particle steamCloud = new SteamCloudParticle((World) world, pos.x, pos.y + 0.01D, pos.z, 0.01D);
         GameUtils.getMC().particles.addEffect(steamCloud);
     }
 
