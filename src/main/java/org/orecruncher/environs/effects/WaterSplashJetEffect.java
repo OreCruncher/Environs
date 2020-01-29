@@ -63,7 +63,7 @@ public class WaterSplashJetEffect extends JetEffect {
 			final BlockState state = provider.getBlockState(tp);
 			if (state.getMaterial() == Material.AIR)
 				return true;
-			final IFluidState fluidState = provider.getFluidState(tp);
+			final IFluidState fluidState = state.getFluidState();
 			final int height = fluidState.getLevel();
 			if (height > 0 && height < 8)
 				return true;
@@ -81,7 +81,7 @@ public class WaterSplashJetEffect extends JetEffect {
 			final BlockState state = provider.getBlockState(tp);
 			if (state.getMaterial() == Material.AIR)
 				return false;
-			final IFluidState fluidState = provider.getFluidState(tp);
+			final IFluidState fluidState = state.getFluidState();
 			final int height = fluidState.getLevel();
 			if (height > 0 && height < 8)
 				return false;
@@ -94,7 +94,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		return countVerticalBlocks(provider, pos, FLUID_PREDICATE, 1);
 	}
 
-	public static boolean isValidSpawnBlock(final IWorldReader provider, final BlockPos pos) {
+	public static boolean isValidSpawnBlock(@Nonnull final IWorldReader provider, @Nonnull final BlockPos pos) {
 		return isValidSpawnBlock(provider, provider.getBlockState(pos), pos);
 	}
 

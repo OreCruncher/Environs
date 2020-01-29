@@ -19,17 +19,21 @@
 package org.orecruncher.environs.effects.particles;
 
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.Pair;
 import org.orecruncher.environs.library.BiomeUtil;
 import org.orecruncher.lib.gui.Color;
 import org.orecruncher.lib.particles.MotionMote;
 import org.orecruncher.lib.random.XorShiftRandom;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
@@ -71,6 +75,13 @@ public class MoteWaterSpray extends MotionMote {
 		this.green = waterColor.green();
 		this.blue = waterColor.blue();
 		this.alpha = 0.99F;
+	}
+
+	@Override
+	public void handleCollision(@Nonnull final Pair<Vec3d, Boolean> collision) {
+		// Do the drip splash, but don't play the sound.  Sounds funny with waterfall effects
+		ParticleHooks.splashHandler(Fluids.WATER, collision.getLeft(), collision.getRight(), false);
+		super.handleCollision(collision);
 	}
 
 	@Override

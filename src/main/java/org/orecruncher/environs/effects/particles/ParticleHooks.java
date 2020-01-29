@@ -119,6 +119,66 @@ public final class ParticleHooks {
         }
     }
 
+    /**
+     * Similar to drip handling, but generically handles the event of a fluid type falling and hitting a surface, wether
+     * solid or liquid.
+     */
+    public static void splashHandler(@Nonnull final Fluid fluidType, @Nonnull final Vec3d particlePos, final boolean onGround, final boolean playSound) {
+
+        final World world = GameUtils.getWorld();
+        // Move down slightly on the Y.  Reason is that the particle may literally just above the block
+        final BlockPos pos = new BlockPos(particlePos.x, particlePos.y - 0.01D, particlePos.z);
+        final BlockState state = world.getBlockState(pos);
+
+        // If the particle is hitting solid ground we need to play a splat
+        if (onGround) {
+            final ResourceLocation acoustic;
+            if (doSteamHiss(fluidType, state)) {
+                createSteamCloud(world, particlePos);
+                acoustic = STEAM_HISS_ACOUSTIC;
+            } else {
+                // Don't set expired - this will cause the logic in DripParticle to do a splash
+                acoustic = WATER_DROP_ACOUSTIC;
+            }
+            if (playSound)
+                Library.resolve(acoustic).playAt(particlePos);
+            return;
+        }
+
+        // Could be falling into a fluid
+        final IFluidState fluidState = world.getFluidState(pos);
+        if (!fluidState.isEmpty()) {
+            final float actualHeight = fluidState.getActualHeight(world, pos) + pos.getY();
+            if (particlePos.y <= actualHeight) {
+                // The position of the particle intersected with the fluid surface thus a hit.  The effect of a drop
+                // hitting lava is different than water.
+                boolean isDripLava = fluidType.isIn(FluidTags.LAVA);
+                final ResourceLocation acoustic;
+
+                if (fluidState.isTagged(FluidTags.LAVA)) {
+                    if (isDripLava) {
+                        acoustic = WATER_DROP_ACOUSTIC;
+                    } else {
+                        createSteamCloud(world, particlePos);
+                        acoustic = STEAM_HISS_ACOUSTIC;
+                    }
+                } else {
+                    // There will be a water ripple
+                    Collections.addWaterRipple(world, particlePos.x, particlePos.y + 0.01D, particlePos.z);
+                    if (isDripLava) {
+                        createSteamCloud(world, particlePos);
+                        acoustic = STEAM_HISS_ACOUSTIC;
+                    } else {
+                        acoustic = WATER_DRIP_ACOUSTIC;
+                    }
+                }
+
+                if (playSound)
+                    Library.resolve(acoustic).playAt(particlePos);
+            }
+        }
+    }
+
     private static void createSteamCloud(@Nonnull final World world, @Nonnull final Vec3d pos) {
         final Particle steamCloud = new SteamCloudParticle(world, pos.x, pos.y + 0.01D, pos.z, 0.01D);
         GameUtils.getMC().particles.addEffect(steamCloud);

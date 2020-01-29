@@ -41,24 +41,18 @@ public abstract class JetEffect extends BlockEffect {
 
 	public static final int MAX_STRENGTH = 10;
 
-	protected static final Predicate<BlockState> FLUID_PREDICATE = (state) -> !state.getFluidState().isEmpty();
+	public static final Predicate<BlockState> FLUID_PREDICATE = (state) -> !state.getFluidState().isEmpty();
 
-	public static final Predicate<BlockState> LAVA_PREDICATE = (state) -> {
-		final IFluidState fs = state.getFluidState();
-		return !fs.isEmpty() && fs.isTagged(FluidTags.LAVA);
-	};
+	public static final Predicate<BlockState> LAVA_PREDICATE = (state) -> state.getFluidState().isTagged(FluidTags.LAVA);
 
-	public static final Predicate<BlockState> WATER_PREDICATE = (state) -> {
-		final IFluidState fs = state.getFluidState();
-		return !fs.isEmpty() && fs.isTagged(FluidTags.WATER);
-	};
+	public static final Predicate<BlockState> WATER_PREDICATE = (state) -> state.getFluidState().isTagged(FluidTags.WATER);
 
 	public static final Predicate<BlockState> SOLID_PREDICATE = (state) -> state.getMaterial().isSolid();
 
 	public static final Predicate<BlockState> HOTBLOCK_PREDICATE = (state) -> LAVA_PREDICATE.test(state) || state.getBlock() == Blocks.MAGMA_BLOCK;
 
-	public static int countVerticalBlocks(final IWorldReader provider, final BlockPos pos,
-										  final Predicate<BlockState> predicate, final int step) {
+	public static int countVerticalBlocks(@Nonnull final IWorldReader provider, @Nonnull final BlockPos pos,
+										  @Nonnull final Predicate<BlockState> predicate, final int step) {
 		int count = 0;
 		final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos(pos);
 		for (; count < MAX_STRENGTH && predicate.test(provider.getBlockState(mutable)); count++)
@@ -66,8 +60,8 @@ public abstract class JetEffect extends BlockEffect {
 		return MathStuff.clamp(count, 0, MAX_STRENGTH);
 	}
 
-	public static int countHorizontalBlocks(final IWorldReader provider, final BlockPos pos,
-											final Predicate<BlockState> predicate, final boolean fastFirst) {
+	public static int countHorizontalBlocks(@Nonnull final IWorldReader provider, @Nonnull final BlockPos pos,
+											@Nonnull final Predicate<BlockState> predicate, final boolean fastFirst) {
 		int blockCount = 0;
 		for (int i = -1; i <= 1; i++)
 			for (int j = -1; j <= 1; j++)
@@ -95,7 +89,7 @@ public abstract class JetEffect extends BlockEffect {
 		return false;
 	}
 
-	protected void addEffect(final Jet fx) {
+	protected void addEffect(@Nonnull final Jet fx) {
 		ParticleSystems.add(fx);
 	}
 
