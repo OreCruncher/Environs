@@ -468,6 +468,17 @@
     },
     {
       "blocks": [
+        "minecraft:cauldron[level=3]"
+      ],
+      "effects": [
+        {
+          "effect": "steam",
+          "chance": 0
+        }
+      ]
+    },
+    {
+      "blocks": [
         "minecraft:ice",
         "minecraft:packed_ice"
       ],

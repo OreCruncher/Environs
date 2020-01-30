@@ -29,6 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.lib.GameUtils;
 import org.orecruncher.lib.random.XorShiftRandom;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
@@ -60,6 +61,7 @@ public class SteamCloudParticle extends SpriteTexturedParticle {
         this.selectSpriteWithAge(this.field_217583_C);
     }
 
+    @Nonnull
     public IParticleRenderType getRenderType() {
         return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
