@@ -18,7 +18,7 @@
 
 package org.orecruncher.environs.handlers;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,37 +28,54 @@ import org.orecruncher.environs.effects.emitters.ParticleEmitter;
 import org.orecruncher.lib.BlockPosUtil;
 
 import javax.annotation.Nonnull;
+import java.util.function.Predicate;
 
 @OnlyIn(Dist.CLIENT)
 public class ParticleSystems extends HandlerBase {
+
+    private static final Predicate<ParticleEmitter> STANDARD = system -> {
+        system.tick();
+        return !system.isAlive();
+    };
+
     ParticleSystems() {
         super("Particle Systems");
     }
 
     private static ParticleSystems _instance = null;
 
-    private final Object2ObjectOpenHashMap<BlockPos, ParticleEmitter> systems = new Object2ObjectOpenHashMap<>();
+    private final Long2ObjectOpenHashMap<ParticleEmitter> systems = new Long2ObjectOpenHashMap<>(512);
+    private BlockPos lastPos = BlockPos.ZERO;
 
     @Override
     public boolean doTick(final long tick) {
-        return !this.systems.isEmpty();
+        return this.systems.size() > 0;
     }
 
     @Override
     public void process(@Nonnull final PlayerEntity player) {
-        final double range = Config.CLIENT.effects.get_effectRange();
-        final BlockPos min = CommonState.getPlayerPosition().add(-range, -range, -range);
-        final BlockPos max = CommonState.getPlayerPosition().add(range, range, range);
+        final BlockPos current = CommonState.getPlayerPosition();
+        final boolean sittingStill = this.lastPos.equals(current);
+        this.lastPos = current;
 
-        this.systems.object2ObjectEntrySet().removeIf(entry -> {
-            final ParticleEmitter system = entry.getValue();
-            if (BlockPosUtil.notContains(system.getPos(), min, max)) {
-                system.setExpired();
-            } else {
-                system.tick();
-            }
-            return !system.isAlive();
-        });
+        Predicate<ParticleEmitter> pred = STANDARD;
+
+        if (!sittingStill) {
+            final double range = Config.CLIENT.effects.get_effectRange();
+            final BlockPos min = new BlockPos(current.getX() - range, current.getY() - range, current.getZ() - range);
+            final BlockPos max = new BlockPos(current.getX() + range, current.getY() + range, current.getZ() + range);
+
+            pred = system -> {
+                if (BlockPosUtil.notContains(system.getPos(), min, max)) {
+                    system.setExpired();
+                } else {
+                    system.tick();
+                }
+                return !system.isAlive();
+            };
+        }
+
+        this.systems.values().removeIf(pred);
     }
 
     @Override
@@ -76,11 +93,11 @@ public class ParticleSystems extends HandlerBase {
     // Determines if it is OK to spawn a particle system at the specified
     // location. Generally only a single system can occupy a block.
     public static boolean okToSpawn(@Nonnull final BlockPos pos) {
-        return !_instance.systems.containsKey(pos);
+        return !_instance.systems.containsKey(pos.toLong());
     }
 
     public static void add(@Nonnull final ParticleEmitter system) {
-        _instance.systems.put(system.getPos().toImmutable(), system);
+        _instance.systems.put(system.getPos().toLong(), system);
     }
 
 }
