@@ -178,7 +178,7 @@ public final class BiomeInfo implements Comparable<BiomeInfo> {
 	}
 
 	public boolean isFake() {
-		return this.biome instanceof FakeBiome;
+		return this.biome instanceof FakeBiomeAdapter;
 	}
 
 	public float getFloatTemperature(@Nonnull final BlockPos pos) {

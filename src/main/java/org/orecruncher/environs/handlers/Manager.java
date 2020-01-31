@@ -25,7 +25,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import org.orecruncher.environs.Environs;
 import org.orecruncher.lib.GameUtils;
@@ -81,10 +80,6 @@ public class Manager {
             h.disconnect0();
     }
 
-    public boolean isConnected() {
-        return isConnected;
-    }
-
     public static void connect() {
         if (isConnected) {
             LOGGER.warn("Attempt to initialize EffectManager when it is already initialized");
@@ -117,8 +112,7 @@ public class Manager {
 
         final long tick = TickCounter.getTickCount();
 
-        for (int i = 0; i < this.effectHandlers.size(); i++) {
-            final HandlerBase handler = this.effectHandlers.get(i);
+        for (final HandlerBase handler : this.effectHandlers) {
             final long mark = System.nanoTime();
             if (handler.doTick(tick))
                 handler.process(getPlayer());

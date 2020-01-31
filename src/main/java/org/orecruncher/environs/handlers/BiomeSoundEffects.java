@@ -61,8 +61,9 @@ public class BiomeSoundEffects extends HandlerBase {
     }
 
     private boolean doBiomeSounds() {
-        return CommonState.isUnderground() || CommonState.getDimensionInfo().alwaysOutside()
-                || !CommonState.isInside();
+        return CommonState.isUnderground()
+                || !CommonState.isInside()
+                || CommonState.getDimensionInfo().alwaysOutside();
     }
 
     private void generateBiomeSounds() {
@@ -117,20 +118,20 @@ public class BiomeSoundEffects extends HandlerBase {
 
             if (biomeSounds) {
                 final BiomeInfo playerBiome = CommonState.getPlayerBiome();
-                final IAcoustic sound = playerBiome.getSpotSound(this.RANDOM);
+                final IAcoustic sound = playerBiome.getSpotSound(RANDOM);
                 if (sound != null)
                     sound.playNear(player);
             }
 
-            final IAcoustic sound = BiomeLibrary.PLAYER_INFO.getSpotSound(this.RANDOM);
+            final IAcoustic sound = BiomeLibrary.PLAYER_INFO.getSpotSound(RANDOM);
             if (sound != null)
                 sound.playNear(player);
         }
 
-        queueAmbientSounds(WORK_MAP);
+        queueAmbientSounds();
     }
 
-    private void queueAmbientSounds(@Nonnull final Reference2FloatOpenHashMap<IAcoustic> sounds) {
+    private void queueAmbientSounds() {
         // Iterate through the existing emitters:
         // * If done, remove
         // * If not in the incoming list, fade
@@ -140,12 +141,12 @@ public class BiomeSoundEffects extends HandlerBase {
             if (backgroundAcousticEmitter.isDonePlaying()) {
                 return true;
             }
-            final float volume = sounds.getFloat(entry.getKey());
+            final float volume = WORK_MAP.getFloat(entry.getKey());
             if (volume > 0) {
                 backgroundAcousticEmitter.setVolumeThrottle(volume);
                 if (backgroundAcousticEmitter.isFading())
                     backgroundAcousticEmitter.unfade();
-                sounds.removeFloat(entry.getKey());
+                WORK_MAP.removeFloat(entry.getKey());
             } else if (!backgroundAcousticEmitter.isFading()) {
                 backgroundAcousticEmitter.fade();
             }
@@ -153,7 +154,7 @@ public class BiomeSoundEffects extends HandlerBase {
         });
 
         // Any sounds left in the list are new and need an emitter created.
-        sounds.forEach((fx, volume) -> {
+        WORK_MAP.forEach((fx, volume) -> {
             final BackgroundAcousticEmitter e = new BackgroundAcousticEmitter(fx);
             e.setVolumeThrottle(volume);
             this.emitters.put(fx, e);

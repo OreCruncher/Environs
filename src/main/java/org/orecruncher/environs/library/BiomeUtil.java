@@ -18,7 +18,7 @@
 
 package org.orecruncher.environs.library;
 
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.util.math.BlockPos;
@@ -33,7 +33,6 @@ import org.orecruncher.lib.gui.Color;
 import org.orecruncher.lib.reflection.ObjectField;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -61,13 +60,8 @@ public final class BiomeUtil {
         return result;
     }
 
-    public static void setBiomeData(@Nonnull final Biome biome, @Nullable final BiomeInfo data) {
+    public static void setBiomeData(@Nonnull final Biome biome, @Nonnull final BiomeInfo data) {
         environs_biomeData.set(biome, data);
-    }
-
-    @Nonnull
-    public static String getBiomeName(@Nonnull final Biome biome) {
-        return biome.getDisplayName().getFormattedText();
     }
 
     // ===================================
@@ -80,7 +74,7 @@ public final class BiomeUtil {
         return BiomeDictionary.Type.getAll();
     }
 
-    @Nullable
+    @Nonnull
     public static Color getColorForLiquid(@Nonnull final World world, @Nonnull final BlockPos pos) {
         final IFluidState fluidState = world.getFluidState(pos);
 
@@ -99,14 +93,10 @@ public final class BiomeUtil {
         try {
             return BiomeDictionary.getTypes(biome);
         } catch (@Nonnull final Throwable t) {
-            final String name = getBiomeName(biome);
+            final String name = biome.getDisplayName().getFormattedText();
             Environs.LOGGER.warn("Unable to get biome type data for biome '%s'", name);
         }
-        return new ReferenceOpenHashSet<>();
-    }
-
-    public static boolean areBiomesSimilar(@Nonnull final Biome b1, @Nonnull final Biome b2) {
-        return BiomeDictionary.areSimilar(b1, b2);
+        return ImmutableSet.of();
     }
 
 }

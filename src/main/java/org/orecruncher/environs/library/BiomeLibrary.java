@@ -19,10 +19,11 @@
 package org.orecruncher.environs.library;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.FluidTags;
@@ -50,77 +51,59 @@ public final class BiomeLibrary {
 
 	private static final int INSIDE_Y_ADJUST = 3;
 
-	public static final FakeBiome UNDERGROUND = new FakeBiome("Underground");
-	public static final FakeBiome PLAYER = new FakeBiome("Player");
-	public static final FakeBiome UNDERWATER = new FakeBiome("Underwater");
-	public static final FakeBiome UNDEROCEAN = new FakeBiome("UnderOCN");
-	public static final FakeBiome UNDERDEEPOCEAN = new FakeBiome("UnderDOCN");
-	public static final FakeBiome UNDERRIVER = new FakeBiome("UnderRVR");
-	public static final FakeBiome OUTERSPACE = new FakeBiome("OuterSpace");
-	public static final FakeBiome CLOUDS = new FakeBiome("Clouds");
-	public static final FakeBiome VILLAGE = new FakeBiome("Village");
-
-	public static BiomeInfo UNDERGROUND_INFO;
-	public static BiomeInfo PLAYER_INFO;
-	public static BiomeInfo UNDERRIVER_INFO;
-	public static BiomeInfo UNDEROCEAN_INFO;
-	public static BiomeInfo UNDERDEEPOCEAN_INFO;
-	public static BiomeInfo UNDERWATER_INFO;
-
-	public static BiomeInfo OUTERSPACE_INFO;
-	public static BiomeInfo CLOUDS_INFO;
-	public static BiomeInfo VILLAGE_INFO;
-	public static BiomeInfo WTF_INFO;
+	public static final FakeBiomeAdapter UNDERGROUND = new FakeBiomeAdapter("Underground");
+	public static final FakeBiomeAdapter PLAYER = new FakeBiomeAdapter("Player");
+	public static final FakeBiomeAdapter UNDERWATER = new FakeBiomeAdapter("Underwater");
+	public static final FakeBiomeAdapter UNDEROCEAN = new FakeBiomeAdapter("UnderOCN");
+	public static final FakeBiomeAdapter UNDERDEEPOCEAN = new FakeBiomeAdapter("UnderDOCN");
+	public static final FakeBiomeAdapter UNDERRIVER = new FakeBiomeAdapter("UnderRVR");
+	public static final FakeBiomeAdapter OUTERSPACE = new FakeBiomeAdapter("OuterSpace");
+	public static final FakeBiomeAdapter CLOUDS = new FakeBiomeAdapter("Clouds");
+	public static final FakeBiomeAdapter VILLAGE = new FakeBiomeAdapter("Village");
 
 	// This is for cases when the biome coming in doesn't make sense
 	// and should default to something to avoid crap.
-	private static final FakeBiome WTF = new WTFFakeBiome();
+	private static final FakeBiomeAdapter WTF = new WTFFakeBiomeAdapter();
 
-	private static final ObjectOpenHashSet<FakeBiome> theFakes = new ObjectOpenHashSet<>();
+	public static final BiomeInfo UNDERGROUND_INFO = UNDERGROUND.getBiomeData();
+	public static final BiomeInfo PLAYER_INFO = PLAYER.getBiomeData();
+	public static final BiomeInfo UNDERRIVER_INFO = UNDERRIVER.getBiomeData();
+	public static final BiomeInfo UNDEROCEAN_INFO = UNDEROCEAN.getBiomeData();
+	public static final BiomeInfo UNDERDEEPOCEAN_INFO = UNDERDEEPOCEAN.getBiomeData();
+	public static final BiomeInfo UNDERWATER_INFO = UNDERWATER.getBiomeData();
+	public static final BiomeInfo OUTERSPACE_INFO = OUTERSPACE.getBiomeData();
+	public static final BiomeInfo CLOUDS_INFO = CLOUDS.getBiomeData();
+	public static final BiomeInfo VILLAGE_INFO = VILLAGE.getBiomeData();
+	public static final BiomeInfo WTF_INFO = WTF.getBiomeData();
+
+	private static final ObjectOpenHashSet<FakeBiomeAdapter> theFakes = new ObjectOpenHashSet<>();
+
+	static {
+		theFakes.add(UNDERGROUND);
+		theFakes.add(PLAYER);
+		theFakes.add(UNDERWATER);
+		theFakes.add(UNDEROCEAN);
+		theFakes.add(UNDERDEEPOCEAN);
+		theFakes.add(UNDERRIVER);
+		theFakes.add(OUTERSPACE);
+		theFakes.add(CLOUDS);
+		theFakes.add(VILLAGE);
+		theFakes.add(WTF);
+	}
 
 	private BiomeLibrary() {
 
 	}
 
 	static void initialize() {
-
 		ForgeUtils.getBiomes().forEach(BiomeLibrary::register);
-
-		// Add our fake biomes
-		register(UNDERWATER);
-		register(UNDEROCEAN);
-		register(UNDERDEEPOCEAN);
-		register(UNDERRIVER);
-		register(PLAYER);
-		register(UNDERGROUND);
-		register(CLOUDS);
-		register(VILLAGE);
-		register(OUTERSPACE);
-
-		UNDERGROUND_INFO = resolve(UNDERGROUND);
-		PLAYER_INFO = resolve(PLAYER);
-		UNDERRIVER_INFO = resolve(UNDERRIVER);
-		UNDEROCEAN_INFO = resolve(UNDEROCEAN);
-		UNDERDEEPOCEAN_INFO = resolve(UNDERDEEPOCEAN);
-
-		UNDERWATER_INFO = resolve(UNDERWATER);
-		CLOUDS_INFO = resolve(CLOUDS);
-		VILLAGE_INFO = resolve(VILLAGE);
-		OUTERSPACE_INFO = resolve(OUTERSPACE);
-
-		// WTF is a strange animal
-		register(WTF);
-		WTF_INFO = resolve(WTF);
 	}
 
 	static void initFromConfig(@Nonnull final ModConfig cfg) {
 
 		if (cfg.biomes.size() > 0) {
-			final List<BiomeInfo> infoList = getCombinedStream();
-
 			final BiomeEvaluator evaluator = new BiomeEvaluator();
-
-			for (final BiomeInfo bi : infoList) {
+			for (final BiomeInfo bi : getCombinedStream()) {
 				evaluator.update(bi);
 				for (final BiomeConfig c : cfg.biomes) {
 					if (evaluator.matches(c.conditions)) {
@@ -150,27 +133,9 @@ public final class BiomeLibrary {
 	}
 
 	private static void register(@Nonnull final Biome biome) {
-		final BiomeHandler handler = new BiomeHandler(biome);
+		final BiomeAdapter handler = new BiomeAdapter(biome);
 		final BiomeInfo info = new BiomeInfo(handler);
 		BiomeUtil.setBiomeData(biome, info);
-	}
-
-	private static void register(@Nonnull final IBiome biome) {
-		if (biome.isFake()) {
-			final FakeBiome fb = (FakeBiome) biome;
-			final BiomeInfo info = new BiomeInfo(fb);
-			fb.setBiomeData(info);
-			theFakes.add(fb);
-		}
-	}
-
-	@Nullable
-	private static BiomeInfo resolve(@Nonnull final IBiome biome) {
-		if (biome.isFake()) {
-			final FakeBiome fb = (FakeBiome) biome;
-			return fb.getBiomeData();
-		}
-		return null;
 	}
 
 	@Nonnull
@@ -203,21 +168,10 @@ public final class BiomeLibrary {
 		return info;
 	}
 
-	private static List<BiomeInfo> getCombinedStream() {
-		final ArrayList<BiomeInfo> infos = new ArrayList<>();
-
-		for (final Biome b : ForgeUtils.getBiomes()) {
-			final BiomeInfo info = BiomeUtil.getBiomeData(b);
-			infos.add(info);
-		}
-
-		for (final FakeBiome b : theFakes) {
-			final BiomeInfo info = b.getBiomeData();
-			if (info != null) {
-				infos.add(info);
-			}
-		}
-
-		return infos;
+	private static Collection<BiomeInfo> getCombinedStream() {
+		return Stream.concat(
+				ForgeUtils.getBiomes().stream().map(BiomeUtil::getBiomeData),
+				theFakes.stream().map(FakeBiomeAdapter::getBiomeData)
+		).collect(Collectors.toCollection(ArrayList::new));
 	}
 }

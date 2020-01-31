@@ -18,48 +18,83 @@
 
 package org.orecruncher.environs.library;
 
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
-public class WTFFakeBiome extends FakeBiome {
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.TempCategory;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
-	public WTFFakeBiome() {
-		super("WTFJustHappened");
+@OnlyIn(Dist.CLIENT)
+public class BiomeAdapter implements IBiome {
+
+	protected final Biome biome;
+	protected final Set<Type> types;
+
+	public BiomeAdapter(@Nonnull final Biome biome) {
+		this.biome = biome;
+		this.types = BiomeUtil.getBiomeTypes(this.biome);
+	}
+
+	@Override
+	public Biome getBiome() {
+		return this.biome;
+	}
+
+	@Override
+	public ResourceLocation getKey() {
+		return this.biome.getRegistryName();
+	}
+
+	@Override
+	public String getName() {
+		return this.biome.getDisplayName().getFormattedText();
+	}
+
+	@Override
+	public Set<Type> getTypes() {
+		return this.types;
 	}
 
 	@Override
 	public Biome.RainType getPrecipitationType() {
-		return Biome.RainType.NONE;
+		return this.biome.getPrecipitation();
 	}
 
 	@Override
 	public float getFloatTemperature(@Nonnull final BlockPos pos) {
-		return 0F;
+		return this.biome.getTemperature(pos);
 	}
 
 	@Override
 	public float getTemperature() {
-		return 0F;
+		return this.biome.getDefaultTemperature();
 	}
 
 	@Override
 	public TempCategory getTempCategory() {
-		return TempCategory.COLD;
+		return this.biome.getTempCategory();
 	}
 
 	@Override
 	public boolean isHighHumidity() {
-		return false;
+		return this.biome.isHighHumidity();
 	}
 
 	@Override
 	public float getDownfall() {
-		return 0F;
+		return this.biome.getDownfall();
 	}
+
+	@Override
+	public boolean isFake() {
+		return false;
+	}
+
 }

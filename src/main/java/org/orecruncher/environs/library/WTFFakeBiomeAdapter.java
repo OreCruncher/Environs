@@ -18,35 +18,48 @@
 
 package org.orecruncher.environs.library;
 
-import net.minecraft.block.BlockState;
+import javax.annotation.Nonnull;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.orecruncher.lib.reflection.ObjectField;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public final class BlockStateUtil {
-    private BlockStateUtil() {
+public class WTFFakeBiomeAdapter extends FakeBiomeAdapter {
 
-    }
+	public WTFFakeBiomeAdapter() {
+		super("WTFJustHappened");
+	}
 
-    private static final ObjectField<BlockState, BlockStateData> environs_blockData =
-            new ObjectField<>(
-                    BlockState.class,
-                    () -> BlockStateData.DEFAULT,
-                    "environs_blockData"
-            );
+	@Override
+	public Biome.RainType getPrecipitationType() {
+		return Biome.RainType.NONE;
+	}
 
-    @Nullable
-    public static BlockStateData getData(@Nonnull final BlockState state) {
-        return environs_blockData.get(state);
-    }
+	@Override
+	public float getFloatTemperature(@Nonnull final BlockPos pos) {
+		return 0F;
+	}
 
-    public static void setData(@Nonnull final BlockState state, @Nullable final BlockStateData data) {
-        //noinspection ConstantConditions
-        environs_blockData.set(state, data);
-    }
+	@Override
+	public float getTemperature() {
+		return 0F;
+	}
 
+	@Override
+	public TempCategory getTempCategory() {
+		return TempCategory.COLD;
+	}
+
+	@Override
+	public boolean isHighHumidity() {
+		return false;
+	}
+
+	@Override
+	public float getDownfall() {
+		return 0F;
+	}
 }

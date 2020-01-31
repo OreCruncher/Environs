@@ -45,10 +45,6 @@ public abstract class AuroraBase implements IAurora {
 	protected final PlayerEntity player;
 	protected final DimensionInfo dimInfo;
 
-	public AuroraBase(final long seed) {
-		this(seed, false);
-	}
-
 	public AuroraBase(final long seed, final boolean flag) {
 		this(new XorShiftRandom(seed), flag);
 	}

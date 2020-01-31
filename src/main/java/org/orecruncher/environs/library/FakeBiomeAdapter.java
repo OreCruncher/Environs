@@ -21,7 +21,6 @@ package org.orecruncher.environs.library;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -37,25 +36,23 @@ import org.orecruncher.environs.Environs;
 import org.orecruncher.lib.GameUtils;
 
 @OnlyIn(Dist.CLIENT)
-public class FakeBiome implements IBiome {
+public class FakeBiomeAdapter implements IBiome {
 
 	protected final String name;
 	protected final ResourceLocation key;
 
-	protected BiomeInfo biomeData;
+	@Nonnull
+	protected final BiomeInfo biomeData;
 
-	public FakeBiome(@Nonnull final String name) {
+	public FakeBiomeAdapter(@Nonnull final String name) {
 		this.name = name;
 		this.key = new ResourceLocation(Environs.MOD_ID, ("fake_" + name).replace(' ', '_').toLowerCase());
+		this.biomeData = new BiomeInfo(this);
 	}
 
-	@Nullable
+	@Nonnull
 	public BiomeInfo getBiomeData() {
 		return this.biomeData;
-	}
-
-	public void setBiomeData(@Nullable BiomeInfo data) {
-		this.biomeData = data;
 	}
 
 	@Override
@@ -86,8 +83,7 @@ public class FakeBiome implements IBiome {
 
 	@Override
 	public float getDownfall() {
-		final BiomeInfo info = getTrueBiome();
-		return info.getRainfall();
+		return getTrueBiome().getRainfall();
 	}
 
 	@Override

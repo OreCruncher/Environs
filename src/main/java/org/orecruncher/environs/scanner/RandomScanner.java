@@ -41,10 +41,6 @@ public abstract class RandomScanner extends Scanner {
 	private int playerY;
 	private int playerZ;
 
-	public RandomScanner(@Nonnull final ScanContext locus, @Nonnull final String name, final int range) {
-		super(locus, name, range);
-	}
-
 	public RandomScanner(@Nonnull final ScanContext locus, @Nonnull final String name, final int range,
                          final int blocksPerTick) {
 		super(locus, name, range, blocksPerTick);

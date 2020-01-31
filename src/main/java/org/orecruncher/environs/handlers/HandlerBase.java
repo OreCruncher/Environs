@@ -32,7 +32,7 @@ import java.util.Random;
 @OnlyIn(Dist.CLIENT)
 public class HandlerBase {
 
-    protected final Random RANDOM = XorShiftRandom.current();
+    protected static final Random RANDOM = XorShiftRandom.current();
 
     private final String handlerName;
     private final TimerEMA timer;
@@ -52,6 +52,7 @@ public class HandlerBase {
      *
      * @return Name of the handler
      */
+    @Nonnull
     public final String getHandlerName() {
         return this.handlerName;
     }

@@ -53,7 +53,5 @@ public interface IBiome {
 
 	float getDownfall();
 
-	default boolean isFake() {
-		return false;
-	}
+	boolean isFake();
 }

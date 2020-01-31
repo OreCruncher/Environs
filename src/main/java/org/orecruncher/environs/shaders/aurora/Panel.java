@@ -65,14 +65,6 @@ final class Panel {
 		this.angle = theta;
 	}
 
-	public void setDeltaZ(final float f) {
-		this.dZ = f;
-	}
-
-	public void setDeltaY(final float f) {
-		this.dY = f;
-	}
-
 	public float getModdedZ() {
 		return this.posZ + this.dZ;
 	}
