@@ -25,8 +25,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import org.orecruncher.environs.handlers.CommonState;
 import org.orecruncher.environs.library.BiomeInfo;
-import org.orecruncher.environs.library.BiomeLibrary;
 import org.orecruncher.environs.library.BiomeUtil;
 import org.orecruncher.lib.GameUtils;
 
@@ -37,7 +37,7 @@ import org.orecruncher.lib.GameUtils;
 @OnlyIn(Dist.CLIENT)
 public final class BiomeScanner {
 
-	private static final int BIOME_SURVEY_RANGE = 20;
+	private static final int BIOME_SURVEY_RANGE = 18;
 	private static final int MAX_BIOME_AREA = (int) Math.pow(BIOME_SURVEY_RANGE * 2 + 1, 2);
 
 	private final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
@@ -51,9 +51,9 @@ public final class BiomeScanner {
 	private BlockPos surveyedPosition = BlockPos.ZERO;
 
 	public void tick() {
-		final BlockPos position = GameUtils.getPlayer().getPosition();
-		final BiomeInfo playerBiome = BiomeLibrary.getPlayerBiome(GameUtils.getPlayer(), false);
-		final int dimId = GameUtils.getWorld().getDimension().getType().getId();
+		final BlockPos position = CommonState.getPlayerPosition();
+		final BiomeInfo playerBiome = CommonState.getPlayerBiome();
+		final int dimId = CommonState.getDimensionId();
 
 		if (this.surveyedBiome != playerBiome
 				|| this.surveyedDimension != dimId
