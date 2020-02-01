@@ -18,6 +18,7 @@
 
 package org.orecruncher.environs.shaders;
 
+import com.mojang.blaze3d.platform.GLX;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Environs;
@@ -38,7 +39,7 @@ public final class Shaders {
 	}
 
 	public static boolean areShadersSupported() {
-		return true; //OpenGlHelper.areShadersSupported();
+		return GLX.isNextGen();
 	}
 
 	private static ShaderProgram register(final String name, final ResourceLocation vertex,

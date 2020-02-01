@@ -27,6 +27,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.orecruncher.environs.Config;
 import org.orecruncher.environs.Environs;
+import org.orecruncher.environs.shaders.Shaders;
 import org.orecruncher.environs.shaders.aurora.AuroraFactory;
 import org.orecruncher.environs.shaders.aurora.AuroraUtils;
 import org.orecruncher.environs.shaders.aurora.IAurora;
@@ -80,6 +81,9 @@ public final class AuroraHandler extends HandlerBase {
 	@Override
 	public void process(@Nonnull final PlayerEntity player) {
 
+		if (!Shaders.areShadersSupported())
+			return;
+
 		// Process the current aurora
 		if (this.current != null) {
 			// If completed or the player changed dimensions we want to kill
@@ -122,8 +126,12 @@ public final class AuroraHandler extends HandlerBase {
 
 	@SubscribeEvent
 	public void diagnostic(@Nonnull final DiagnosticEvent event) {
-		event.getLeft().add("Aurora: " + (this.current == null ? "NONE" : this.current.toString()));
-		event.getRenderTimers().add(this.render);
+		if (Shaders.areShadersSupported()) {
+			event.getLeft().add("Aurora: " + (this.current == null ? "NONE" : this.current.toString()));
+			event.getRenderTimers().add(this.render);
+		} else {
+			event.getLeft().add("Aurora: Shaders not supported by platform");
+		}
 	}
 
 }
