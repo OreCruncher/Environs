@@ -18,48 +18,47 @@
 
 package org.orecruncher.environs.fog;
 
-import javax.annotation.Nonnull;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.orecruncher.lib.collections.ObjectArray;
-
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import org.orecruncher.lib.collections.ObjectArray;
 import org.orecruncher.lib.gui.Color;
+
+import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
 public class HolisticFogColorCalculator implements IFogColorCalculator {
 
-	protected ObjectArray<IFogColorCalculator> calculators = new ObjectArray<>(4);
-	protected Color cached;
+    protected ObjectArray<IFogColorCalculator> calculators = new ObjectArray<>(4);
+    protected Color cached;
 
-	public void add(@Nonnull final IFogColorCalculator calc) {
-		this.calculators.add(calc);
-	}
+    public void add(@Nonnull final IFogColorCalculator calc) {
+        this.calculators.add(calc);
+    }
 
-	@Nonnull
-	@Override
-	public Color calculate(@Nonnull final EntityViewRenderEvent.FogColors event) {
-		Color result = null;
-		for (int i = 0; i < this.calculators.size(); i++) {
-			final Color color = this.calculators.get(i).calculate(event);
-			if (result == null)
-				result = color;
-			else
-				result = result.mix(color);
+    @Nonnull
+    @Override
+    public Color calculate(@Nonnull final EntityViewRenderEvent.FogColors event) {
+        Color result = null;
+        for (int i = 0; i < this.calculators.size(); i++) {
+            final Color color = this.calculators.get(i).calculate(event);
+            if (result == null)
+                result = color;
+            else
+                result = result.mix(color);
 
-		}
-		return this.cached = result;
-	}
+        }
+        return this.cached = result;
+    }
 
-	@Override
-	public void tick() {
-		this.calculators.forEach(IFogColorCalculator::tick);
-	}
+    @Override
+    public void tick() {
+        this.calculators.forEach(IFogColorCalculator::tick);
+    }
 
-	@Override
-	public String toString() {
-		return this.cached != null ? this.cached.toString() : "<NOT SET>";
-	}
+    @Override
+    public String toString() {
+        return this.cached != null ? this.cached.toString() : "<NOT SET>";
+    }
 
 }

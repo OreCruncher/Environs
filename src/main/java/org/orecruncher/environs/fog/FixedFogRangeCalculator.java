@@ -18,25 +18,26 @@
 
 package org.orecruncher.environs.fog;
 
-import javax.annotation.Nonnull;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 
+import javax.annotation.Nonnull;
+
 @OnlyIn(Dist.CLIENT)
 public class FixedFogRangeCalculator extends VanillaFogRangeCalculator {
 
-	protected final FogResult cached;
+    protected final FogResult cached;
 
-	public FixedFogRangeCalculator(final float minDistance, final float maxDistance) {
-		this.cached = new FogResult(minDistance, maxDistance);
-	}
+    public FixedFogRangeCalculator(final float minDistance, final float maxDistance) {
+        super("FixedFogRangeCalculator");
+        this.cached = new FogResult(minDistance, maxDistance);
+    }
 
-	@Override
-	@Nonnull
-	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
-		return this.cached;
-	}
+    @Override
+    @Nonnull
+    public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
+        return this.cached;
+    }
 
 }

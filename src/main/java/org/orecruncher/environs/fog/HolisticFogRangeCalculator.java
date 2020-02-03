@@ -18,13 +18,14 @@
 
 package org.orecruncher.environs.fog;
 
-import javax.annotation.Nonnull;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.orecruncher.lib.collections.ObjectArray;
-
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import org.orecruncher.environs.Environs;
+import org.orecruncher.lib.collections.ObjectArray;
+import org.orecruncher.lib.logging.IModLog;
+
+import javax.annotation.Nonnull;
 
 /**
  * Consults various different fog calculators and aggregates the results into a
@@ -33,35 +34,51 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 @OnlyIn(Dist.CLIENT)
 public class HolisticFogRangeCalculator implements IFogRangeCalculator {
 
-	protected final ObjectArray<IFogRangeCalculator> calculators = new ObjectArray<>(8);
-	protected final FogResult cached = new FogResult();
+    private static final IModLog LOGGER = Environs.LOGGER.createChild(HolisticFogRangeCalculator.class);
 
-	public void add(@Nonnull final IFogRangeCalculator calc) {
-		this.calculators.add(calc);
-	}
+    protected final ObjectArray<IFogRangeCalculator> calculators = new ObjectArray<>(8);
+    protected final FogResult cached = new FogResult();
 
-	@Override
-	@Nonnull
-	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
-		float start = event.getFarPlaneDistance();
-		float end = event.getFarPlaneDistance();
-		for (int i = 0; i < this.calculators.size(); i++) {
-			final FogResult result = this.calculators.get(i).calculate(event);
-			start = Math.min(start, result.getStart());
-			end = Math.min(end, result.getEnd());
-		}
-		this.cached.set(start, end);
-		return this.cached;
-	}
+    public void add(@Nonnull final IFogRangeCalculator calc) {
+        this.calculators.add(calc);
+    }
 
-	@Override
-	public void tick() {
-		this.calculators.forEach(IFogRangeCalculator::tick);
-	}
+    @Override
+    @Nonnull
+    public String getName() {
+        return "HolisticFogRangeCalculator";
+    }
 
-	@Override
-	@Nonnull
-	public String toString() {
-		return this.cached.toString();
-	}
+    @Override
+    @Nonnull
+    public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
+
+        this.cached.set(event);
+        float start = this.cached.getStart();
+        float end = this.cached.getEnd();
+
+        for (final IFogRangeCalculator calc : this.calculators) {
+            final FogResult result = calc.calculate(event);
+            if (result.getStart() > result.getEnd() || result.getStart() < 0 || result.getEnd() < 0) {
+                LOGGER.warn("Fog calculator '%s' reporting invalid fog range (start %f, end %f); ignored", calc.getName(), result.getStart(), result.getEnd());
+            } else {
+                start = Math.min(start, result.getStart());
+                end = Math.min(end, result.getEnd());
+            }
+        }
+
+        this.cached.set(start, end);
+        return this.cached;
+    }
+
+    @Override
+    public void tick() {
+        this.calculators.forEach(IFogRangeCalculator::tick);
+    }
+
+    @Override
+    @Nonnull
+    public String toString() {
+        return this.cached.toString();
+    }
 }

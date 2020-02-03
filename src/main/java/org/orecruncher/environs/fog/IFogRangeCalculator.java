@@ -18,29 +18,37 @@
 
 package org.orecruncher.environs.fog;
 
-import javax.annotation.Nonnull;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 
+import javax.annotation.Nonnull;
+
 @OnlyIn(Dist.CLIENT)
 public interface IFogRangeCalculator {
 
-	/**
-	 * Called during the render pass to obtain parameters for fog rendering.
-	 *
-	 * @param event The event that is being fired
-	 * @return FogResult containing the fog information the calculator is interested
-	 *         in reporting
-	 */
-	@Nonnull
-	FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event);
+    /**
+     * The name of the fog calculator for logging purposes.
+     *
+     * @return The name of the fog calculator
+     */
+    @Nonnull
+    String getName();
 
-	/**
-	 * Called once every client side tick. Up to the calculator to figure out what
-	 * to do with the time, if anything.
-	 */
-	void tick();
+    /**
+     * Called during the render pass to obtain parameters for fog rendering.
+     *
+     * @param event The event that is being fired
+     * @return FogResult containing the fog information the calculator is interested
+     * in reporting
+     */
+    @Nonnull
+    FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event);
+
+    /**
+     * Called once every client side tick. Up to the calculator to figure out what
+     * to do with the time, if anything.
+     */
+    void tick();
 
 }

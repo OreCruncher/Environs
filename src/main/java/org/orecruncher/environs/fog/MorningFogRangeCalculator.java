@@ -35,9 +35,9 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
 
-	private static final float START = 0.630F;
-	private static final float END = 0.830F;
-	private static final float RESERVE = 10F;
+    private static final float START = 0.630F;
+    private static final float END = 0.830F;
+    private static final float RESERVE = 10F;
     private static final Map<Season, FogType> MAPPING = new Reference2ReferenceOpenHashMap<>();
 
     static {
@@ -61,6 +61,10 @@ public class MorningFogRangeCalculator extends VanillaFogRangeCalculator {
     protected final FogResult cache = new FogResult();
     protected int fogDay = -1;
     protected FogType type = FogType.NORMAL;
+
+    public MorningFogRangeCalculator() {
+        super("MorningFogRangeCalculator");
+    }
 
     @Override
     @Nonnull

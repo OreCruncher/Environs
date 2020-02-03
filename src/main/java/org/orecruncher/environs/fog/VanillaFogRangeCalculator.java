@@ -18,11 +18,11 @@
 
 package org.orecruncher.environs.fog;
 
-import javax.annotation.Nonnull;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+
+import javax.annotation.Nonnull;
 
 /**
  * Vanilla calculator that reflects whatever is in the event in terms of
@@ -31,19 +31,30 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 @OnlyIn(Dist.CLIENT)
 public class VanillaFogRangeCalculator implements IFogRangeCalculator {
 
-	public VanillaFogRangeCalculator() {
+    private final String name;
 
-	}
+    public VanillaFogRangeCalculator() {
+        this.name = "VanillaFogRangeCalculator";
+    }
 
-	@Override
-	@Nonnull
-	public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
-		return new FogResult(event);
-	}
+    protected VanillaFogRangeCalculator(@Nonnull final String name) {
+        this.name = name;
+    }
 
-	@Override
-	public void tick() {
+    @Nonnull
+    public String getName() {
+        return this.name;
+    }
 
-	}
+    @Override
+    @Nonnull
+    public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
+        return new FogResult(event);
+    }
+
+    @Override
+    public void tick() {
+
+    }
 
 }
