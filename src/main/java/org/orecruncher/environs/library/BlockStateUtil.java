@@ -39,9 +39,14 @@ public final class BlockStateUtil {
                     "environs_blockData"
             );
 
-    @Nullable
+    @Nonnull
     public static BlockStateData getData(@Nonnull final BlockState state) {
-        return environs_blockData.get(state);
+        BlockStateData profile = environs_blockData.get(state);
+        if (profile == null) {
+            profile = BlockStateLibrary.get(state);
+            environs_blockData.set(state, profile);
+        }
+        return profile;
     }
 
     public static void setData(@Nonnull final BlockState state, @Nullable final BlockStateData data) {

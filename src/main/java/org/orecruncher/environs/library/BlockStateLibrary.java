@@ -69,21 +69,15 @@ public final class BlockStateLibrary {
     }
 
     static void complete() {
-        int blockStates = (int) ForgeUtils.getBlockStates().stream().map(BlockStateLibrary::get).count();
+        final int blockStates = (int) ForgeUtils.getBlockStates().stream().map(BlockStateUtil::getData).count();
         LOGGER.info("%d block states processed, %d registry entries", blockStates, registry.size());
-        ForgeUtils.getBlockStates().stream().map(BlockStateLibrary::get).forEach(BlockStateData::trim);
+        ForgeUtils.getBlockStates().stream().map(BlockStateUtil::getData).forEach(BlockStateData::trim);
     }
 
     @Nonnull
-    private static BlockStateData get(@Nonnull final BlockState state) {
-        BlockStateData profile = BlockStateUtil.getData(state);
-        if (profile == null) {
-            profile = registry.get(state);
-            if (profile == null)
-                profile = BlockStateData.DEFAULT;
-            BlockStateUtil.setData(state, profile);
-        }
-        return profile;
+    static BlockStateData get(@Nonnull final BlockState state) {
+        BlockStateData profile = registry.get(state);
+        return profile == null ? BlockStateData.DEFAULT : profile;
     }
 
     @Nonnull

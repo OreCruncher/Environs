@@ -1,7 +1,7 @@
 {
   "biomes": [
     {
-      "conditions": "!biome.isMountain && ((biome.isWasteland && !biome.isSwamp) || biome.isHills)",
+      "conditions": "!biome.isMountain && ((biome.isWasteland && !biome.isSwamp && !biome.isCold) || biome.isHills)",
       "_comment": "Wind for Hills/Wasteland",
       "acoustics": [
         {
@@ -20,10 +20,19 @@
     },
     {
       "conditions": "biome.isSandy && biome.isDry && !(biome.isLush || biome.isHills || biome.isMountain || biome.isPlains)",
-      "_comment": "Desert wind",
+      "_comment": "Desert Wind",
       "acoustics": [
         {
           "acoustic": "biome/wind/desert"
+        }
+      ]
+    },
+    {
+      "conditions": "biome.isCold && biome.isWasteland",
+      "_comment": "Arctic Wind",
+      "acoustics": [
+        {
+          "acoustic": "biome/wind/arctic"
         }
       ]
     },

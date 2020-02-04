@@ -18,6 +18,11 @@
     "repeatable": true,
     "volume": 15
   },
+  "biome/wind/arctic": {
+    "name": "environs:arctic.wind",
+    "repeatable": true,
+    "volume": 30
+  },
   "biome/ocean/deep": {
     "name": "environs:beach",
     "repeatable": true,

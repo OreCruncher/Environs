@@ -52,10 +52,8 @@ public final class BiomeUtil {
     public static BiomeInfo getBiomeData(@Nonnull final Biome biome) {
         BiomeInfo result = environs_biomeData.get(biome);
         if (result == null) {
-            Environs.LOGGER.warn("Unable to find configuration for biome [%s] (hc=%d)", biome.getRegistryName(),
-                    System.identityHashCode(biome));
-            result = BiomeLibrary.WTF_INFO;
-            setBiomeData(biome, result);
+            final BiomeAdapter handler = new BiomeAdapter(biome);
+            environs_biomeData.set(biome, result = new BiomeInfo(handler));
         }
         return result;
     }

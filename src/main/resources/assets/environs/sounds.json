@@ -82,6 +82,19 @@
 			}
 		]
 	},
+	"arctic.wind": {
+		"category": "biomes",
+		"credits": [
+			"§aHowling Wind Ambience",
+			"DBlover",
+			"Creative Commons 0"
+		],
+		"sounds": [
+			{
+				"name": "environs:ambient/outside/arctic_wind"
+			}
+		]
+	},
 	"savanna.day": {
 		"category": "biomes",
 		"credits": [

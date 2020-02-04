@@ -96,7 +96,7 @@ public final class BiomeLibrary {
 	}
 
 	static void initialize() {
-		ForgeUtils.getBiomes().forEach(BiomeLibrary::register);
+		ForgeUtils.getBiomes().forEach(BiomeUtil::getBiomeData);
 	}
 
 	static void initFromConfig(@Nonnull final ModConfig cfg) {
@@ -130,12 +130,6 @@ public final class BiomeLibrary {
 			getCombinedStream().stream().sorted().map(Object::toString).forEach(LOGGER::info);
 		}
 		getCombinedStream().forEach(BiomeInfo::trim);
-	}
-
-	private static void register(@Nonnull final Biome biome) {
-		final BiomeAdapter handler = new BiomeAdapter(biome);
-		final BiomeInfo info = new BiomeInfo(handler);
-		BiomeUtil.setBiomeData(biome, info);
 	}
 
 	@Nonnull
