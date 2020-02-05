@@ -197,6 +197,21 @@
 			}
 		]
 	},
+	"ocean": {
+		"category": "biomes",
+		"credits": [
+			"§aocean waves surround me.wav",
+			"bohitomi",
+			"Attribution"
+		],
+		"sounds": [
+			{
+				"name": "environs:ambient/outside/ocean",
+				"volume": 0.4,
+				"stream": true
+			}
+		]
+	},
 	"river": {
 		"category": "biomes",
 		"credits": [

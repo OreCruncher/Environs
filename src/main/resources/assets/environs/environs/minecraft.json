@@ -77,7 +77,7 @@
       ]
     },
     {
-      "conditions": "biome.isForest && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle || biome.isDense)",
+      "conditions": "biome.isForest && !(biome.isDead || biome.isWasteland || biome.isDense || biome.isSwamp) && lib.isBetween(biome.temperature, 0.2, 1.0)",
       "_comment": "Basic Forest w/Crickets",
       "acoustics": [
         {
@@ -91,7 +91,7 @@
       ]
     },
     {
-      "conditions": "biome.isForest && biome.isDense && !(biome.isHot || biome.isSwamp || biome.isDead || biome.isSnowy || biome.isCold || biome.isOcean || biome.isWasteland || biome.isJungle)",
+      "conditions": "biome.isForest && biome.isDense && !(biome.isDead || biome.isWasteland || biome.isSwamp || biome.isJungle) && lib.isBetween(biome.temperature, 0.2, 1.0)",
       "_comment": "Deep Forest w/Crickets",
       "acoustics": [
         {
@@ -126,7 +126,7 @@
       ]
     },
     {
-      "conditions": "!biome.isSnowy && (biome.isOcean || biome.isBeach)",
+      "conditions": "biome.isBeach && !biome.isSnowy",
       "_comment": "Beach",
       "acoustics": [
         {
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "conditions": "lib.oneof(biome.name, 'Frozen Ocean', 'Deep Frozen Ocean')",
+      "conditions": "lib.oneof(biome.id, 'minecraft:frozen_ocean', 'minecraft:deep_frozen_ocean')",
       "_comment": "Frozen Ocean/Deep Frozen Ocean explicit set",
       "fog": true,
       "fogColor": "220,219,223",
@@ -156,7 +156,16 @@
       ]
     },
     {
-      "conditions": "biome.name == 'Deep Ocean'",
+      "conditions": "biome.isOcean",
+      "_comment": "Ocean background",
+      "acoustics": [
+        {
+          "acoustic": "biome/ocean"
+        }
+      ]
+    },
+    {
+      "conditions": "biome.id == 'minecraft:deep_ocean'",
       "_comment": "Deep Ocean explicit set",
       "soundReset": true,
       "acoustics": [
@@ -164,6 +173,11 @@
           "acoustic": "biome/ocean/deep"
         }
       ]
+    },
+    {
+      "conditions": "biome.id == 'minecraft:deep_frozen_ocean'",
+      "_comment": "Deep Frozen Ocean explicit set",
+      "soundReset": true
     },
     {
       "conditions": "biome.isSwamp && !biome.isForest",
@@ -203,12 +217,6 @@
       "_comment": "Dust for desert like biomes",
       "dust": true,
       "dustColor": "255,234,151"
-    },
-    {
-      "conditions": "biome.name == 'Cold Desert'",
-      "_comment": "Cold Desert dust explicit set",
-      "dust": true,
-      "fogColor": "220,219,223"
     },
     {
       "conditions": "!(biome.isOcean || biome.isRiver || biome.isNether || biome.isEnd || biome.isMushroom) && !(biome.isFake || biome.isSnowy || biome.isSwamp || biome.isJungle || biome.isBeach || biome.isWasteland || biome.isWet)",

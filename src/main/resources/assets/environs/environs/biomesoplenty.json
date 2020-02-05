@@ -1,3 +1,24 @@
 {
-
+  "biomes": [
+    {
+      "conditions": "biome.id == 'biomesoplenty:cold_desert'",
+      "_comment": "BoP Cold Desert dust explicit set",
+      "dust": true,
+      "fogColor": "220,219,223"
+    },
+    {
+      "conditions": "biome.id == 'biomesoplenty:marsh'",
+      "_comment": "BoP Marsh specific set",
+      "acoustics": [
+        {
+          "acoustic": "biome/bog",
+          "conditions": "weather.isNotRaining() && !weather.canWaterFreeze() && diurnal.isDay()"
+        },
+        {
+          "acoustic": "biome/crickets",
+          "conditions": "!weather.canWaterFreeze() && diurnal.isNight()"
+        }
+      ]
+    }
+  ]
 }

@@ -23,10 +23,14 @@
     "repeatable": true,
     "volume": 30
   },
+  "biome/ocean": {
+    "name": "environs:ocean",
+    "repeatable": true
+  },
   "biome/ocean/deep": {
-    "name": "environs:beach",
+    "name": "environs:ocean",
     "repeatable": true,
-    "pitch": 40
+    "pitch": 70
   },
   "biome/jungle": {
     "name": "environs:jungle",

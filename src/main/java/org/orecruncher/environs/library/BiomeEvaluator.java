@@ -42,6 +42,13 @@ public class BiomeEvaluator {
         props.put("id", biome.getKey().toString());
         props.put("modid", biome.getKey().getNamespace());
         props.put("isFake", biome.isFake());
+        if (biome.isFake()) {
+            props.put("temperature", 0);
+            props.put("rainfall", 0);
+        } else {
+            props.put("temperature", biome.getTemperature());
+            props.put("rainfall", biome.getRainfall());
+        }
 
         final Collection<BiomeDictionary.Type> types = BiomeUtil.getBiomeTypes();
         final Set<BiomeDictionary.Type> biomeTypes = biome.getBiomeTypes();
