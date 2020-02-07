@@ -245,7 +245,7 @@
 		"sounds": [
 			{
 				"name": "environs:ambient/outside/jungle",
-				"volume": 0.08,
+				"volume": 0.2,
 				"pitch": 0.8,
 				"stream": true
 			}

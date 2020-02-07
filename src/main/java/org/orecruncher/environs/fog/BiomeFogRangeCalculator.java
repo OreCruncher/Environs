@@ -21,6 +21,10 @@ package org.orecruncher.environs.fog;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.chunk.AbstractChunkProvider;
+import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -40,6 +44,8 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
 
     protected static final int DISTANCE = 20;
     protected static final float DUST_FOG_IMPACT = 0.9F;
+
+    protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
     protected final Context[] context = {new Context(), new Context()};
 
     public BiomeFogRangeCalculator() {
@@ -50,19 +56,20 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
     @Nonnull
     public FogResult calculate(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
 
-        final double partialTicks = event.getRenderPartialTicks();
         final PlayerEntity player = GameUtils.getPlayer();
+        final World world = GameUtils.getWorld();
+
+        assert player != null && world != null;
+
+        final double partialTicks = event.getRenderPartialTicks();
         final int playerX = MathStuff.floor(player.posX);
         final int playerZ = MathStuff.floor(player.posZ);
-        final World world = GameUtils.getWorld();
         final float rainStr = WorldUtils.getRainStrength(world, (float) partialTicks);
 
         final Context ctx = this.context[event.getFogMode() == -1 ? 0 : 1];
 
         if (ctx.returnCached(playerX, playerZ, rainStr, event))
             return ctx.cached;
-
-        final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
 
         float fpDistanceBiomeFog = 0F;
         float weightBiomeFog = 0;
@@ -71,14 +78,25 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
         ctx.rain = rainStr;
         ctx.doScan = false;
 
+        final AbstractChunkProvider chunkProvider = world.getChunkProvider();
+
         for (int z = -DISTANCE; z <= DISTANCE; ++z) {
             for (int x = -DISTANCE; x <= DISTANCE; ++x) {
-                pos.setPos(playerX + x, 0, playerZ + z);
 
-                // If the chunk is not available doScan will be set true. This will force
-                // another scan on the next tick.
-                ctx.doScan = ctx.doScan | !world.isBlockPresent(pos);
-                final BiomeInfo biome = BiomeUtil.getBiomeData(world.getBiome(pos));
+                this.pos.setPos(playerX + x, 0, playerZ + z);
+
+                final int chunkX = this.pos.getX() >> 4;
+                final int chunkZ = this.pos.getZ() >> 4;
+                final IChunk chunk = chunkProvider.getChunk(chunkX, chunkZ, ChunkStatus.FULL, false);
+
+                final BiomeInfo biome;
+                // If the chunk is not available doScan will be set true. This will force another scan on the next tick.
+                if (chunk == null) {
+                    ctx.doScan = true;
+                    biome = BiomeUtil.getBiomeData(Biomes.PLAINS);
+                } else {
+                    biome = BiomeUtil.getBiomeData(chunk.getBiome(this.pos));
+                }
 
                 float distancePart = 1F;
                 final float weightPart = 1;

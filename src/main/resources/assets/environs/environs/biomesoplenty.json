@@ -3,12 +3,13 @@
     {
       "conditions": "biome.id == 'biomesoplenty:cold_desert'",
       "_comment": "BoP Cold Desert dust explicit set",
-      "dust": true,
-      "fogColor": "220,219,223"
+      "fog": true,
+      "fogColor": "220,219,223",
+      "fogDensity": 0.4
     },
     {
-      "conditions": "biome.id == 'biomesoplenty:marsh'",
-      "_comment": "BoP Marsh specific set",
+      "conditions": "lib.oneof(biome.id, 'biomesoplenty:marsh', 'biomesoplenty:mangrove')",
+      "_comment": "BoP Marsh/Mangrove specific set",
       "acoustics": [
         {
           "acoustic": "biome/bog",

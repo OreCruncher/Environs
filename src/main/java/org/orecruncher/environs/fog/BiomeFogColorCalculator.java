@@ -23,6 +23,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.chunk.AbstractChunkProvider;
+import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -40,11 +44,12 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
     // ForgeHooksClient.getSkyBlendColour()
     private static final int[] BLEND_RANGES = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34};
 
+    protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+
     protected int posX;
     protected int posZ;
 
-    // Last pass calculations. We can reuse if possible to avoid scanning
-    // the area, again.
+    // Last pass calculations. We can reuse if possible to avoid scanning the area, again.
     protected double weightBiomeFog;
     protected Color biomeFogColor;
     protected boolean doScan = true;
@@ -55,6 +60,9 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 
         final PlayerEntity player = GameUtils.getPlayer();
         final World world = GameUtils.getWorld();
+
+        assert player != null && world != null;
+
         final int playerX = MathStuff.floor(player.posX);
         final int playerZ = MathStuff.floor(player.posZ);
 
@@ -64,7 +72,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
             distance = BLEND_RANGES[MathStuff.clamp(settings.renderDistanceChunks, 0, BLEND_RANGES.length - 1)];
         }
 
-        final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(0, 0, 0);
+        // Biome scan - only need to worry about the change in X and Z
         this.doScan |= this.posX != playerX || this.posZ != playerZ;
 
         if (this.doScan) {
@@ -77,14 +85,25 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
             float green = 0;
             float blue = 0;
 
+            final AbstractChunkProvider chunkProvider = world.getChunkProvider();
+
             for (int z = -distance; z <= distance; ++z) {
                 for (int x = -distance; x <= distance; ++x) {
-                    pos.setPos(playerX + x, 0, playerZ + z);
 
-                    // If the chunk is not available doScan will be set true. This will force
-                    // another scan on the next tick.
-                    this.doScan = this.doScan | !world.isBlockPresent(pos);
-                    final BiomeInfo biome = BiomeUtil.getBiomeData(world.getBiome(pos));
+                    this.pos.setPos(playerX + x, 0, playerZ + z);
+
+                    final int chunkX = this.pos.getX() >> 4;
+                    final int chunkZ = this.pos.getZ() >> 4;
+                    final IChunk chunk = chunkProvider.getChunk(chunkX, chunkZ, ChunkStatus.FULL, false);
+
+                    final BiomeInfo biome;
+                    // If the chunk is not available doScan will be set true. This will force another scan on the next tick.
+                    if (chunk == null) {
+                        this.doScan = true;
+                        biome = BiomeUtil.getBiomeData(Biomes.PLAINS);
+                    } else {
+                        biome = BiomeUtil.getBiomeData(chunk.getBiome(this.pos));
+                    }
                     final Color color;
 
                     // Fetch the color we are dealing with.
@@ -184,8 +203,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
             fogColor.scale(darkScale);
         }
 
-        // EntityRenderer.updateFogColor() - If the player has nightvision going
-        // need to lighten it a bit
+        // EntityRenderer.updateFogColor() - If the player has night vision going need to lighten it a bit
         if (player.isPotionActive(Effects.NIGHT_VISION)) {
             final int duration = player.getActivePotionEffect(Effects.NIGHT_VISION).getDuration();
             final float brightness = (duration > 200) ? 1
