@@ -26,6 +26,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -57,7 +58,7 @@ public class WaterSplashJetEffect extends JetEffect {
 		return BlockEffectType.SPLASH_JET;
 	}
 
-	private static boolean isUnboundedLiquid(final IWorldReader provider, final BlockPos pos) {
+	private static boolean isUnboundedLiquid(final IBlockReader provider, final BlockPos pos) {
 		for (final Vec3i cardinal_offset : cardinal_offsets) {
 			final BlockPos tp = pos.add(cardinal_offset);
 			final BlockState state = provider.getBlockState(tp);
@@ -75,7 +76,7 @@ public class WaterSplashJetEffect extends JetEffect {
 	/**
 	 * Similar to isUnboundedLiquid() but geared towards determine that the liquid is bound on all sides.
 	 */
-	private static boolean isBoundedLiquid(final IWorldReader provider, final BlockPos pos) {
+	private static boolean isBoundedLiquid(final IBlockReader provider, final BlockPos pos) {
 		for (final Vec3i cardinal_offset : cardinal_offsets) {
 			final BlockPos tp = pos.add(cardinal_offset);
 			final BlockState state = provider.getBlockState(tp);
@@ -90,15 +91,15 @@ public class WaterSplashJetEffect extends JetEffect {
 		return true;
 	}
 
-	private int liquidBlockCount(final IWorldReader provider, final BlockPos pos) {
+	private int liquidBlockCount(final IBlockReader provider, final BlockPos pos) {
 		return countVerticalBlocks(provider, pos, FLUID_PREDICATE, 1);
 	}
 
-	public static boolean isValidSpawnBlock(@Nonnull final IWorldReader provider, @Nonnull final BlockPos pos) {
+	public static boolean isValidSpawnBlock(@Nonnull final IBlockReader provider, @Nonnull final BlockPos pos) {
 		return isValidSpawnBlock(provider, provider.getBlockState(pos), pos);
 	}
 
-	private static boolean isValidSpawnBlock(final IWorldReader provider, final BlockState state,
+	private static boolean isValidSpawnBlock(final IBlockReader provider, final BlockState state,
 			final BlockPos pos) {
 		if (state.getFluidState().isEmpty())
 			return false;
@@ -114,13 +115,13 @@ public class WaterSplashJetEffect extends JetEffect {
 	}
 
 	@Override
-	public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+	public boolean canTrigger(@Nonnull final IBlockReader provider, @Nonnull final BlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 		return super.canTrigger(provider, state, pos, random) && isValidSpawnBlock(provider, state, pos);
 	}
 
 	@Override
-	public void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+	public void doEffect(@Nonnull final IBlockReader provider, @Nonnull final BlockState state,
 			@Nonnull final BlockPos pos, @Nonnull final Random random) {
 
 		final int strength = liquidBlockCount(provider, pos);

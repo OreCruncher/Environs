@@ -20,15 +20,14 @@ package org.orecruncher.environs.handlers;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
 import org.orecruncher.environs.library.BiomeInfo;
 import org.orecruncher.environs.library.BiomeLibrary;
 import org.orecruncher.environs.library.DimensionInfo;
-import org.orecruncher.lib.DayCycle;
-import org.orecruncher.lib.MinecraftClock;
-import org.orecruncher.lib.TickCounter;
+import org.orecruncher.lib.*;
 import org.orecruncher.lib.seasons.Season;
 
 @OnlyIn(Dist.CLIENT)
@@ -38,6 +37,10 @@ public final class CommonState {
 
     static CommonState getData() {
         return instance;
+    }
+
+    static void reset() {
+        instance = new CommonState();
     }
 
     // State that is gathered from the various sources
@@ -62,6 +65,8 @@ public final class CommonState {
     DayCycle dayCycle = DayCycle.NO_SKY;
 
     MinecraftClock clock = new MinecraftClock();
+
+    EnvironmentBlockReader blockReader;
 
     CommonState() {
     }
@@ -134,5 +139,9 @@ public final class CommonState {
 
     public static MinecraftClock getClock() {
         return instance.clock;
+    }
+
+    public static IEnviromentBlockReader getBlockReader() {
+        return instance.blockReader;
     }
 }

@@ -23,7 +23,7 @@ import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -40,7 +40,7 @@ public class FireJet extends Jet {
 	protected final boolean isSolid;
 	protected boolean soundFired;
 
-	public FireJet(final int strength, final IWorldReader world, final double x, final double y, final double z, boolean isSolid) {
+	public FireJet(final int strength, final IBlockReader world, final double x, final double y, final double z, boolean isSolid) {
 		super(strength, world, x, y, z);
 		this.isLava = !isSolid && RANDOM.nextInt(3) == 0;
 		this.particleType = this.isLava ? ParticleTypes.LAVA : ParticleTypes.FLAME;

@@ -50,7 +50,7 @@ class AreaBlockEffects extends HandlerBase {
         this.nearEffects.tick();
         this.farEffects.tick();
         this.alwaysOn.tick();
-        this.blockChange.update(nanos);
+        this.blockChange.update(this.nanos);
         this.nanos = 0;
     }
 

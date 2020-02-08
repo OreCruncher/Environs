@@ -23,7 +23,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.lib.GameUtils;
@@ -37,14 +37,14 @@ public abstract class ParticleEmitter {
 
 	protected static final Random RANDOM = XorShiftRandom.current();
 
-	protected final IWorldReader world;
+	protected final IBlockReader world;
 	protected final double posX;
 	protected final double posY;
 	protected final double posZ;
 	protected final BlockPos position;
 	private boolean isAlive = true;
 
-	protected ParticleEmitter(final IWorldReader worldIn, final double posXIn, final double posYIn, final double posZIn) {
+	protected ParticleEmitter(final IBlockReader worldIn, final double posXIn, final double posYIn, final double posZIn) {
 		this.world = worldIn;
 		this.posX = posXIn;
 		this.posY = posYIn;

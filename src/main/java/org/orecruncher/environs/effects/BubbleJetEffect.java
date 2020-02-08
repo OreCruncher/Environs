@@ -20,6 +20,7 @@ package org.orecruncher.environs.effects;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -43,7 +44,7 @@ public class BubbleJetEffect extends JetEffect {
     }
 
     @Override
-    public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+    public boolean canTrigger(@Nonnull final IBlockReader provider, @Nonnull final BlockState state,
                               @Nonnull final BlockPos pos, @Nonnull final Random random) {
         if (WATER_PREDICATE.test(state)) {
             final boolean isSolidBlock = provider.getBlockState(pos.down()).getMaterial().isSolid();
@@ -53,7 +54,7 @@ public class BubbleJetEffect extends JetEffect {
     }
 
     @Override
-    public void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+    public void doEffect(@Nonnull final IBlockReader provider, @Nonnull final BlockState state,
                          @Nonnull final BlockPos pos, @Nonnull final Random random) {
         final int liquidBlocks = countVerticalBlocks(provider, pos, WATER_PREDICATE, 1);
         if (liquidBlocks > 0) {

@@ -21,11 +21,12 @@ package org.orecruncher.environs.effects;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.effects.emitters.Jet;
 import org.orecruncher.environs.effects.emitters.SteamJet;
+import org.orecruncher.lib.WorldUtils;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -37,9 +38,9 @@ public class SteamJetEffect extends JetEffect {
         super(chance);
     }
 
-    public static boolean isValidSpawnBlock(@Nonnull final IWorldReader provider,
+    public static boolean isValidSpawnBlock(@Nonnull final IBlockReader provider,
                                             @Nonnull final BlockPos pos) {
-        return provider.isAirBlock(pos.up())
+        return WorldUtils.isAirBlock(provider, pos.up())
                 && countCubeBlocks(provider, pos, HOTBLOCK_PREDICATE, true) > 0;
     }
 
@@ -50,13 +51,13 @@ public class SteamJetEffect extends JetEffect {
     }
 
     @Override
-    public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+    public boolean canTrigger(@Nonnull final IBlockReader provider, @Nonnull final BlockState state,
                               @Nonnull final BlockPos pos, @Nonnull final Random random) {
         return isValidSpawnBlock(provider, pos) && super.canTrigger(provider, state, pos, random);
     }
 
     @Override
-    public void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+    public void doEffect(@Nonnull final IBlockReader provider, @Nonnull final BlockState state,
                          @Nonnull final BlockPos pos, @Nonnull final Random random) {
         final int strength = countCubeBlocks(provider, pos, HOTBLOCK_PREDICATE, false);
         if (strength > 0) {

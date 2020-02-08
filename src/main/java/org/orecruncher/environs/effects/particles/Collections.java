@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
@@ -62,7 +63,7 @@ public final class Collections {
 
     }
 
-    public static void addWaterRipple(@Nonnull final IWorldReader world, final double x, final double y,
+    public static void addWaterRipple(@Nonnull final IBlockReader world, final double x, final double y,
                                       final double z) {
         if (theRipples.canFit()) {
             final IParticleMote mote = new MoteWaterRipple(world, x, y, z);
@@ -70,7 +71,7 @@ public final class Collections {
         }
     }
 
-    public static boolean addWaterSpray(@Nonnull final IWorldReader world, final double x, final double y,
+    public static boolean addWaterSpray(@Nonnull final IBlockReader world, final double x, final double y,
                                               final double z, final double dX, final double dY, final double dZ) {
         if (theSprays.canFit()) {
             final IParticleMote mote = new MoteWaterSpray(world, x, y, z, dX, dY, dZ);
@@ -84,7 +85,7 @@ public final class Collections {
         return theSprays.canFit();
     }
 
-    public static void addRainSplash(@Nonnull final IWorldReader world, final double x, final double y,
+    public static void addRainSplash(@Nonnull final IBlockReader world, final double x, final double y,
                                               final double z) {
         if (theSprays.canFit()) {
             final IParticleMote mote = new MoteRainSplash(world, x, y, z);
@@ -92,7 +93,7 @@ public final class Collections {
         }
     }
 
-    public static void addFireFly(@Nonnull final IWorldReader world, final double x, final double y, final double z) {
+    public static void addFireFly(@Nonnull final IBlockReader world, final double x, final double y, final double z) {
         if (theFireFlies.canFit()) {
             final IParticleMote mote = new MoteFireFly(world, x, y, z);
             theFireFlies.add(mote);

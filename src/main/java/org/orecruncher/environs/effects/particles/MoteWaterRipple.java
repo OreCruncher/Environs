@@ -19,12 +19,11 @@
 package org.orecruncher.environs.effects.particles;
 
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.world.World;
 import org.orecruncher.environs.library.BiomeUtil;
 import org.orecruncher.lib.gui.Color;
 import org.orecruncher.lib.particles.AgeableMote;
@@ -41,7 +40,7 @@ public class MoteWaterRipple extends AgeableMote {
 	protected float texU1, texU2;
 	protected float texV1, texV2;
 
-	public MoteWaterRipple(final IWorldReader world, final double x, final double y, final double z) {
+	public MoteWaterRipple(final IBlockReader world, final double x, final double y, final double z) {
 		super(world, x, y, z);
 
 		final RippleStyle style = RippleStyle.get();
@@ -60,7 +59,7 @@ public class MoteWaterRipple extends AgeableMote {
 
 		this.posY -= 0.2D;
 
-		final Color waterColor = BiomeUtil.getColorForLiquid((World) world, this.position);
+		final Color waterColor = BiomeUtil.getColorForLiquid(world, this.position);
 		this.red = waterColor.red();
 		this.green = waterColor.green();
 		this.blue = waterColor.blue();

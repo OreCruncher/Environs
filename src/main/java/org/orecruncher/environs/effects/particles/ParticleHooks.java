@@ -27,7 +27,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -127,7 +127,7 @@ public final class ParticleHooks {
      */
     public static void splashHandler(@Nonnull final Fluid fluidType, @Nonnull final ParticleCollisionResult collision, final boolean playSound) {
 
-        final IWorldReader world =collision.world;
+        final IBlockReader world = collision.world;
         // Move down slightly on the Y.  Reason is that the particle may literally just above the block
         final Vec3d particlePos = collision.position;
         final BlockPos pos = new BlockPos(particlePos.x, particlePos.y - 0.01D, particlePos.z);
@@ -182,8 +182,8 @@ public final class ParticleHooks {
         }
     }
 
-    private static void createSteamCloud(@Nonnull final IWorldReader world, @Nonnull final Vec3d pos) {
-        final Particle steamCloud = new SteamCloudParticle((World) world, pos.x, pos.y + 0.01D, pos.z, 0.01D);
+    private static void createSteamCloud(@Nonnull final IBlockReader world, @Nonnull final Vec3d pos) {
+        final Particle steamCloud = new SteamCloudParticle(GameUtils.getWorld(), pos.x, pos.y + 0.01D, pos.z, 0.01D);
         GameUtils.getMC().particles.addEffect(steamCloud);
     }
 

@@ -24,6 +24,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -63,7 +64,7 @@ public class RandomBlockEffectScanner extends RandomScanner {
 
 	@Override
 	public void blockScan(@Nonnull final BlockState state, @Nonnull final BlockPos pos, @Nonnull final Random rand) {
-		final IWorldReader world = this.locus.getWorld();
+		final IBlockReader world = this.locus.getWorld();
 		final BlockStateData profile = BlockStateUtil.getData(state);
 		final Collection<BlockEffect> effects = profile.getEffects();
 

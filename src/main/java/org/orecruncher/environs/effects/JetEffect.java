@@ -23,7 +23,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.effects.emitters.Jet;
@@ -59,7 +59,7 @@ public abstract class JetEffect extends BlockEffect {
         super(chance);
     }
 
-    public static int countVerticalBlocks(@Nonnull final IWorldReader provider, @Nonnull final BlockPos pos,
+    public static int countVerticalBlocks(@Nonnull final IBlockReader provider, @Nonnull final BlockPos pos,
                                           @Nonnull final Predicate<BlockState> predicate, final int step) {
         int count = 0;
         final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos(pos);
@@ -68,7 +68,7 @@ public abstract class JetEffect extends BlockEffect {
         return MathStuff.clamp(count, 0, MAX_STRENGTH);
     }
 
-    public static int countCubeBlocks(@Nonnull final IWorldReader provider, @Nonnull final BlockPos pos,
+    public static int countCubeBlocks(@Nonnull final IBlockReader provider, @Nonnull final BlockPos pos,
                                       @Nonnull final Predicate<BlockState> predicate, final boolean fastFirst) {
         int blockCount = 0;
         for (int k = -1; k <= 1; k++)
@@ -85,7 +85,7 @@ public abstract class JetEffect extends BlockEffect {
     }
 
     @Override
-    public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+    public boolean canTrigger(@Nonnull final IBlockReader provider, @Nonnull final BlockState state,
                               @Nonnull final BlockPos pos, @Nonnull final Random random) {
         if (alwaysExecute() || random.nextInt(getChance()) == 0) {
             return ParticleSystems.okToSpawn(pos) && ConditionEvaluator.INSTANCE.check(getConditions());

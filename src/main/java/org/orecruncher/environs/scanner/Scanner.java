@@ -24,11 +24,11 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ReferenceArraySet;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.lib.random.XorShiftRandom;
@@ -38,15 +38,16 @@ import net.minecraft.util.math.BlockPos;
 @OnlyIn(Dist.CLIENT)
 public abstract class Scanner {
 
-	protected static final Set<BlockState> BLOCKSTATES_TO_IGNORE = new ReferenceOpenHashSet<>();
+	protected static final Set<BlockState> BLOCKSTATES_TO_IGNORE = new ReferenceArraySet<>(3);
 
 	static {
-		BLOCKSTATES_TO_IGNORE.add(Blocks.AIR.getDefaultState());
-		BLOCKSTATES_TO_IGNORE.add(Blocks.CAVE_AIR.getDefaultState());
+		// The implementation searches backwards so order so the most common blocks will be hit first
 		BLOCKSTATES_TO_IGNORE.add(Blocks.VOID_AIR.getDefaultState());
+		BLOCKSTATES_TO_IGNORE.add(Blocks.CAVE_AIR.getDefaultState());
+		BLOCKSTATES_TO_IGNORE.add(Blocks.AIR.getDefaultState());
 	}
 
-	private final static int MAX_BLOCKS_TICK = 3000;
+	private final static int MAX_BLOCKS_TICK = 6000;
 
 	protected final String name;
 
@@ -133,7 +134,7 @@ public abstract class Scanner {
 
 		preScan();
 
-		final IWorldReader provider = this.locus.getWorld();
+		final IBlockReader provider = this.locus.getWorld();
 		for (int count = 0; count < this.blocksPerTick; count++) {
 			final BlockPos pos = nextPos(this.workingPos, this.random);
 			if (pos == null)

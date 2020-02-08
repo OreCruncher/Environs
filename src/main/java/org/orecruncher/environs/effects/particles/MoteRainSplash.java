@@ -19,14 +19,14 @@
 package org.orecruncher.environs.effects.particles;
 
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class MoteRainSplash extends MoteWaterSpray {
 
-	public MoteRainSplash(final IWorldReader world, final double x, final double y, final double z) {
+	public MoteRainSplash(final IBlockReader world, final double x, final double y, final double z) {
 		super(world, x, y, z, 0, 0, 0);
 
 		// Setup motion

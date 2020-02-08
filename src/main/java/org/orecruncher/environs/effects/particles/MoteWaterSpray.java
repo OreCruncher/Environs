@@ -20,14 +20,11 @@ package org.orecruncher.environs.effects.particles;
 
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.world.World;
-import org.apache.commons.lang3.tuple.Pair;
 import org.orecruncher.environs.library.BiomeUtil;
 import org.orecruncher.lib.gui.Color;
 import org.orecruncher.lib.particles.MotionMote;
@@ -48,7 +45,7 @@ public class MoteWaterSpray extends MotionMote {
 	protected final float texV1, texV2;
 	protected final float f4;
 
-	public MoteWaterSpray(final IWorldReader world, final double x, final double y, final double z, final double dX,
+	public MoteWaterSpray(final IBlockReader world, final double x, final double y, final double z, final double dX,
 						  final double dY, final double dZ) {
 
 		super(world, x, y, z, dX, dY, dZ);
@@ -71,7 +68,7 @@ public class MoteWaterSpray extends MotionMote {
 
 	@Override
 	public void configureColor() {
-		final Color waterColor = BiomeUtil.getColorForLiquid((World) this.world, this.position);
+		final Color waterColor = BiomeUtil.getColorForLiquid(this.world, this.position);
 		this.red = waterColor.red();
 		this.green = waterColor.green();
 		this.blue = waterColor.blue();

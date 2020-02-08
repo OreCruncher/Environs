@@ -21,7 +21,7 @@ package org.orecruncher.environs.effects.particles;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.lib.GameUtils;
@@ -39,7 +39,7 @@ public class MoteFireFly extends AnimatedMote {
 
     private boolean doRender;
 
-    public MoteFireFly(@Nonnull final IWorldReader world, final double x, final double y, final double z) {
+    public MoteFireFly(@Nonnull final IBlockReader world, final double x, final double y, final double z) {
         super(GameUtils.getMC().particles.sprites.get(ParticleTypes.FIREWORK.getRegistryName()), world, x, y, z, 0, 0, 0);
 
         this.motionX = RANDOM.nextGaussian() * XZ_MOTION_DELTA;

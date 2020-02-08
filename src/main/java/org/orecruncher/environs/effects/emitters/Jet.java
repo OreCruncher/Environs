@@ -18,7 +18,7 @@
 
 package org.orecruncher.environs.effects.emitters;
 
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -36,11 +36,11 @@ public abstract class Jet extends ParticleEmitter {
 	protected final int particleMaxAge;
 	protected int particleAge;
 
-	public Jet(final int strength, final IWorldReader world, final double x, final double y, final double z) {
+	public Jet(final int strength, final IBlockReader world, final double x, final double y, final double z) {
 		this(0, strength, world, x, y, z, 3);
 	}
 
-	public Jet(final int layer, final int strength, final IWorldReader world, final double x, final double y,
+	public Jet(final int layer, final int strength, final IBlockReader world, final double x, final double y,
 			   final double z, final int freq) {
 		super(world, x, y, z);
 

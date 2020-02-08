@@ -35,10 +35,7 @@ import org.orecruncher.environs.handlers.scripts.ConditionEvaluator;
 import org.orecruncher.environs.library.BiomeLibrary;
 import org.orecruncher.environs.library.DimensionLibrary;
 import org.orecruncher.environs.scanner.CeilingCoverage;
-import org.orecruncher.lib.DayCycle;
-import org.orecruncher.lib.GameUtils;
-import org.orecruncher.lib.TickCounter;
-import org.orecruncher.lib.WorldUtils;
+import org.orecruncher.lib.*;
 import org.orecruncher.lib.events.DiagnosticEvent;
 import org.orecruncher.lib.seasons.Season;
 
@@ -111,8 +108,16 @@ class CommonStateHandler extends HandlerBase {
             }
         }
 
+        // Adjust our block reader
+        data.blockReader = new EnvironmentBlockReader(world);
+
         // Resets cached script variables so they are updated
         ConditionEvaluator.INSTANCE.tick();
+    }
+
+    @Override
+    public void onDisconnect() {
+        CommonState.reset();
     }
 
     private final static String[] scripts = {

@@ -19,7 +19,7 @@
 package org.orecruncher.environs.effects.emitters;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -32,7 +32,7 @@ public class FountainJet extends Jet {
 
 	protected final BlockState state;
 
-	public FountainJet(final int strength, final IWorldReader world, final double x, final double y, final double z,
+	public FountainJet(final int strength, final IBlockReader world, final double x, final double y, final double z,
 					   final BlockState state) {
 		super(1, strength, world, x, y, z, 1);
 		this.state = state;

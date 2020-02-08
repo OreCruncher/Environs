@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -73,7 +73,7 @@ public final class BiomeUtil {
     }
 
     @Nonnull
-    public static Color getColorForLiquid(@Nonnull final World world, @Nonnull final BlockPos pos) {
+    public static Color getColorForLiquid(@Nonnull final IBlockReader world, @Nonnull final BlockPos pos) {
         final IFluidState fluidState = world.getFluidState(pos);
 
         if (fluidState.isEmpty())

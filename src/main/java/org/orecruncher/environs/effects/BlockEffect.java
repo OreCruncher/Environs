@@ -20,6 +20,7 @@ package org.orecruncher.environs.effects;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -73,7 +74,7 @@ public abstract class BlockEffect {
      * should make sure to call the parent last to avoid necessary CPU churn related
      * to the script check.
      */
-    public boolean canTrigger(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+    public boolean canTrigger(@Nonnull final IBlockReader provider, @Nonnull final BlockState state,
                               @Nonnull final BlockPos pos, @Nonnull final Random random) {
         if (!alwaysExecute() && random.nextInt(getChance()) != 0)
             return false;
@@ -84,17 +85,15 @@ public abstract class BlockEffect {
     /**
      * Override to provide the body of the effect that is to take place.
      */
-    public abstract void doEffect(@Nonnull final IWorldReader provider, @Nonnull final BlockState state,
+    public abstract void doEffect(@Nonnull final IBlockReader provider, @Nonnull final BlockState state,
                                   @Nonnull final BlockPos pos, @Nonnull final Random random);
 
     @Override
     @Nonnull
     public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("type: ").append(getEffectType().getName());
-        builder.append(" conditions: [").append(getConditions()).append(']');
-        builder.append("; chance:").append(getChance());
-        builder.append(' ').append(this.getClass().getSimpleName());
-        return builder.toString();
+        return "type: " + getEffectType().getName() +
+                " conditions: [" + getConditions() + ']' +
+                "; chance:" + getChance() +
+                ' ' + this.getClass().getSimpleName();
     }
 }

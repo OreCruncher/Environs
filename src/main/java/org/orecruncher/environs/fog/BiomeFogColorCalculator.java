@@ -22,14 +22,13 @@ import net.minecraft.client.GameSettings;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.chunk.AbstractChunkProvider;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import org.orecruncher.environs.handlers.CommonState;
 import org.orecruncher.environs.library.BiomeInfo;
 import org.orecruncher.environs.library.BiomeUtil;
 import org.orecruncher.lib.GameUtils;
@@ -85,25 +84,15 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
             float green = 0;
             float blue = 0;
 
-            final AbstractChunkProvider chunkProvider = world.getChunkProvider();
+            final IEnviromentBlockReader reader = CommonState.getBlockReader();
 
             for (int z = -distance; z <= distance; ++z) {
                 for (int x = -distance; x <= distance; ++x) {
 
                     this.pos.setPos(playerX + x, 0, playerZ + z);
 
-                    final int chunkX = this.pos.getX() >> 4;
-                    final int chunkZ = this.pos.getZ() >> 4;
-                    final IChunk chunk = chunkProvider.getChunk(chunkX, chunkZ, ChunkStatus.FULL, false);
-
-                    final BiomeInfo biome;
-                    // If the chunk is not available doScan will be set true. This will force another scan on the next tick.
-                    if (chunk == null) {
-                        this.doScan = true;
-                        biome = BiomeUtil.getBiomeData(Biomes.PLAINS);
-                    } else {
-                        biome = BiomeUtil.getBiomeData(chunk.getBiome(this.pos));
-                    }
+                    final Biome b = reader.getBiome(this.pos);
+                    final BiomeInfo biome = BiomeUtil.getBiomeData(b);
                     final Color color;
 
                     // Fetch the color we are dealing with.

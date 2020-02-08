@@ -19,6 +19,7 @@
 package org.orecruncher.environs.scanner;
 
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,6 +30,7 @@ import org.orecruncher.environs.handlers.CommonState;
 import org.orecruncher.environs.library.BiomeInfo;
 import org.orecruncher.environs.library.BiomeUtil;
 import org.orecruncher.lib.GameUtils;
+import org.orecruncher.lib.TickCounter;
 
 /**
  * Performs an area scan around the to calculate the relative weights of the
@@ -57,7 +59,8 @@ public final class BiomeScanner {
 
 		if (this.surveyedBiome != playerBiome
 				|| this.surveyedDimension != dimId
-				|| this.surveyedPosition.compareTo(position) != 0) {
+				|| this.surveyedPosition.compareTo(position) != 0
+				|| TickCounter.getTickCount() % 20 == 0) {
 
 			this.surveyedBiome = playerBiome;
 			this.surveyedDimension = dimId;
@@ -70,7 +73,7 @@ public final class BiomeScanner {
 				this.biomeArea = 1;
 				this.weights.put(playerBiome, 1);
 			} else {
-				final IWorldReader provider = GameUtils.getWorld();
+				final IEnviromentBlockReader provider = CommonState.getBlockReader();
 				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 					for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++) {
 						this.mutable.setPos(this.surveyedPosition.getX() + dX, 0, this.surveyedPosition.getZ() + dZ);

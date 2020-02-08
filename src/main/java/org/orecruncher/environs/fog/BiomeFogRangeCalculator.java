@@ -20,14 +20,14 @@ package org.orecruncher.environs.fog;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.chunk.AbstractChunkProvider;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import org.orecruncher.environs.handlers.CommonState;
 import org.orecruncher.environs.library.BiomeInfo;
 import org.orecruncher.environs.library.BiomeUtil;
 import org.orecruncher.lib.GameUtils;
@@ -78,24 +78,20 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
         ctx.rain = rainStr;
         ctx.doScan = false;
 
-        final AbstractChunkProvider chunkProvider = world.getChunkProvider();
+        final IEnviromentBlockReader reader = CommonState.getBlockReader();
 
         for (int z = -DISTANCE; z <= DISTANCE; ++z) {
             for (int x = -DISTANCE; x <= DISTANCE; ++x) {
 
                 this.pos.setPos(playerX + x, 0, playerZ + z);
 
-                final int chunkX = this.pos.getX() >> 4;
-                final int chunkZ = this.pos.getZ() >> 4;
-                final IChunk chunk = chunkProvider.getChunk(chunkX, chunkZ, ChunkStatus.FULL, false);
-
                 final BiomeInfo biome;
-                // If the chunk is not available doScan will be set true. This will force another scan on the next tick.
-                if (chunk == null) {
+                if (world.isBlockPresent(this.pos)) {
+                    final Biome b = reader.getBiome(this.pos);
+                    biome = BiomeUtil.getBiomeData(b);
+                } else {
                     ctx.doScan = true;
                     biome = BiomeUtil.getBiomeData(Biomes.PLAINS);
-                } else {
-                    biome = BiomeUtil.getBiomeData(chunk.getBiome(this.pos));
                 }
 
                 float distancePart = 1F;

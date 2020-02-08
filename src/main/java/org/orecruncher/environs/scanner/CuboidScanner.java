@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.util.math.BlockPos;
@@ -159,7 +159,7 @@ public abstract class CuboidScanner extends Scanner {
 	protected void updateScan(@Nonnull final Cuboid newVolume, @Nonnull final Cuboid oldVolume,
 			@Nonnull final Cuboid intersect) {
 
-		final IWorldReader provider = this.locus.getWorld();
+		final IBlockReader provider = this.locus.getWorld();
 
 		if (doBlockUnscan()) {
 			final ComplementsPointIterator newOutOfRange = new ComplementsPointIterator(oldVolume, intersect);
