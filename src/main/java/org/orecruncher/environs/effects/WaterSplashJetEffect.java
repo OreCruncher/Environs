@@ -23,11 +23,9 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.effects.emitters.Jet;
@@ -83,6 +81,11 @@ public class WaterSplashJetEffect extends JetEffect {
 			if (state.getMaterial() == Material.AIR)
 				return false;
 			final IFluidState fluidState = state.getFluidState();
+			if (fluidState.isEmpty()) {
+				continue;
+			}
+			if (fluidState.get(FlowingFluid.FALLING))
+				return false;
 			final int height = fluidState.getLevel();
 			if (height > 0 && height < 8)
 				return false;

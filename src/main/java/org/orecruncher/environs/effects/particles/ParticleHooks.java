@@ -19,6 +19,7 @@
 package org.orecruncher.environs.effects.particles;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.DripParticle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.fluid.Fluid;
@@ -150,7 +151,7 @@ public final class ParticleHooks {
 
         // Could be falling into a fluid
         final IFluidState fluidState = collision.fluidState;
-        if (!fluidState.isEmpty() && fluidState.isSource()) {
+        if (!fluidState.isEmpty() && fluidState.isSource() && world.getBlockState(pos.up()).getMaterial() == Material.AIR) {
             final float actualHeight = fluidState.getActualHeight(world, pos) + pos.getY();
             if (particlePos.y <= actualHeight) {
                 // The position of the particle intersected with the fluid surface thus a hit.  The effect of a drop
