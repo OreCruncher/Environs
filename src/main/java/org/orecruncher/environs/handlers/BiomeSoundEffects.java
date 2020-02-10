@@ -49,7 +49,7 @@ public class BiomeSoundEffects extends HandlerBase {
     }
 
     private final BiomeScanner biomes = new BiomeScanner();
-    private final Reference2ObjectOpenHashMap<IAcoustic, BackgroundAcousticEmitter> emitters = new Reference2ObjectOpenHashMap<>(8, 1F);
+    private final ObjectArray<BackgroundAcousticEmitter> emitters = new ObjectArray<>(8);
 
     BiomeSoundEffects() {
         super("Biome Sounds");
@@ -79,7 +79,7 @@ public class BiomeSoundEffects extends HandlerBase {
 
     @Override
     public void process(@Nonnull final PlayerEntity player) {
-        this.emitters.values().forEach(BackgroundAcousticEmitter::tick);
+        this.emitters.forEach(BackgroundAcousticEmitter::tick);
         if ((TickCounter.getTickCount() % SCAN_INTERVAL) == 0) {
             this.biomes.tick();
             handleBiomeSounds(player);
@@ -98,12 +98,9 @@ public class BiomeSoundEffects extends HandlerBase {
 
     private void handleBiomeSounds(@Nonnull final PlayerEntity player) {
         this.biomes.tick();
-
-        // Reset our map
         WORK_MAP.clear();
 
-        // Only gather data if the player is alive. If the player is dead the biome
-        // sounds will cease playing.
+        // Only gather data if the player is alive. If the player is dead the biome sounds will cease playing.
         if (player.isAlive()) {
 
             final boolean biomeSounds = doBiomeSounds();
@@ -136,19 +133,18 @@ public class BiomeSoundEffects extends HandlerBase {
         // * If done, remove
         // * If not in the incoming list, fade
         // * If it does exist, update volume throttle and unfade if needed
-        this.emitters.reference2ObjectEntrySet().removeIf(entry -> {
-            final BackgroundAcousticEmitter backgroundAcousticEmitter = entry.getValue();
-            if (backgroundAcousticEmitter.isDonePlaying()) {
+        this.emitters.removeIf(entry -> {
+            if (entry.isDonePlaying()) {
                 return true;
             }
-            final float volume = WORK_MAP.getFloat(entry.getKey());
+            final float volume = WORK_MAP.getFloat(entry.getSource());
             if (volume > 0) {
-                backgroundAcousticEmitter.setVolumeThrottle(volume);
-                if (backgroundAcousticEmitter.isFading())
-                    backgroundAcousticEmitter.unfade();
-                WORK_MAP.removeFloat(entry.getKey());
-            } else if (!backgroundAcousticEmitter.isFading()) {
-                backgroundAcousticEmitter.fade();
+                entry.setVolumeThrottle(volume);
+                if (entry.isFading())
+                    entry.unfade();
+                WORK_MAP.removeFloat(entry.getSource());
+            } else if (!entry.isFading()) {
+                entry.fade();
             }
             return false;
         });
@@ -157,12 +153,12 @@ public class BiomeSoundEffects extends HandlerBase {
         WORK_MAP.forEach((fx, volume) -> {
             final BackgroundAcousticEmitter e = new BackgroundAcousticEmitter(fx);
             e.setVolumeThrottle(volume);
-            this.emitters.put(fx, e);
+            this.emitters.add(e);
         });
     }
 
     public void clearSounds() {
-        this.emitters.values().forEach(BackgroundAcousticEmitter::stop);
+        this.emitters.forEach(BackgroundAcousticEmitter::stop);
         this.emitters.clear();
         WORK_MAP.clear();
         AudioEngine.stopAll();
@@ -170,6 +166,6 @@ public class BiomeSoundEffects extends HandlerBase {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void diagnostics(@Nonnull final DiagnosticEvent event) {
-        this.emitters.values().forEach(backgroundAcousticEmitter -> event.getLeft().add("EMITTER: " + backgroundAcousticEmitter.toString()));
+        this.emitters.forEach(backgroundAcousticEmitter -> event.getLeft().add("EMITTER: " + backgroundAcousticEmitter.toString()));
     }
 }

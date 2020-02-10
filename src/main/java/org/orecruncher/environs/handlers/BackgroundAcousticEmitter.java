@@ -24,6 +24,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.orecruncher.environs.Environs;
 import org.orecruncher.sndctrl.api.acoustics.IAcoustic;
+import org.orecruncher.sndctrl.api.acoustics.IAcousticFactory;
 import org.orecruncher.sndctrl.api.sound.IFadableSoundInstance;
 import org.orecruncher.sndctrl.audio.AudioEngine;
 import org.orecruncher.sndctrl.audio.SoundState;
@@ -42,13 +43,21 @@ public final class BackgroundAcousticEmitter {
 	private static final int REPLACED_STANDOFF = 33;
 
 	@Nonnull
+	protected final IAcoustic acousticSource;
+	@Nonnull
 	protected final IFadableSoundInstance activeSound;
 
 	protected int standoff = 0;
 	protected boolean done = false;
 
 	public BackgroundAcousticEmitter(@Nonnull final IAcoustic acoustic) {
+		this.acousticSource = acoustic;
 		this.activeSound = acoustic.getFactory().createBackgroundSound();
+	}
+
+	@Nonnull
+	public IAcoustic getSource() {
+		return this.acousticSource;
 	}
 
 	public void tick() {
