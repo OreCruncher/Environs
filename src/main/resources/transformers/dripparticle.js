@@ -8,11 +8,6 @@ var HIT_GROUND_HANDLER = ASM.mapMethod("func_217577_h");
 
 var FORMAT = "[dripparticle.js] {}";
 
-function log(message)
-{
-    print("[Environs Transformer - DripParticle]: " + message);
-}
-
 function initializeCoreMod()
 {
     return {
