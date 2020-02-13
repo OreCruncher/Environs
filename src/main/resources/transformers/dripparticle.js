@@ -6,6 +6,8 @@ var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
 
 var HIT_GROUND_HANDLER = ASM.mapMethod("func_217577_h");
 
+var FORMAT = "[dripparticle.js] {}";
+
 function log(message)
 {
     print("[Environs Transformer - DripParticle]: " + message);
@@ -33,8 +35,12 @@ function initializeCoreMod()
                 newInstructions.add(callback);
 
                 var targetMethod = findMethod(classNode, HIT_GROUND_HANDLER);
-                targetMethod.instructions.insert(newInstructions);
-                log("Hooked DripParticle$Falling.groundHitHandler()");
+                if (targetMethod !== null) {
+                    targetMethod.instructions.insert(newInstructions);
+                    ASM.log("INFO", FORMAT, ["Hooked DripParticle$Falling.groundHitHandler()"]);
+                } else {
+                    ASM.log("WARN", FORMAT, ["Will not be able to generate special effects for water drip impacts"]);
+                }
 
                 return classNode;
             }
@@ -49,6 +55,6 @@ function findMethod(classNode, methodName)
         if (method.name == methodName)
             return method;
     }
-    log("Method not found: " + methodName);
+    ASM.log("WARN", "Method not found: {}",  [methodName]);
     return null;
 }

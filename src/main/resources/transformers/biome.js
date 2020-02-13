@@ -3,6 +3,8 @@ var ASM = Java.type("net.minecraftforge.coremod.api.ASMAPI");
 var Opcodes = Java.type('org.objectweb.asm.Opcodes');
 var FieldNode = Java.type('org.objectweb.asm.tree.FieldNode');
 
+var FORMAT = "[biome.js] {}";
+
 function initializeCoreMod()
 {
     return {
@@ -14,7 +16,7 @@ function initializeCoreMod()
             "transformer": function(classNode) {
                 // Add a field to cache our data
                 classNode.fields.add(new FieldNode(Opcodes.ACC_PUBLIC, "environs_biomeData", "Ljava/lang/Object;", null, null));
-                print("[Environs Transformer]: Patched Biome - Added biome data cache field");
+                ASM.log("INFO", FORMAT, ["Added biome data cache field"]);
                 return classNode;
             }
         }
