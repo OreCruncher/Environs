@@ -200,6 +200,7 @@ public final class Config {
             private final BooleanValue enableDustJets;
             private final BooleanValue enableFountainJets;
             private final BooleanValue enableWaterSplashJets;
+            private final BooleanValue disableUnderwaterParticles;
 
             private boolean _enableFireFlies;
             private boolean _enableSteamJets;
@@ -208,6 +209,7 @@ public final class Config {
             private boolean _enableDustJets;
             private boolean _enableFountainJets;
             private boolean _enableWaterSplashJets;
+            private boolean _disableUnderwaterParticles;
 
             Effects(@Nonnull final ForgeConfigSpec.Builder builder) {
                 builder.comment("Options for controlling various effects")
@@ -255,6 +257,12 @@ public final class Config {
                         .translation("environs.cfg.effects.Splash")
                         .define("Water Splash", true);
 
+                this.disableUnderwaterParticles = builder
+                        .worldRestart()
+                        .comment("Enable/disable Minecrafts Underwater particle effect")
+                        .translation("environs.cfg.effects.Underwater")
+                        .define("Disable Underwater Particles", false);
+
                 builder.pop();
             }
 
@@ -266,6 +274,7 @@ public final class Config {
                 this._enableDustJets = this.enableDustJets.get();
                 this._enableFountainJets = this.enableFountainJets.get();
                 this._enableWaterSplashJets = this.enableWaterSplashJets.get();
+                this._disableUnderwaterParticles = this.disableUnderwaterParticles.get();
             }
 
             // Reach over and grab from SoundControl
@@ -299,6 +308,10 @@ public final class Config {
 
             public boolean get_enableWaterSplashJets() {
                 return this._enableWaterSplashJets;
+            }
+
+            public boolean get_disableUnderwaterParticles() {
+                return this._disableUnderwaterParticles;
             }
 
         }

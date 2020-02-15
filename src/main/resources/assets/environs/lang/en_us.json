@@ -31,6 +31,8 @@
 	"environs.cfg.effects.Fireflies.tooltip": "Enable/disable Firefly effect around plants",
 	"environs.cfg.effects.Splash": "Water Splash",
 	"environs.cfg.effects.Splash.tooltip": "Enable/disable Water Splash effects when water spills down",
+	"environs.cfg.effects.Underwater": "Disable Underwater Particles",
+	"environs.cfg.effects.Underwater.tooltip": "Enable/disable Minecrafts Underwater particle effect",
 	"environs.cfg.aurora": "Aurora Options",
 	"environs.cfg.aurora.tooltip": "Options that control Aurora behavior and rendering",
 	"environs.cfg.aurora.Enable": "Auroras",
