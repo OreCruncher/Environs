@@ -126,11 +126,13 @@ public final class AuroraHandler extends HandlerBase {
 
 	@SubscribeEvent
 	public void diagnostic(@Nonnull final DiagnosticEvent event) {
-		if (Shaders.areShadersSupported()) {
-			event.getLeft().add("Aurora: " + (this.current == null ? "NONE" : this.current.toString()));
-			event.getRenderTimers().add(this.render);
-		} else {
-			event.getLeft().add("Aurora: Shaders not supported by platform");
+		if (Config.CLIENT.logging.get_enableLogging()) {
+			if (Shaders.areShadersSupported()) {
+				event.getLeft().add("Aurora: " + (this.current == null ? "NONE" : this.current.toString()));
+				event.getRenderTimers().add(this.render);
+			} else {
+				event.getLeft().add("Aurora: Shaders not supported by platform");
+			}
 		}
 	}
 

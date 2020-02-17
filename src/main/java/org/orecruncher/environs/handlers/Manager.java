@@ -26,6 +26,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.orecruncher.environs.Config;
 import org.orecruncher.environs.Environs;
 import org.orecruncher.lib.GameUtils;
 import org.orecruncher.lib.TickCounter;
@@ -122,7 +123,8 @@ public class Manager {
 
     @SubscribeEvent
     public static void diagnosticEvent(@Nonnull final DiagnosticEvent event) {
-        instance().effectHandlers.forEach(h -> event.addTimer(h.getTimer()));
+        if (Config.CLIENT.logging.get_enableLogging())
+            instance().effectHandlers.forEach(h -> event.addTimer(h.getTimer()));
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)

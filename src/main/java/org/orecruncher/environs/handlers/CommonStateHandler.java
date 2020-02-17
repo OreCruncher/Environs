@@ -31,6 +31,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.orecruncher.environs.Config;
 import org.orecruncher.environs.handlers.scripts.ConditionEvaluator;
 import org.orecruncher.environs.library.BiomeLibrary;
 import org.orecruncher.environs.library.DimensionLibrary;
@@ -133,10 +134,11 @@ class CommonStateHandler extends HandlerBase {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void diagnostics(@Nonnull final DiagnosticEvent event) {
-        for (final String s : scripts) {
-            final String result = ConditionEvaluator.INSTANCE.eval(s).toString();
-            event.getLeft().add(TextFormatting.DARK_AQUA + result);
+        if (Config.CLIENT.logging.get_enableLogging()) {
+            for (final String s : scripts) {
+                final String result = ConditionEvaluator.INSTANCE.eval(s).toString();
+                event.getLeft().add(TextFormatting.DARK_AQUA + result);
+            }
         }
     }
-
 }

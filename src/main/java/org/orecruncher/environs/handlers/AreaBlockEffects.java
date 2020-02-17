@@ -72,7 +72,8 @@ class AreaBlockEffects extends HandlerBase {
 
     @SubscribeEvent
     public void onDiagnostics(@Nonnull final DiagnosticEvent event) {
-        event.addRenderTimer(this.blockChange);
+        if (Config.CLIENT.logging.get_enableLogging())
+            event.addRenderTimer(this.blockChange);
     }
 
     @SubscribeEvent

@@ -92,13 +92,15 @@ public class FogHandler extends HandlerBase {
 
     @SubscribeEvent
     public void diagnostics(final DiagnosticEvent event) {
-        if (doFog()) {
-            event.getLeft().add("Fog Range: " + this.fogRange.toString());
-            event.getLeft().add("Fog Color: " + this.fogColor.toString());
-            event.addRenderTimer(this.renderColor);
-            event.addRenderTimer(this.render);
-        } else
-            event.getLeft().add("FOG: IGNORED");
+        if (Config.CLIENT.logging.get_enableLogging()) {
+            if (doFog()) {
+                event.getLeft().add("Fog Range: " + this.fogRange.toString());
+                event.getLeft().add("Fog Color: " + this.fogColor.toString());
+                event.addRenderTimer(this.renderColor);
+                event.addRenderTimer(this.render);
+            } else
+                event.getLeft().add("FOG: IGNORED");
+        }
     }
 
     @Override
