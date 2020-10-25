@@ -20,9 +20,10 @@ package org.orecruncher.environs.fog;
 
 import net.minecraft.client.GameSettings;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,7 +44,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
     // ForgeHooksClient.getSkyBlendColour()
     private static final int[] BLEND_RANGES = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34};
 
-    protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+    protected final BlockPos.Mutable pos = new BlockPos.Mutable();
 
     protected int posX;
     protected int posZ;
@@ -62,8 +63,8 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 
         assert player != null && world != null;
 
-        final int playerX = MathStuff.floor(player.posX);
-        final int playerZ = MathStuff.floor(player.posZ);
+        final int playerX = MathStuff.floor(player.getPosX());
+        final int playerZ = MathStuff.floor(player.getPosZ());
 
         final GameSettings settings = GameUtils.getGameSettings();
         int distance = 6;
@@ -84,7 +85,7 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
             float green = 0;
             float blue = 0;
 
-            final IEnviromentBlockReader reader = CommonState.getBlockReader();
+            final IWorldReader reader = CommonState.getBlockReader();
 
             for (int z = -distance; z <= distance; ++z) {
                 for (int x = -distance; x <= distance; ++x) {
@@ -177,13 +178,14 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
 
     protected Color applyPlayerEffects(@Nonnull final World world, @Nonnull final PlayerEntity player,
                                        @Nonnull final Color fogColor, final float renderPartialTicks) {
-        float darkScale = (float) ((player.lastTickPosY + (player.posY - player.lastTickPosY) * renderPartialTicks)
+        float darkScale = (float) ((player.lastTickPosY + (player.getPosY() - player.lastTickPosY) * renderPartialTicks)
                 * world.getDimension().getVoidFogYFactor());
 
         // EntityRenderer.updateFogColor() - If the player is blind need to
         // darken it further
-        if (player.isPotionActive(Effects.BLINDNESS)) {
-            final int duration = player.getActivePotionEffect(Effects.BLINDNESS).getDuration();
+        EffectInstance effect = player.getActivePotionEffect(Effects.BLINDNESS);
+        if (effect != null) {
+            final int duration = effect.getDuration();
             darkScale *= (duration < 20) ? (1 - duration / 20f) : 0;
         }
 
@@ -193,8 +195,9 @@ public class BiomeFogColorCalculator extends VanillaFogColorCalculator {
         }
 
         // EntityRenderer.updateFogColor() - If the player has night vision going need to lighten it a bit
-        if (player.isPotionActive(Effects.NIGHT_VISION)) {
-            final int duration = player.getActivePotionEffect(Effects.NIGHT_VISION).getDuration();
+        effect = player.getActivePotionEffect(Effects.NIGHT_VISION);
+        if (effect != null) {
+            final int duration = effect.getDuration();
             final float brightness = (duration > 200) ? 1
                     : 0.7f + MathStuff.sin((duration - renderPartialTicks) * MathStuff.PI_F * 0.2f) * 0.3f;
 

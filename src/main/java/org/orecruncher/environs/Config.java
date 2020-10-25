@@ -64,7 +64,7 @@ public final class Config {
     }
 
     @SubscribeEvent
-    public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
+    public static void onFileChange(final ModConfig.Reloading configEvent) {
         Environs.LOGGER.debug("Config file changed %s", configEvent.getConfig().getFileName());
         applyConfig();
     }
@@ -283,7 +283,8 @@ public final class Config {
             }
 
             public boolean get_enableFireFlies() {
-                return this._enableFireFlies;
+                return false;
+                //return this._enableFireFlies;
             }
 
             public boolean get_enableSteamJets() {
@@ -299,7 +300,8 @@ public final class Config {
             }
 
             public boolean get_enableDustJets() {
-                return this._enableDustJets;
+                return false;
+                //return this._enableDustJets;
             }
 
             public boolean get_enableFountainJets() {
@@ -307,7 +309,8 @@ public final class Config {
             }
 
             public boolean get_enableWaterSplashJets() {
-                return this._enableWaterSplashJets;
+                return false;
+                //return this._enableWaterSplashJets;
             }
 
             public boolean get_disableUnderwaterParticles() {
@@ -349,7 +352,8 @@ public final class Config {
             }
 
             public boolean get_auroraEnabled() {
-                return this._auroraEnabled;
+                return false;
+                //return this._auroraEnabled;
             }
 
             public int get_maxBands() {

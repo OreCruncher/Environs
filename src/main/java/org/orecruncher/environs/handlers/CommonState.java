@@ -20,7 +20,7 @@ package org.orecruncher.environs.handlers;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.StringUtils;
@@ -65,8 +65,6 @@ public final class CommonState {
     DayCycle dayCycle = DayCycle.NO_SKY;
 
     MinecraftClock clock = new MinecraftClock();
-
-    EnvironmentBlockReader blockReader;
 
     CommonState() {
     }
@@ -141,7 +139,7 @@ public final class CommonState {
         return instance.clock;
     }
 
-    public static IEnviromentBlockReader getBlockReader() {
-        return instance.blockReader;
+    public static IWorldReader getBlockReader() {
+        return GameUtils.getWorld();
     }
 }

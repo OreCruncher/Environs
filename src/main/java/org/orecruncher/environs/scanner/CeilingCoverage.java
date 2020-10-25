@@ -96,7 +96,7 @@ public final class CeilingCoverage {
 
 		private final Vec3i offset;
 		private final float points;
-		private final BlockPos.MutableBlockPos working;
+		private final BlockPos.Mutable working;
 
 		public Cell(@Nonnull final Vec3i offset, final int range) {
 			this.offset = offset;
@@ -104,7 +104,7 @@ public final class CeilingCoverage {
 			final float zV = range - MathStuff.abs(offset.getZ()) + 1;
 			final float candidate = Math.min(xV, zV);
 			this.points = candidate * candidate;
-			this.working = new BlockPos.MutableBlockPos();
+			this.working = new BlockPos.Mutable();
 		}
 
 		public float potentialPoints() {

@@ -19,6 +19,7 @@
 package org.orecruncher.environs.shaders.aurora;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.WorldVertexBufferUploader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
@@ -41,14 +42,12 @@ public class AuroraShaderBand extends AuroraBase {
 	private static final float v1 = 0;
 	private static final float v2 = 1F;
 	
-	protected static final VertexUploader uploader = new VertexUploader();
-	
 	protected ShaderProgram program;
 	protected ShaderProgram.IShaderUseCallback callback;
 	protected final float auroraWidth;
 	protected final float panelTexWidth;
 	
-	protected final BufferBuilder buffer;
+	//protected final BufferBuilder buffer;
 
 	public AuroraShaderBand(final long seed) {
 		super(seed, true);
@@ -67,7 +66,7 @@ public class AuroraShaderBand extends AuroraBase {
 		this.auroraWidth = this.band.getNodeList().length * this.band.getNodeWidth();
 		this.panelTexWidth = this.band.getNodeWidth() / this.auroraWidth;
 
-		this.buffer = createList();
+		//this.buffer = createList();
 	}
 
 	@Override
@@ -154,7 +153,8 @@ public class AuroraShaderBand extends AuroraBase {
 				GlStateManager.pushMatrix();
 				GlStateManager.translated(tranX, tranY, tranZ + this.offset * b);
 				GlStateManager.scaled(0.5D, 10.0D, 0.5D);
-				uploader.draw(this.buffer);
+				WorldVertexBufferUploader.draw(createList());
+				//this.buffer.reset();
 				GlStateManager.popMatrix();
 			}
 

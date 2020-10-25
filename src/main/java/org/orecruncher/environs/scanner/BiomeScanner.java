@@ -19,7 +19,6 @@
 package org.orecruncher.environs.scanner;
 
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
-import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,7 +28,6 @@ import net.minecraft.world.biome.Biome;
 import org.orecruncher.environs.handlers.CommonState;
 import org.orecruncher.environs.library.BiomeInfo;
 import org.orecruncher.environs.library.BiomeUtil;
-import org.orecruncher.lib.GameUtils;
 import org.orecruncher.lib.TickCounter;
 
 /**
@@ -42,7 +40,7 @@ public final class BiomeScanner {
 	private static final int BIOME_SURVEY_RANGE = 18;
 	private static final int MAX_BIOME_AREA = (int) Math.pow(BIOME_SURVEY_RANGE * 2 + 1, 2);
 
-	private final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+	private final BlockPos.Mutable mutable = new BlockPos.Mutable();
 
 	private int biomeArea;
 	private Reference2IntOpenHashMap<BiomeInfo> weights = new Reference2IntOpenHashMap<>(8);
@@ -73,7 +71,7 @@ public final class BiomeScanner {
 				this.biomeArea = 1;
 				this.weights.put(playerBiome, 1);
 			} else {
-				final IEnviromentBlockReader provider = CommonState.getBlockReader();
+				final IWorldReader provider = CommonState.getBlockReader();
 				for (int dZ = -BIOME_SURVEY_RANGE; dZ <= BIOME_SURVEY_RANGE; dZ++) {
 					for (int dX = -BIOME_SURVEY_RANGE; dX <= BIOME_SURVEY_RANGE; dX++) {
 						this.mutable.setPos(this.surveyedPosition.getX() + dX, 0, this.surveyedPosition.getZ() + dZ);

@@ -134,7 +134,7 @@ public final class BiomeLibrary {
 
 	@Nonnull
 	public static BiomeInfo getPlayerBiome(@Nonnull final PlayerEntity player, final boolean getTrue) {
-		final Biome biome = player.getEntityWorld().getBiome(new BlockPos(player.posX, 0, player.posZ));
+		final Biome biome = player.getEntityWorld().getBiome(new BlockPos(player.getPosX(), 0, player.getPosZ()));
 		BiomeInfo info = BiomeUtil.getBiomeData(biome);
 
 		if (!getTrue) {
@@ -149,7 +149,7 @@ public final class BiomeLibrary {
 					info = UNDERWATER_INFO;
 			} else {
 				final DimensionInfo dimInfo = DimensionLibrary.getData(player.getEntityWorld());
-				final int theY = MathStuff.floor(player.posY);
+				final int theY = MathStuff.floor(player.getPosY());
 				if ((theY + INSIDE_Y_ADJUST) <= dimInfo.getSeaLevel())
 					info = UNDERGROUND_INFO;
 				else if (theY >= dimInfo.getSpaceHeight())

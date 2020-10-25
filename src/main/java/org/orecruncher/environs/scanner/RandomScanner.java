@@ -60,7 +60,7 @@ public abstract class RandomScanner extends Scanner {
 
 	@Override
 	@Nonnull
-	protected BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos workingPos, @Nonnull final Random rand) {
+	protected BlockPos nextPos(@Nonnull final BlockPos.Mutable workingPos, @Nonnull final Random rand) {
 		return workingPos.setPos(this.playerX + randomRange(this.xRange), this.playerY + randomRange(this.yRange),
 				this.playerZ + randomRange(this.zRange));
 	}

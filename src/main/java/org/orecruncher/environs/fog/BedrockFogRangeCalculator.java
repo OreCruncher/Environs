@@ -48,7 +48,7 @@ public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
         this.cached.set(event);
         if (WorldUtils.hasVoidPartiles(GameUtils.getWorld())) {
             final PlayerEntity player = GameUtils.getPlayer();
-            final double factor = (MathHelper.lerp(event.getRenderPartialTicks(), player.lastTickPosY, player.posY) + 4.0D) / 32.0D;
+            final double factor = (MathHelper.lerp(event.getRenderPartialTicks(), player.lastTickPosY, player.getPosY()) + 4.0D) / 32.0D;
             double d0 = (this.skyLight / 16.0D) + factor;
 
             float end = event.getFarPlaneDistance();
@@ -69,7 +69,7 @@ public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
                 }
             }
 
-            this.cached.set(event.getFogMode(), end, FogResult.DEFAULT_PLANE_SCALE);
+            this.cached.set(event.getType(), end, FogResult.DEFAULT_PLANE_SCALE);
         }
 
         return this.cached;
@@ -77,6 +77,6 @@ public class BedrockFogRangeCalculator extends VanillaFogRangeCalculator {
 
     @Override
     public void tick() {
-        this.skyLight = (GameUtils.getPlayer().getBrightnessForRender() & 0xF00000) >> 20;
+        this.skyLight = GameUtils.getPlayer().getBrightness();
     }
 }

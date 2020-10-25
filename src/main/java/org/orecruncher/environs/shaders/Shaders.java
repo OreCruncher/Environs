@@ -39,7 +39,10 @@ public final class Shaders {
 	}
 
 	public static boolean areShadersSupported() {
-		return GLX.isNextGen();
+		return true;
+
+		// TODO: Detect shader support
+		//return GLX.isNextGen();
 	}
 
 	private static ShaderProgram register(final String name, final ResourceLocation vertex,

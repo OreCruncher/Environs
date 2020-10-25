@@ -64,7 +64,7 @@ public abstract class Scanner {
 	protected final ScanContext locus;
 
 	protected final Random random = new XorShiftRandom();
-	protected final BlockPos.MutableBlockPos workingPos = new BlockPos.MutableBlockPos();
+	protected final BlockPos.Mutable workingPos = new BlockPos.Mutable();
 
 	public Scanner(@Nonnull final ScanContext locus, @Nonnull final String name, final int range) {
 		this(locus, name, range, 0);
@@ -157,6 +157,6 @@ public abstract class Scanner {
 	 * returned from the function call.
 	 */
 	@Nullable
-	protected abstract BlockPos nextPos(@Nonnull final BlockPos.MutableBlockPos pos, @Nonnull final Random rand);
+	protected abstract BlockPos nextPos(@Nonnull final BlockPos.Mutable pos, @Nonnull final Random rand);
 
 }

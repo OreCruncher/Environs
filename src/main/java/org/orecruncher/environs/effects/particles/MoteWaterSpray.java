@@ -18,6 +18,7 @@
 
 package org.orecruncher.environs.effects.particles;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.world.IBlockReader;
@@ -83,11 +84,18 @@ public class MoteWaterSpray extends MotionMote {
 	}
 
 	@Override
-	public void render(BufferBuilder buffer, ActiveRenderInfo info, float partialTicks, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ) {
+	public void renderParticle(@Nonnull IVertexBuilder buffer, @Nonnull ActiveRenderInfo info, float partialTicks) {
 
-		final float x = renderX(partialTicks);
-		final float y = renderY(partialTicks);
-		final float z = renderZ(partialTicks);
+		final float x = this.renderX(info, partialTicks);
+		final float y = this.renderY(info, partialTicks);
+		final float z = this.renderZ(info, partialTicks);
+
+		float rotX = info.getRotation().getX();
+		float rotY = info.getRotation().getY();
+		float rotZ = info.getRotation().getZ();
+		float rotYZ = 0.0F;
+		float rotXY = 0.0F;
+		float rotXZ = 0.0F;
 
 		drawVertex(buffer, x + (-rotX * this.f4 - rotXY * this.f4), y + (-rotZ * this.f4),
 				z + (-rotYZ * this.f4 - rotXZ * this.f4), this.texU2, this.texV2);

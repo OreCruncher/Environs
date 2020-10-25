@@ -18,6 +18,7 @@
 
 package org.orecruncher.environs.effects.particles;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.particles.ParticleTypes;
@@ -67,9 +68,9 @@ public class MoteFireFly extends AnimatedMote {
     }
 
     @Override
-    public void render(BufferBuilder buffer, ActiveRenderInfo info, float partialTicks, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ) {
+    public void renderParticle(@Nonnull IVertexBuilder buffer, @Nonnull ActiveRenderInfo info, float partialTicks) {
         if (this.doRender)
-            super.render(buffer, info, partialTicks, rotX, rotZ, rotYZ, rotXY, rotXZ);
+            super.renderParticle(buffer, info, partialTicks);
     }
 
 }

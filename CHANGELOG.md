@@ -1,3 +1,21 @@
+### Environs-1.15.2-1.0.0.0
+**Requirements**
+* Forge 1.15.2-31.2.44+
+* Dynamic Surroundings: Sound Control 1.15.2-1.0.0.1+
+* 100% client side; no server side deployment needed
+
+**Changes**
+* Aurora, Fire Flies, Dust, and Waterfall effects are temporarily disabled
+
+### Environs-1.14.4-0.1.1.0
+**Requirements**
+* Forge 1.14.4-28.1.96+
+* Dynamic Surroundings: Sound Control 1.14.4-0.1.1.0+
+* 100% client side; no server side deployment needed
+
+**Fixes**
+* Server side crash when mod present on dedicated server
+
 ### Environs-1.14.4-0.1.0.0
 **Requirements**
 * Forge 1.14.4-28.1.96+

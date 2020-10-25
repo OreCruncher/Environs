@@ -18,6 +18,7 @@
 
 package org.orecruncher.environs.fog;
 
+import net.minecraft.client.renderer.FogRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -29,17 +30,17 @@ public final class FogResult {
 
     public static final float DEFAULT_PLANE_SCALE = 0.75F;
 
-    private int fogMode;
+    private FogRenderer.FogType fogType;
     private float start;
     private float end;
 
     public FogResult() {
-        this.fogMode = 0;
+        this.fogType = FogRenderer.FogType.FOG_SKY;
         this.start = 0F;
         this.end = 0F;
     }
 
-    public FogResult(final int fogMode, final float distance, final float scale) {
+    public FogResult(final FogRenderer.FogType fogMode, final float distance, final float scale) {
         this.set(fogMode, distance, scale);
     }
 
@@ -51,24 +52,24 @@ public final class FogResult {
         this.set(event);
     }
 
-    public void set(final int fogMode, final float distance, final float scale) {
-        this.fogMode = fogMode;
-        this.start = fogMode < 0 ? 0F : distance * scale;
+    public void set(final FogRenderer.FogType fogMode, final float distance, final float scale) {
+        this.fogType = fogMode;
+        this.start = fogMode == FogRenderer.FogType.FOG_SKY ? 0F : distance * scale;
         this.end = distance;
     }
 
     public void set(final float start, final float end) {
-        this.fogMode = 0;
+        this.fogType = FogRenderer.FogType.FOG_SKY;
         this.start = start;
         this.end = end;
     }
 
     public void set(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
-        this.set(event.getFogMode(), event.getFarPlaneDistance(), DEFAULT_PLANE_SCALE);
+        this.set(event.getType(), event.getFarPlaneDistance(), DEFAULT_PLANE_SCALE);
     }
 
-    public int getFogMode() {
-        return this.fogMode;
+    public FogRenderer.FogType getFogType() {
+        return this.fogType;
     }
 
     public float getStart() {
@@ -80,12 +81,12 @@ public final class FogResult {
     }
 
     public boolean isValid(@Nonnull final EntityViewRenderEvent.RenderFogEvent event) {
-        return this.end > this.start && event.getFogMode() == this.fogMode;
+        return this.end > this.start && event.getType() == this.fogType;
     }
 
     @Override
     public String toString() {
-        return String.format("[mode: %d, start: %f, end: %f]", this.fogMode, this.start, this.end);
+        return String.format("[mode: %s, start: %f, end: %f]", this.fogType.name(), this.start, this.end);
     }
 
 }

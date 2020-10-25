@@ -76,7 +76,7 @@ public class FireJet extends Jet {
 		final Particle particle = GameUtils.getMC().particles.addParticle(this.particleType, x, this.posY, z, 0, speedY, 0D);
 
 		if (particle instanceof FlameParticle) {
-			particle.multipleParticleScaleBy(scale);
+			particle.multiplyParticleScaleBy(scale);
 		}
 	}
 }

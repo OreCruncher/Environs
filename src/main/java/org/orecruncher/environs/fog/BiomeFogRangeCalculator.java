@@ -18,9 +18,10 @@
 
 package org.orecruncher.environs.fog;
 
+import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
@@ -45,7 +46,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
     protected static final int DISTANCE = 20;
     protected static final float DUST_FOG_IMPACT = 0.9F;
 
-    protected final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+    protected final BlockPos.Mutable pos = new BlockPos.Mutable();
     protected final Context[] context = {new Context(), new Context()};
 
     public BiomeFogRangeCalculator() {
@@ -62,11 +63,11 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
         assert player != null && world != null;
 
         final double partialTicks = event.getRenderPartialTicks();
-        final int playerX = MathStuff.floor(player.posX);
-        final int playerZ = MathStuff.floor(player.posZ);
+        final int playerX = MathStuff.floor(player.getPosX());
+        final int playerZ = MathStuff.floor(player.getPosZ());
         final float rainStr = WorldUtils.getRainStrength(world, (float) partialTicks);
 
-        final Context ctx = this.context[event.getFogMode() == -1 ? 0 : 1];
+        final Context ctx = this.context[event.getType() == FogRenderer.FogType.FOG_SKY ? 0 : 1];
 
         if (ctx.returnCached(playerX, playerZ, rainStr, event))
             return ctx.cached;
@@ -78,7 +79,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
         ctx.rain = rainStr;
         ctx.doScan = false;
 
-        final IEnviromentBlockReader reader = CommonState.getBlockReader();
+        final IWorldReader reader = CommonState.getBlockReader();
 
         for (int z = -DISTANCE; z <= DISTANCE; ++z) {
             for (int x = -DISTANCE; x <= DISTANCE; ++x) {
@@ -125,7 +126,7 @@ public class BiomeFogRangeCalculator extends VanillaFogRangeCalculator {
         ctx.lastFarPlane = event.getFarPlaneDistance();
         farPlaneDistance = Math.min(farPlaneDistance, event.getFarPlaneDistance());
 
-        ctx.cached.set(event.getFogMode(), farPlaneDistance, farPlaneDistanceScale);
+        ctx.cached.set(event.getType(), farPlaneDistance, farPlaneDistanceScale);
 
         return ctx.cached;
     }

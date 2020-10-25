@@ -63,10 +63,6 @@ class CommonStateHandler extends HandlerBase {
 
         ceilingCoverage.tick();
 
-        // Adjust our block reader
-        if (data.blockReader == null || data.blockReader.needsUpdate(world))
-            data.blockReader = new EnvironmentBlockReader(world);
-
         data.clock.update(world);
         data.season = Season.getSeason(world);
 

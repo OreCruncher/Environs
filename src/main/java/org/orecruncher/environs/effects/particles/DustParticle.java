@@ -30,7 +30,7 @@ import net.minecraft.world.World;
 @OnlyIn(Dist.CLIENT)
 public class DustParticle extends DiggingParticle {
 
-	private final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+	private final BlockPos.Mutable pos = new BlockPos.Mutable();
 
 	public DustParticle(final World world, final double x, final double y, final double z, final BlockState state) {
 		this(world, x, y, z, 0, 0, 0, state);
@@ -44,7 +44,7 @@ public class DustParticle extends DiggingParticle {
 		this.motionY = dY;
 		this.motionZ = dZ;
 
-		multipleParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 30.0F));
+		multiplyParticleScaleBy((float) (0.3F + this.rand.nextGaussian() / 30.0F));
 		setPosition(this.posX, this.posY, this.posZ);
 	}
 
